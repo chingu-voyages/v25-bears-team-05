@@ -1,0 +1,32 @@
+.Button {
+  background: none;
+  color: var(--primary-text-color);
+  height: 40px;
+  border: none;
+  border-width: 1px;
+  font-weight: 700;
+}
+.Button a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+.Button.square {
+  border-style: solid;
+  border-radius: 2px;
+}
+.Button.round {
+  border-style: solid;
+  border-radius: 28px;
+}
+.Button.green-border { 
+  border-color: var(--color-green-3);
+}
+.Button.black-text {
+  color: var(--color-black);
+}
+.Button.green-background {
+  background-color: var(--primary-green-color);
+}
+.Button.grey-background {
+  background-color: var(--grey-background-color);
+}

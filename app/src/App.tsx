@@ -4,25 +4,30 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Home from './pages/home';
+import Landing from './pages/landing';
+import Network from './pages/network';
+import Profile from './pages/profile';
+import Signup from './pages/signup';
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route path="/network">
-          "Landing Page: TODO"
+          <Network />
         </Route>
         <Route path="/profile/:userId">
-          "Profile Page: TODO"
+          <Profile />
         </Route>
         <Route path="/home">
-          "Home Page: TODO"
+          <Home />
         </Route>
         <Route path="/signup">
-          "Signup Page: TODO"
+          <Signup />
         </Route>
         <Route path="/">
-          "Landing Page: TODO"
+          <Landing />
         </Route>
       </Switch>
     </Router>

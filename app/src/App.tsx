@@ -1,10 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./pages/home";
-import Landing from "./pages/landing";
-import Network from "./pages/network";
-import Profile from "./pages/profile";
-import Signup from "./pages/signup";
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import Home from './pages/home';
+import Landing from './pages/landing';
+import Network from './pages/network';
+import Profile from './pages/profile';
+import Signup from './pages/signup';
 
 function App() {
   return (

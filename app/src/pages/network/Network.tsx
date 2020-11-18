@@ -1,5 +1,5 @@
-import React from "react";
-import "./Network.css";
+import React from 'react';
+import './Network.css';
 
 function Network() {
   return (

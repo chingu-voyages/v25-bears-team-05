@@ -1,28 +1,28 @@
 :root {
-  --color-green-0: #1A3627;
+  --color-green-0: #1a3627;
   --color-green-1: #185233;
   --color-green-2: #167341;
   --color-green-3: #209959;
-  --color-green-4: #40B674;
-  --color-green-5: #53ED97;
-  --color-green-6: #B9FFD8;
-  --color-green-7: #E5FFF1;
+  --color-green-4: #40b674;
+  --color-green-5: #53ed97;
+  --color-green-6: #b9ffd8;
+  --color-green-7: #e5fff1;
 
-  --color-blue-0: #0D2135;
+  --color-blue-0: #0d2135;
 
-  --color-orange-0: #D9532C;
-  --color-orange-1: #F3BA63;
+  --color-orange-0: #d9532c;
+  --color-orange-1: #f3ba63;
 
-  --color-red: #D11124;
-  --color-purple: #725F87;
+  --color-red: #d11124;
+  --color-purple: #725f87;
   --color-brown: #955646;
-  --color-pale: #EFB4A4;
+  --color-pale: #efb4a4;
 
-  --color-grey-0: #3C4545;
-  --color-grey-1: #535A57;
-  --color-grey-2: #9EA9A4;
-  --color-grey-3: #CCD7D2;
-  --color-grey-4: #ECF5F1;
+  --color-grey-0: #3c4545;
+  --color-grey-1: #535a57;
+  --color-grey-2: #9ea9a4;
+  --color-grey-3: #ccd7d2;
+  --color-grey-4: #ecf5f1;
 
   --color-white: #ffffff;
   --color-black: #000000;
@@ -36,7 +36,6 @@
   --grey-background-color: var(--color-grey-1);
   --black-background-color: var(--color-black);
   --green-background-color: var(--color-green-0);
-
 }
 
 body {

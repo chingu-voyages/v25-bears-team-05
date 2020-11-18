@@ -1,10 +1,10 @@
-import React from 'react';
-import Logo from '../../components/logo';
-import Login from '../../components/login';
-import Button from '../../components/button';
-import { Link } from 'react-router-dom';
-import featureGraphicSVG from '../../images/pairprograminggraphic.svg';
-import './Landing.css';
+import React from "react";
+import Logo from "../../components/logo";
+import Login from "../../components/login";
+import Button from "../../components/button";
+import { Link } from "react-router-dom";
+import featureGraphicSVG from "../../images/pairprograminggraphic.svg";
+import "./Landing.css";
 
 function Landing() {
   return (

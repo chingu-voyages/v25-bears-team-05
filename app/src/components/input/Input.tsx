@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { InputProps, InputAttributes } from "./input.types";
+import { IInputProps, IInputAttributes } from "./input.types";
 import "./Input.css";
 
-function Input(props: InputProps) {
+function Input(props: IInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleFocus = () => {
@@ -19,7 +19,7 @@ function Input(props: InputProps) {
   return (
     <div className="wrapper__Input">
       <input
-        {...(attributes as InputAttributes)}
+        {...(attributes as IInputAttributes)}
         type={props.type && showPassword ? "text" : props.type}
         onFocus={handleFocus}
         onBlur={handleBlur}

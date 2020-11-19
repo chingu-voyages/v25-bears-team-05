@@ -11,7 +11,7 @@ function Landing() {
     <div className="Landing-page">
       <header className="Landing-page__header-bar">
         <Logo />
-        <Button className="square primary green-border">
+        <Button className="square">
           <Link to="/signup">Join now</Link>
         </Button>
       </header>

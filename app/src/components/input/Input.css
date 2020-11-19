@@ -43,3 +43,6 @@
   top: 22px;
   right: 12px;
 }
+.Input__show-password-toggle:focus {
+  outline: none;
+}

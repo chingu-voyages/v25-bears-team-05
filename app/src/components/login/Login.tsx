@@ -18,7 +18,9 @@ function Login() {
     setEmail(e.target.value);
   };
   const handleSignin = async () => {
-    const errors = !isEmailValid(email) && setIsEmailError(true);
+    const errors =
+      (!isEmailValid(email) && setIsEmailError(true)) ||
+      validatePassword(password);
     if (!errors) {
       try {
         const req = await axios({
@@ -49,6 +51,7 @@ function Login() {
         ? ["Password requires ", errors.join(" and ")].join("")
         : ""
     );
+    return errors.length > 0;
   };
   const handlePasswordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.value

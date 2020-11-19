@@ -46,3 +46,7 @@
 .Input__show-password-toggle:focus {
   outline: none;
 }
+.Input--error ~ .Input__show-password-toggle,
+.Input--error ~ .Input__label--floating {
+  color: var(--error-color);
+}

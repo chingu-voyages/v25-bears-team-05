@@ -1,0 +1,46 @@
+.wrapper__Input {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 8px;
+}
+.Input {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--secondary-text-color);
+  border-radius: 4px;
+  color: var(--primary-text-color);
+  height: 60px;
+  background: none;
+  padding: 0 12px;
+  padding-top: 24px;
+  font-size: 24px;
+}
+.Input:focus {
+  outline: 1px solid var(--primary-green-color);
+  outline-offset: -1px;
+}
+.Input--error {
+  color: var(--error-color);
+  border-color: var(--error-color);
+}
+.Input__label--floating {
+  color: var(--secondary-text-color);
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  transition: transform 0.2s;
+  font-size: 24px;
+}
+.Input:focus ~ .Input__label--floating,
+.Input--has-content ~ .Input__label--floating {
+  transform: translate(-6px, -18px) scale(0.8);
+}
+.Input__error {
+  color: var(--error-color);
+}
+.Input__show-password-toggle {
+  position: absolute;
+  top: 22px;
+  right: 12px;
+}

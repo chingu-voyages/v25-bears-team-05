@@ -6,6 +6,7 @@ import Button from "../button";
 import { Link } from "react-router-dom";
 import googleIcon from "../../images/googleicon.svg";
 import axios from "axios";
+import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -42,16 +43,9 @@ function Login() {
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const validatePassword = (currentPassword: string) => {
-    let errors = [];
-    currentPassword.length < 8 && errors.push("at least 8 characters");
-    (!currentPassword.match(/[A-Z]/) || !currentPassword.match(/[a-z]/)) &&
-      errors.push("a mix of uppercase and lowercase");
-    setPasswordErrorMessage(
-      errors.length > 0
-        ? ["Password requires ", errors.join(" and ")].join("")
-        : ""
-    );
-    return errors.length > 0;
+    const errorMessage = getInvalidPasswordMessage(currentPassword);
+    setPasswordErrorMessage(errorMessage);
+    return !!errorMessage;
   };
   const handlePasswordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.value

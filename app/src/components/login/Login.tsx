@@ -1,32 +1,28 @@
 import React, { useState } from "react";
 import Input from "../input";
 import isEmailValid from "../../utils/isEmailValid";
+import { isPasswordValid } from "../../utils/passwordValidations";
 import "./Login.css";
 import Button from "../button";
 import { Link } from "react-router-dom";
 import googleIcon from "../../images/googleicon.svg";
 import axios from "axios";
 import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
+import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 
 function Login() {
   const [email, setEmail] = useState("");
-  const [isEmailError, setIsEmailError] = useState(false);
-  const validateEmail = (currentEmail: string) => {
-    setIsEmailError(!isEmailValid(currentEmail));
-  };
-  const handleEmailOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value ? validateEmail(e.target.value) : setIsEmailError(false);
-    setEmail(e.target.value);
-  };
+  const [password, setPassword] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const handleSignin = async () => {
-    const errors =
-      (!isEmailValid(email) && setIsEmailError(true)) ||
-      validatePassword(password);
+    const errors = !isEmailValid(email) || isPasswordValid(password);
     if (!errors) {
+      let req;
+      let reqError;
       try {
-        const req = await axios({
+        req = await axios({
           method: "post",
-          url: "localhost:5000/auth/local",
+          url: "/auth/local",
           data: {
             email,
             password,
@@ -37,22 +33,14 @@ function Login() {
         }
       } catch (error) {
         console.error(error);
+        reqError = error;
+      } finally {
+        typeof reqError?.message === "string" &&
+          setPasswordErrorMessage(reqError.message);
       }
     }
   };
-  const [password, setPassword] = useState("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const validatePassword = (currentPassword: string) => {
-    const errorMessage = getInvalidPasswordMessage(currentPassword);
-    setPasswordErrorMessage(errorMessage);
-    return !!errorMessage;
-  };
-  const handlePasswordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value
-      ? validatePassword(e.target.value)
-      : setPasswordErrorMessage("");
-    setPassword(e.target.value);
-  };
+
   return (
     <div className="Login">
       <div className="Login__inputs">
@@ -61,15 +49,16 @@ function Login() {
           id="loginEmail"
           type="email"
           value={email}
-          onChange={handleEmailOnChange}
-          errorMessage={isEmailError ? "Please enter a valid email" : ""}
+          setValue={setEmail}
+          validationMessenger={getInvalidEmailMessage}
         />
         <Input
           label="Password"
           id="loginPassword"
           type="password"
           value={password}
-          onChange={handlePasswordOnChange}
+          setValue={setPassword}
+          validationMessenger={getInvalidPasswordMessage}
           errorMessage={passwordErrorMessage}
         />
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IInputProps, IInputAttributes } from "./input.types";
 import "./Input.css";
 
@@ -13,9 +13,31 @@ function Input(props: IInputProps) {
     props.onBlur?.();
     setIsFocused(false);
   };
-  const attributes = { ...props };
+
+  const [errorMessage, setErrorMessage] = useState(props.errorMessage);
+  const validate = (currentPassword: string) => {
+    if (props.validationMessenger) {
+      const errorMessage = props.validationMessenger(currentPassword);
+      setErrorMessage(errorMessage);
+    }
+  };
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChange?.();
+    e.target.value ? validate(e.target.value) : setErrorMessage("");
+    props.setValue(e.target.value);
+  };
+
+  const attributes: IInputAttributes = { ...props };
   delete attributes.errorMessage;
   delete attributes.label;
+  delete attributes.setValue;
+  delete attributes.validationMessenger;
+
+  useEffect(() => {
+    if (props.errorMessage) {
+      setErrorMessage(props.errorMessage);
+    }
+  }, [props.errorMessage]);
   return (
     <div className="wrapper__Input">
       <input
@@ -23,8 +45,9 @@ function Input(props: IInputProps) {
         type={props.type && showPassword ? "text" : props.type}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onChange={handleOnChange}
         className={`Input ${attributes.className} ${
-          props.errorMessage && !isFocused ? "Input--error" : ""
+          errorMessage && !isFocused ? "Input--error" : ""
         } ${props.value ? "Input--has-content" : ""}`}
       />
       <label
@@ -44,14 +67,14 @@ function Input(props: IInputProps) {
           {showPassword ? "Hide" : "Show"}
         </div>
       )}
-      {props.errorMessage && !isFocused && (
+      {errorMessage && !isFocused && (
         <div
           error-for={props.id}
           className="Input__error"
           role="alert"
           aria-live="assertive"
         >
-          {props.errorMessage}
+          {errorMessage}
         </div>
       )}
     </div>

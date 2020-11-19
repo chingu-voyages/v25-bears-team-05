@@ -1,32 +1,43 @@
 .Button {
   background: none;
   color: var(--primary-text-color);
-  height: 40px;
   border: none;
   border-width: 1px;
   font-weight: 700;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
 }
 .Button a {
   color: var(--primary-text-color);
   text-decoration: none;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 .Button.square {
   border-style: solid;
   border-radius: 2px;
+  border-color: var(--color-green-3);
+  height: 40px;
 }
 .Button.round {
   border-style: solid;
   border-radius: 28px;
+  height: 60px;
+  width: 100%;
+  font-size: 16px;
 }
-.Button.green-border {
-  border-color: var(--color-green-3);
-}
-.Button.black-text {
+.Button.primary {
+  background-color: var(--primary-green-color);
   color: var(--color-black);
 }
-.Button.green-background {
-  background-color: var(--primary-green-color);
-}
-.Button.grey-background {
+.Button.primary:hover,
+.Button.primary:active {
+  background-color: var(--color-green-3);
   background-color: var(--grey-background-color);
 }

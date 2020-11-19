@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 
-export interface InputAttributes {
+export interface IInputAttributes {
   type: string;
   id: string;
   value: string;
@@ -10,7 +10,7 @@ export interface InputAttributes {
   [keyof: string]: any;
 }
 
-export interface InputProps extends InputAttributes {
+export interface IInputProps extends IInputAttributes {
   label?: string;
   errorMessage?: string;
 }

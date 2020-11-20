@@ -1,0 +1,43 @@
+.Register {
+  width: 100%;
+  color: var(--color-black);
+  display: grid;
+  place-items: start center;
+}
+.Register__inputs {
+  width: 95%;
+}
+.Register__inputs .Input {
+  background: var(--color-black);
+}
+.Register__conditions {
+  text-align: center;
+  font-size: 12px;
+}
+.Register__buttons {
+  display: grid;
+  width: 95%;
+  row-gap: 6px;
+  margin: 24px 0;
+}
+.Register__join-with-google {
+  background-color: var(--grey-background-color);
+  border-width: 0;
+}
+.Register__already-registered {
+  text-align: center;
+}
+.Register__already-registered a {
+  font-weight: 700;
+  color: var(--color-black);
+  text-decoration: none;
+}
+.Register__google-icon {
+  padding-right: 12px;
+}
+.Register__error {
+  color: var(--error-color);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

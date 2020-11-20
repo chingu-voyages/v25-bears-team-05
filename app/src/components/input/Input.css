@@ -2,7 +2,6 @@
   position: relative;
   top: 0;
   left: 0;
-  margin: 8px;
 }
 .Input {
   box-sizing: border-box;
@@ -43,4 +42,11 @@
   position: absolute;
   top: 22px;
   right: 12px;
+}
+.Input__show-password-toggle:focus {
+  outline: none;
+}
+.Input--error ~ .Input__show-password-toggle,
+.Input--error ~ .Input__label--floating {
+  color: var(--error-color);
 }

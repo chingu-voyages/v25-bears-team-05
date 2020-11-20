@@ -1,6 +1,31 @@
-.Landing-page header {
+.Landing-page {
+  display: grid;
+  place-items: start center;
+  font-family: "Roboto", sans-serif;
+}
+.Landing-page__header-bar {
+  box-sizing: border-box;
+  width: 100%;
   background: var(--black-background-color);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding: 12px 18px;
 }
 .Landing-page main {
+  box-sizing: border-box;
+  width: 100%;
   background: var(--black-background-color);
+  margin: 0;
+  height: 70%;
+  padding: 24px 12px;
+}
+.Landing-page__tagline {
+  margin-top: 0;
+  color: var(--primary-green-color);
+  font-size: 42px;
+  font-weight: 400;
+}
+.Landing-page__feature-graphic {
+  max-width: 100%;
 }

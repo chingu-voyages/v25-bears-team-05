@@ -9,17 +9,23 @@ import "./Landing.css";
 function Landing() {
   return (
     <div className="Landing-page">
-      <header>
+      <header className="Landing-page__header-bar">
         <Logo />
-        <Button className="square primary green-border">
+        <Button className="square">
           <Link to="/signup">Join now</Link>
         </Button>
       </header>
-      <main>
-        <h1>Landing - TODO</h1>
+      <main className="Landing-page__main">
+        <h1 className="Landing-page__tagline">
+          Welcome to your developer community
+        </h1>
         <Login />
-        <figure>
-          <img src={featureGraphicSVG} alt="" />
+        <figure className="warpper__Landing-page__feature-graphic">
+          <img
+            className="Landing-page__feature-graphic"
+            src={featureGraphicSVG}
+            alt=""
+          />
         </figure>
       </main>
     </div>

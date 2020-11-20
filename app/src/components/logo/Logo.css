@@ -1,0 +1,8 @@
+.wrapper__Logo {
+  display: grid;
+  place-items: center center;
+}
+
+.Logo {
+  width: 100%;
+}

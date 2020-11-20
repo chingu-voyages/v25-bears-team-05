@@ -1,0 +1,27 @@
+.wrapper__Signup-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    to right top,
+    var(--color-green-2),
+    var(--color-green-4)
+  );
+}
+.Signup-page {
+  display: grid;
+  place-items: start center;
+  font-family: "Roboto", sans-serif;
+}
+.Signup-page__header {
+  margin-top: 24px;
+  display: grid;
+  place-items: end center;
+}
+.Signup-page__tagline {
+  margin-top: 24px;
+  color: var(--color-black);
+  font-weight: 400;
+  font-size: 24px;
+}
+.Signup-page__registration {
+  width: 100%;
+}

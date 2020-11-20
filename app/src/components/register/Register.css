@@ -9,6 +9,7 @@
 }
 .Register__inputs .Input {
   background: var(--color-black);
+  border-radius: 0;
 }
 .Register__conditions {
   text-align: center;

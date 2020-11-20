@@ -14,7 +14,7 @@ function Input(props: IInputProps) {
     setIsFocused(false);
   };
 
-  const [errorMessage, setErrorMessage] = useState(props.errorMessage);
+  const [errorMessage, setErrorMessage] = useState(props.errorMessage || "");
   const validate = (currentPassword: string) => {
     if (props.validationMessenger) {
       const errorMessage = props.validationMessenger(currentPassword);
@@ -32,12 +32,17 @@ function Input(props: IInputProps) {
   delete attributes.label;
   delete attributes.setValue;
   delete attributes.validationMessenger;
+  delete attributes.errorMessageReturner;
 
   useEffect(() => {
     if (props.errorMessage) {
       setErrorMessage(props.errorMessage);
     }
   }, [props.errorMessage]);
+
+  useEffect(() => {
+    props.errorMessageReturner?.(!isFocused ? errorMessage : "");
+  }, [errorMessage, isFocused]);
   return (
     <div className="wrapper__Input">
       <input
@@ -67,7 +72,7 @@ function Input(props: IInputProps) {
           {showPassword ? "Hide" : "Show"}
         </div>
       )}
-      {errorMessage && !isFocused && (
+      {!props.errorMessageReturner && errorMessage && !isFocused && (
         <div
           error-for={props.id}
           className="Input__error"

@@ -14,4 +14,5 @@ export interface IInputProps extends IInputAttributes {
   label?: string;
   errorMessage?: string;
   validationMessenger?: (value: string) => string;
+  errorMessageReturner?: (error: string) => void;
 }

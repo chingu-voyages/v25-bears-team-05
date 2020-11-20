@@ -15,7 +15,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const handleSignin = async () => {
-    const errors = !isEmailValid(email) || isPasswordValid(password);
+    const errors = !isEmailValid(email) || !isPasswordValid(password);
     if (!errors) {
       let req;
       let reqError;

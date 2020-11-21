@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Input from "../input";
-import isEmailValid from "../../utils/isEmailValid";
-import { isPasswordValid } from "../../utils/passwordValidations";
 import "./Login.css";
 import Button from "../button";
 import { Link } from "react-router-dom";
@@ -12,11 +10,18 @@ import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 
 function Login() {
   const [email, setEmail] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const handleSignin = async () => {
-    const errors = !isEmailValid(email) || !isPasswordValid(password);
-    if (!errors) {
+    const errors = {
+      email: getInvalidEmailMessage(email),
+      password: getInvalidPasswordMessage(password),
+    };
+    setEmailErrorMessage(errors.email);
+    setPasswordErrorMessage(errors.password);
+    const thereAreErrors = !Object.values(errors).some((error) => error);
+    if (thereAreErrors) {
       let req;
       let reqError;
       try {
@@ -40,7 +45,7 @@ function Login() {
       }
     }
   };
-
+  console.log(process.env.REACT_APP_API_PORT);
   return (
     <div className="Login">
       <div className="Login__inputs">
@@ -51,6 +56,7 @@ function Login() {
           value={email}
           setValue={setEmail}
           validationMessenger={getInvalidEmailMessage}
+          errorMessage={emailErrorMessage}
         />
         <Input
           label="Password"

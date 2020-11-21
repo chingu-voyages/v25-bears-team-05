@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Input from "../input";
-import isEmailValid from "../../utils/isEmailValid";
-import { isPasswordValid } from "../../utils/passwordValidations";
 import "./Register.css";
 import Button from "../button";
 import { Link } from "react-router-dom";
@@ -10,7 +8,6 @@ import axios from "axios";
 import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import getInvalidNameMessage from "../../utils/getInvalidNameMessage";
-import isNameValid from "../../utils/isNameValid";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -26,12 +23,15 @@ function Register() {
     });
   };
   const handleRegister = async () => {
-    const errors =
-      !isEmailValid(email) ||
-      !isPasswordValid(password) ||
-      !isNameValid(firstName) ||
-      !isNameValid(lastName);
-    if (!errors) {
+    const errors = {
+      firstName: getInvalidNameMessage(firstName),
+      lastName: getInvalidNameMessage(lastName),
+      email: getInvalidEmailMessage(email),
+      password: getInvalidPasswordMessage(password),
+    };
+    setErrorMessage(Object.values(errors));
+    const thereAreErrors = !Object.values(errors).some((error) => error);
+    if (thereAreErrors) {
       let reqError;
       try {
         await axios({

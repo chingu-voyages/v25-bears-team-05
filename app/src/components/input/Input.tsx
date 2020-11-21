@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IInputProps, IInputAttributes } from "./input.types";
 import "./Input.css";
 
 function Input(props: IInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const propsErrorMessage = props.errorMessage;
+  const errorMessageReturner = useRef(props.errorMessageReturner);
   const handleFocus = () => {
     props.onFocus?.();
     setIsFocused(true);
@@ -14,7 +16,7 @@ function Input(props: IInputProps) {
     setIsFocused(false);
   };
 
-  const [errorMessage, setErrorMessage] = useState(props.errorMessage || "");
+  const [errorMessage, setErrorMessage] = useState(propsErrorMessage || "");
   const validate = (currentPassword: string) => {
     if (props.validationMessenger) {
       const errorMessage = props.validationMessenger(currentPassword);
@@ -35,13 +37,13 @@ function Input(props: IInputProps) {
   delete attributes.errorMessageReturner;
 
   useEffect(() => {
-    if (props.errorMessage) {
-      setErrorMessage(props.errorMessage);
+    if (propsErrorMessage) {
+      setErrorMessage(propsErrorMessage);
     }
-  }, [props.errorMessage]);
+  }, [propsErrorMessage]);
 
   useEffect(() => {
-    props.errorMessageReturner?.(!isFocused ? errorMessage : "");
+    errorMessageReturner.current?.(!isFocused ? errorMessage : "");
   }, [errorMessage, isFocused]);
   return (
     <div className="wrapper__Input">
@@ -72,7 +74,7 @@ function Input(props: IInputProps) {
           {showPassword ? "Hide" : "Show"}
         </div>
       )}
-      {!props.errorMessageReturner && errorMessage && !isFocused && (
+      {!errorMessageReturner.current && errorMessage && !isFocused && (
         <div
           error-for={props.id}
           className="Input__error"

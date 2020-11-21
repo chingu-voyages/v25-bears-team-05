@@ -15,7 +15,6 @@ import isNameValid from "../../utils/isNameValid";
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [errorMessage, setErrorMessage] = useState(["", "", "", "", ""]);
@@ -33,10 +32,9 @@ function Register() {
       !isNameValid(firstName) ||
       !isNameValid(lastName);
     if (!errors) {
-      let req;
       let reqError;
       try {
-        req = await axios({
+        await axios({
           method: "post",
           url: "/register/local",
           data: {
@@ -125,9 +123,7 @@ function Register() {
           className="square Register__join-with-google"
         >
           <a
-            href="localhost:5000/auth/google"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`}
           >
             <div>
               <img className="Register__google-icon" src={googleIcon} alt="" />

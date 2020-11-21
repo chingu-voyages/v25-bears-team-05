@@ -79,9 +79,7 @@ function Login() {
         </div>
         <Button type="submit" aria-label="Sign in" className="round">
           <a
-            href="localhost:5000/auth/google"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`}
           >
             <div>
               <img className="Login__google-icon" src={googleIcon} alt="" />

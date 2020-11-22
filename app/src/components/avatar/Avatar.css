@@ -6,6 +6,7 @@
   background: var(--color-black);
   display: grid;
   place-items: center center;
+  box-shadow: 0 2px 2px var(--color-white);
 }
 .Avatar.small {
   width: 50px;

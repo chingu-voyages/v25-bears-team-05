@@ -2,7 +2,9 @@ const isPasswordTooShort = (password: string) => {
   return password.length < 8;
 };
 const doesPasswordHaveMixedCase = (password: string) => {
-  return !password.match(/[A-Z]/) || !password.match(/[a-z]/);
+  const lowerCaseExpression = /[a-z]/;
+  const upperCaseExpression = /[A-Z]/;
+  return lowerCaseExpression.test(password) && upperCaseExpression.test(password);
 };
 
 const isPasswordValid = (password: string) => {

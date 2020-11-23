@@ -1,81 +1,55 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { Link, useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import wallpaper from "../../images/profilewallpapergraphic.svg";
 import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
-import Input from "../../components/input";
-import axios from "axios";
+import { updateUser, getUser } from "../../services/user";
+import IUser, { IUserPatch } from "../../types/user.type";
+import ProfileCard from "../../components/profileCard";
+import ProfileEditor from "../../components/profileEditor";
 
 function Profile() {
   const match: any = useRouteMatch("/profile/:userId");
   const userId = match.params.userId.toLowerCase();
+  const [nOfConnections, setNOfConnections]: [
+    number | null,
+    React.Dispatch<React.SetStateAction<any>>
+  ] = useState(null);
+  const [avatar, setAvatar] = useState("");
+  const [getDataErrorMessage, setGetDataErrorMessage] = useState("");
+  const [editorErrorMessage, setEditorErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
     jobTitle: "",
   });
-  const [firstNameInput, setFirstNameInput] = useState("");
-  const [lastNameInput, setlastNameInput] = useState("");
-  const [jobTitleInput, setJobTitleInput] = useState("");
+  const [inputs, setInputs] = useState(userInfo);
   const [isEditing, setIsEditing] = useState(false);
-  const [nConnections, setNConnections] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const handleToggleEditMode = () => {
     const editingMode = !isEditing;
     if (editingMode) {
-      setFirstNameInput(userInfo.firstName);
-      setlastNameInput(userInfo.lastName);
-      setJobTitleInput(userInfo.jobTitle);
+      setInputs(userInfo);
     }
     setIsEditing(editingMode);
   };
-  const handleUpdateInfo = async () => {
-    const newUserInfo = {
-      firstName: firstNameInput,
-      lastName: lastNameInput,
-      jobTitle: jobTitleInput,
-    };
-    let req;
-    let reqError;
-    try {
-      req = await axios({
-        method: "patch",
-        url: `user/${userId}`,
-        data: newUserInfo,
-      });
-    } catch (error) {
-      console.error(error);
-      reqError = error;
-    } finally {
-      typeof reqError?.message === "string" &&
-        setErrorMessage(reqError.message);
-    }
-    if (!reqError) {
-      setUserInfo(newUserInfo);
+
+  const handleUpdateInfo = () => {
+    const onSuccess = (newData: IUserPatch) => {
+      setUserInfo((oldData) => ({ ...oldData, ...newData }));
       handleToggleEditMode();
-    }
+    };
+    updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
   };
-  const getUserName = () =>
-    `${userInfo.firstName} ${userInfo.lastName}`.trim() || "... ...";
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios("/user/me");
-        const { firstName, lastName, jobTitle, numberOfConnections } = res.data;
-        setUserInfo((userInfo) => ({
-          ...userInfo,
-          firstName,
-          lastName,
-          jobTitle,
-        }));
-        setNConnections((oldN) => numberOfConnections || oldN);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
+    const onSuccess = (newData: IUser) => {
+      const { nOfConnections } = newData;
+      setUserInfo((oldData) => ({ ...oldData, ...newData }));
+      setNOfConnections(nOfConnections);
+    };
+    getUser({ userId, onSuccess, onError: setGetDataErrorMessage });
   }, []);
   return (
     <div className="Profile-page">
@@ -85,7 +59,13 @@ function Profile() {
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
         </div>
         <figure className="Profile-page__avatar">
-          <Avatar userName={getUserName()} />
+          <Avatar
+            url={avatar}
+            userName={
+              `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
+              "user avatar"
+            }
+          />
         </figure>
         <div className="Profile-page__info">
           {userId === "me" && (
@@ -107,47 +87,20 @@ function Profile() {
             </>
           )}
           {isEditing ? (
-            <div className="Profile-page__info__inputs">
-              <Input
-                label={"First name"}
-                type="text"
-                className="Profile-page__inputs__first-name"
-                id="ProfilePageFirstName"
-                value={firstNameInput}
-                setValue={setFirstNameInput}
-                errorMessage={errorMessage}
-                errorMessageReturner={() => null}
-              />
-              <Input
-                label={"Last name"}
-                type="text"
-                className="Profile-page__inputs__last-name"
-                id="ProfilePageLastName"
-                value={lastNameInput}
-                setValue={setlastNameInput}
-                errorMessage={errorMessage}
-                errorMessageReturner={() => null}
-              />
-              <Input
-                label={"Job title"}
-                type="text"
-                className="Profile-page__inputs__job-title"
-                id="ProfileJobTitle"
-                value={jobTitleInput}
-                setValue={setJobTitleInput}
-                errorMessage={errorMessage}
-              />
-            </div>
+            <ProfileEditor
+              {...{ inputs, setInputs, errorMessage: editorErrorMessage }}
+              className="Profile-page__editor"
+            />
           ) : (
-            <div className="Profile-page__info__text">
-              <h1 className="Profile-page__name">{getUserName()}</h1>
-              <h2 className="Profile-page__job-title">
-                {userInfo.jobTitle || "..."}
-              </h2>
-              <p className="Profile-page__connections-count">
-                <Link to="/network">{nConnections || "..."} Connections</Link>
-              </p>
-            </div>
+            <ProfileCard
+              profileInfo={{ ...userInfo, nOfConnections, avatar }}
+              className="Profile-page__info__text"
+            />
+          )}
+          {getDataErrorMessage && (
+            <p className="Profile-page__get-data-error">
+              {getDataErrorMessage}
+            </p>
           )}
         </div>
       </main>

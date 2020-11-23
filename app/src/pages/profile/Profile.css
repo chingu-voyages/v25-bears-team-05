@@ -35,19 +35,6 @@
     "inputs edit"
     "inputs save";
 }
-.Profile-page__name,
-.Profile-page__inputs__first-name label,
-.Profile-page__inputs__last-name label {
-  font-size: 18px;
-  margin: 4px 0;
-  font-weight: 400;
-}
-.Profile-page__job-title,
-.Profile-page__inputs__job-title label {
-  font-size: 14px;
-  margin: 4px 0;
-  font-weight: 400;
-}
 .Profile-page__connections-count {
   font-size: 11px;
   margin: 4px 0;
@@ -64,26 +51,18 @@
   grid-area: save;
   place-self: end end;
 }
-.Profile-page__info__inputs {
+.Profile-page__editor {
   grid-area: inputs;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "firstName lastName"
-    "jobTitle jobTitle";
-}
-.Profile-page__inputs__first-name {
-  grid-area: firstName;
-}
-.Profile-page__inputs__last-name {
-  grid-area: lastName;
-}
-.Profile-page__inputs__job-title {
-  grid-area: jobTitle;
 }
 @media (orientation: landscape) {
   .Profile-page__wall-paper {
     width: 100%;
     margin-left: 0;
   }
+}
+.Profile-page__get-data-error {
+  position: absolute;
+  bottom: -40px;
+  font-size: 11px;
+  color: var(--error-color);
 }

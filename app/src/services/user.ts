@@ -1,4 +1,4 @@
-import IUser, { IUserPatch } from "../types/user.type";
+import IUser, { IUserPatch, IUserAPI } from "../types/user.type";
 import axios from "axios";
 
 const getUser = async ({
@@ -7,11 +7,11 @@ const getUser = async ({
   onError,
 }: {
   userId: string;
-  onSuccess: (data: IUser) => void;
+  onSuccess: (data: IUserAPI) => void;
   onError: (message: string) => void;
 }) => {
   try {
-    const res = await axios(`user/${userId}`);
+    const res = await axios(`/users/${userId}`);
     onSuccess(res.data);
   } catch (error) {
     console.error(error);
@@ -32,7 +32,7 @@ const updateUser = async ({
   try {
     const req = await axios({
       method: "patch",
-      url: `user/me`,
+      url: `/users/me`,
       data,
     });
     if (req.status === 200) {

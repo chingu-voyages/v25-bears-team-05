@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Profile.css";
 import { useRouteMatch } from "react-router-dom";
 import wallpaper from "../../images/profilewallpapergraphic.svg";
@@ -6,13 +6,13 @@ import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
 import { updateUser, getUser } from "../../services/user";
-import IUser, { IUserPatch } from "../../types/user.type";
+import { IUserPatch, IUserAPI } from "../../types/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 
 function Profile() {
   const match: any = useRouteMatch("/profile/:userId");
-  const userId = match.params.userId.toLowerCase();
+  const userId = useRef(match.params.userId.toLowerCase());
   const [nOfConnections, setNOfConnections]: [
     number | null,
     React.Dispatch<React.SetStateAction<any>>
@@ -40,16 +40,33 @@ function Profile() {
       setUserInfo((oldData) => ({ ...oldData, ...newData }));
       handleToggleEditMode();
     };
-    updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
+    const inputsHaveChanged = Object.entries(inputs).some(
+      ([key, value]) => value !== ((userInfo as unknown) as any)[key]
+    );
+    if (inputsHaveChanged) {
+      updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
+    } else {
+      handleToggleEditMode();
+    }
   };
 
   useEffect(() => {
-    const onSuccess = (newData: IUser) => {
-      const { nOfConnections } = newData;
-      setUserInfo((oldData) => ({ ...oldData, ...newData }));
-      setNOfConnections(nOfConnections);
+    const onSuccess = (newData: IUserAPI) => {
+      const { connections, firstName, lastName, jobTitle, avatar } = newData;
+      setUserInfo((oldData) => ({
+        ...oldData,
+        firstName,
+        lastName,
+        jobTitle: jobTitle || "New SyncedUp Member",
+      }));
+      setNOfConnections(Object.keys(connections).length);
+      setAvatar(avatar?.[0]?.url || "");
     };
-    getUser({ userId, onSuccess, onError: setGetDataErrorMessage });
+    getUser({
+      userId: userId.current,
+      onSuccess,
+      onError: setGetDataErrorMessage,
+    });
   }, []);
   return (
     <div className="Profile-page">
@@ -68,7 +85,7 @@ function Profile() {
           />
         </figure>
         <div className="Profile-page__info">
-          {userId === "me" && (
+          {userId.current === "me" && (
             <>
               <Button
                 onClick={handleToggleEditMode}

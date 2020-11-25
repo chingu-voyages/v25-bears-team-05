@@ -40,3 +40,6 @@
   row-gap: 6px;
   margin: 24px 0;
 }
+.Login__error {
+  color: var(--error-color);
+}

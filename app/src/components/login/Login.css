@@ -42,4 +42,5 @@
 }
 .Login__error {
   color: var(--error-color);
+  text-align: center;
 }

@@ -24,10 +24,8 @@ function Login() {
     setPasswordErrorMessage(errors.password);
     const thereAreErrors = !Object.values(errors).some((error) => error);
     if (thereAreErrors) {
-      let req;
-      let reqError;
       try {
-        req = await axios({
+        const res = await axios({
           method: "post",
           url: "/auth/local",
           data: {
@@ -35,25 +33,37 @@ function Login() {
             password,
           },
         });
-        if (req.status === 401) {
-          setPasswordErrorMessage("Invalid login!");
+        if (res.status === 200) {
+          setDone(true);
         }
       } catch (error) {
-        console.error(error);
-        reqError = error;
-      } finally {
-        typeof reqError?.message === "string" &&
-          setPasswordErrorMessage(reqError.message);
+        if (error.response.status === 401) {
+          setPasswordErrorMessage("Invalid login!");
+          setEmailErrorMessage(" ");
+        } else {
+          setPasswordErrorMessage("Woppps something went wrong!");
+          console.error(error);
+        }
       }
     }
   };
   const handleGoogleSignin = async () => {
     const requestAuth = async () => {
-      const res = await axios("/auth");
-      if (res.status === 200) {
-        setDone(true);
-      } else {
-        setErrorMessage("Authentication unsuccessful!");
+      try {
+        const res = await axios("/auth");
+        if (res.status === 200) {
+          setDone(true);
+        }
+      } catch (error) {
+        if (error.response.status === 401) {
+          typeof error?.message === "string" &&
+            setErrorMessage(
+              "Authentication unsuccessful, please select a google acoount to sign in with."
+            );
+        } else {
+          setErrorMessage("Woppps something went wrong!");
+          console.error(error);
+        }
       }
     };
     const googleAuthPage = window.open(

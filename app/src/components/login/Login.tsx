@@ -46,7 +46,6 @@ function Login() {
           type="password"
           value={password}
           setValue={setPassword}
-          validationMessenger={getInvalidPasswordMessage}
           errorMessage={passwordErrorMessage}
         />
       </div>

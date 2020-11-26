@@ -1,5 +1,4 @@
 import axios from "axios";
-import getInvalidPasswordMessage from "../utils/getInvalidPasswordMessage";
 import getInvalidEmailMessage from "../utils/getInvalidEmailMessage";
 
 interface ILocalLoginProps {
@@ -19,10 +18,8 @@ const localLogin = async ({
 }: ILocalLoginProps) => {
   const errors = {
     email: getInvalidEmailMessage(email),
-    password: getInvalidPasswordMessage(password),
   };
   setEmailErrorMessage(errors.email);
-  setPasswordErrorMessage(errors.password);
   const thereAreErrors = !Object.values(errors).some((error) => error);
   if (thereAreErrors) {
     try {

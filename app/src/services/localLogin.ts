@@ -25,8 +25,9 @@ const localLogin = async ({
   if (passwordError) {
     setPasswordErrorMessage("Invalid login!");
     setTimeout(() => setDone?.(false), 1000);
+    return;
   }
-  if (!emailError && !passwordError) {
+  if (!emailError) {
     try {
       const res = await axios({
         method: "post",
@@ -51,6 +52,8 @@ const localLogin = async ({
         console.error(error);
       }
     }
+  } else {
+    setDone(false);
   }
 };
 

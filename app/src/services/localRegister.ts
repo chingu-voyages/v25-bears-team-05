@@ -8,8 +8,12 @@ interface ILocalRegisterProps {
   lastName: string;
   email: string;
   password: string;
-  setDone: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>;
+  setDone:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((isDone: boolean) => void);
+  setErrorMessages:
+    | React.Dispatch<React.SetStateAction<string[]>>
+    | ((message: string[]) => void);
 }
 
 const localRegister = async ({
@@ -42,8 +46,11 @@ const localRegister = async ({
       });
       if (res.status === 200) {
         setDone(true);
+      } else {
+        setDone(false);
       }
     } catch (error) {
+      setDone(false);
       if (error.response.status === 409) {
         setErrorMessages([`User with email ${email} already exists!`]);
       } else {
@@ -51,6 +58,8 @@ const localRegister = async ({
         console.error(error);
       }
     }
+  } else {
+    setDone(false);
   }
 };
 

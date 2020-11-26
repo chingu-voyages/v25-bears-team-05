@@ -44,8 +44,12 @@ const localRegister = async ({
         setDone(true);
       }
     } catch (error) {
-      setErrorMessages(["Woppps something went wrong!"]);
-      console.error(error);
+      if (error.response.status === 409) {
+        setErrorMessages([`User with email ${email} already exists!`]);
+      } else {
+        setErrorMessages(["Woppps something went wrong!"]);
+        console.error(error);
+      }
     }
   }
 };

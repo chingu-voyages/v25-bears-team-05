@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../input";
 import "./Register.css";
 import Button from "../button";
@@ -9,6 +9,7 @@ import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import getInvalidNameMessage from "../../utils/getInvalidNameMessage";
 import localRegister from "../../services/localRegister";
 import googleAuth from "../../services/googleAuth";
+import checkIfAuthed from "../../services/checkIfAuthed";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -38,6 +39,10 @@ function Register() {
       setDone,
       setErrorMessage: (msg: string) => setErrorMessages([msg]),
     });
+
+  useEffect(() => {
+    checkIfAuthed({ setDone });
+  }, []);
 
   return done ? (
     <Redirect to="/home" />

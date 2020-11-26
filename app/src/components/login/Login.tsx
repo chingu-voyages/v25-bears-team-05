@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../input";
 import "./Login.css";
 import Button from "../button";
@@ -7,6 +7,7 @@ import googleIcon from "../../images/googleicon.svg";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import googleAuth from "../../services/googleAuth";
 import localLogin from "../../services/localLogin";
+import checkIfAuthed from "../../services/checkIfAuthed";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,10 @@ function Login() {
       setPasswordErrorMessage,
     });
   const handleGoogleSignin = () => googleAuth({ setDone, setErrorMessage });
+
+  useEffect(() => {
+    checkIfAuthed({ setDone });
+  }, []);
 
   return done ? (
     <Redirect to="/home" />

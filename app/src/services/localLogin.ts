@@ -1,10 +1,13 @@
 import axios from "axios";
 import getInvalidEmailMessage from "../utils/getInvalidEmailMessage";
+import { isPasswordValid } from "../utils/passwordValidations";
 
 interface ILocalLoginProps {
   email: string;
   password: string;
-  setDone: React.Dispatch<React.SetStateAction<boolean>>;
+  setDone:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((isDone: boolean) => void);
   setPasswordErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setEmailErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -18,7 +21,12 @@ const localLogin = async ({
 }: ILocalLoginProps) => {
   const emailError = getInvalidEmailMessage(email);
   setEmailErrorMessage(emailError);
-  if (!emailError) {
+  const passwordError = !isPasswordValid(password);
+  if (passwordError) {
+    setPasswordErrorMessage("Invalid login!");
+    setTimeout(() => setDone?.(false), 1000);
+  }
+  if (!emailError && !passwordError) {
     try {
       const res = await axios({
         method: "post",
@@ -30,8 +38,11 @@ const localLogin = async ({
       });
       if (res.status === 200) {
         setDone(true);
+      } else {
+        setDone(false);
       }
     } catch (error) {
+      setDone(false);
       if (error.response.status === 401) {
         setPasswordErrorMessage("Invalid login!");
         setEmailErrorMessage(" ");

@@ -16,12 +16,9 @@ const localLogin = async ({
   setPasswordErrorMessage,
   setEmailErrorMessage,
 }: ILocalLoginProps) => {
-  const errors = {
-    email: getInvalidEmailMessage(email),
-  };
-  setEmailErrorMessage(errors.email);
-  const thereAreErrors = !Object.values(errors).some((error) => error);
-  if (thereAreErrors) {
+  const emailError = getInvalidEmailMessage(email);
+  setEmailErrorMessage(emailError);
+  if (!emailError) {
     try {
       const res = await axios({
         method: "post",

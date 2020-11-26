@@ -2,59 +2,46 @@ import React, { useState } from "react";
 import Input from "../input";
 import "./Register.css";
 import Button from "../button";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import googleIcon from "../../images/googleicon.svg";
-import axios from "axios";
 import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import getInvalidNameMessage from "../../utils/getInvalidNameMessage";
+import localRegister from "../../services/localRegister";
+import googleAuth from "../../services/googleAuth";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [errorMessage, setErrorMessage] = useState(["", "", "", "", ""]);
+  const [errorMessages, setErrorMessages] = useState(["", "", "", "", ""]);
+  const [done, setDone] = useState(false);
   const handleErrorMessageReturn = (index: number, message: string) => {
-    setErrorMessage((messages) => {
+    setErrorMessages((messages) => {
       const newMessages = [...messages];
       newMessages[index] = message;
       return newMessages;
     });
   };
-  const handleRegister = async () => {
-    const errors = {
-      firstName: getInvalidNameMessage(firstName),
-      lastName: getInvalidNameMessage(lastName),
-      email: getInvalidEmailMessage(email),
-      password: getInvalidPasswordMessage(password),
-    };
-    setErrorMessage(Object.values(errors));
-    const thereAreErrors = !Object.values(errors).some((error) => error);
-    if (thereAreErrors) {
-      let reqError;
-      try {
-        await axios({
-          method: "post",
-          url: "/register/local",
-          data: {
-            firstName,
-            lastName,
-            email,
-            password,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-        reqError = error;
-      } finally {
-        typeof reqError?.message === "string" &&
-          handleErrorMessageReturn(4, reqError.message);
-      }
-    }
-  };
+  const handleLocalSignup = () =>
+    localRegister({
+      firstName,
+      lastName,
+      email,
+      password,
+      setDone,
+      setErrorMessages,
+    });
+  const handleGoogleSignup = () =>
+    googleAuth({
+      setDone,
+      setErrorMessage: (msg: string) => setErrorMessages([msg]),
+    });
 
-  return (
+  return done ? (
+    <Redirect to="/home" />
+  ) : (
     <div className="Register">
       <div className="Register__inputs">
         <Input
@@ -102,7 +89,7 @@ function Register() {
           }
         />
         <ul className="Register__error">
-          {errorMessage.map((msg, i) => msg && <li key={msg + i}>{msg}</li>)}
+          {errorMessages.map((msg, i) => msg && <li key={msg + i}>{msg}</li>)}
         </ul>
       </div>
       <p className="Register__conditions">
@@ -110,7 +97,7 @@ function Register() {
       </p>
       <div className="Register__buttons">
         <Button
-          onClick={handleRegister}
+          onClick={handleLocalSignup}
           type="submit"
           aria-label="Sign up"
           className="square primary"
@@ -119,17 +106,14 @@ function Register() {
         </Button>
         <Button
           type="submit"
+          onClick={handleGoogleSignup}
           aria-label="Sign up"
           className="square Register__join-with-google"
         >
-          <a
-            href={`http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`}
-          >
-            <div>
-              <img className="Register__google-icon" src={googleIcon} alt="" />
-            </div>
-            <div>Join with Google</div>
-          </a>
+          <div>
+            <img className="Register__google-icon" src={googleIcon} alt="" />
+          </div>
+          <div>Join with Google</div>
         </Button>
       </div>
       <p className="Register__already-registered">

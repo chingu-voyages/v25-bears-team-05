@@ -2,7 +2,9 @@ import axios from "axios";
 
 interface IGoogleAuthProps {
   setDone: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  setErrorMessage:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((msg: string) => void);
 }
 
 const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {

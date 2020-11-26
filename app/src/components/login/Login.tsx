@@ -4,7 +4,6 @@ import "./Login.css";
 import Button from "../button";
 import { Link, Redirect } from "react-router-dom";
 import googleIcon from "../../images/googleicon.svg";
-import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import googleAuth from "../../services/googleAuth";
 import localLogin from "../../services/localLogin";

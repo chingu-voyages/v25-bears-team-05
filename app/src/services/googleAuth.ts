@@ -1,7 +1,9 @@
 import axios from "axios";
 
 interface IGoogleAuthProps {
-  setDone: React.Dispatch<React.SetStateAction<boolean>>;
+  setDone:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((isDone: boolean) => void);
   setErrorMessage:
     | React.Dispatch<React.SetStateAction<string>>
     | ((msg: string) => void);

@@ -3,7 +3,9 @@ import axios from "axios";
 const checkIfAuthed = async ({
   setDone,
 }: {
-  setDone: React.Dispatch<React.SetStateAction<boolean>>;
+  setDone:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((isDone: boolean) => void);
 }) => {
   try {
     const res = await axios("/auth");
@@ -11,6 +13,7 @@ const checkIfAuthed = async ({
       setDone(true);
     }
   } catch (error) {
+    setDone(false);
     return;
   }
 };

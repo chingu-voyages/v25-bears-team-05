@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../input";
 import "./Login.css";
 import Button from "../button";
@@ -26,12 +26,8 @@ function Login() {
     });
   const handleGoogleSignin = () => googleAuth({ setDone, setErrorMessage });
 
-  useEffect(() => {
-    checkIfAuthed({ setDone });
-  }, []);
-
   return done ? (
-    <Redirect to="/home" />
+    <Redirect to="/login" />
   ) : (
     <div className="Login">
       <div className="Login__inputs">

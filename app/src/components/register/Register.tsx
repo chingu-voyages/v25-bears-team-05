@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../input";
 import "./Register.css";
 import Button from "../button";
@@ -40,12 +40,8 @@ function Register() {
       setErrorMessage: (msg: string) => setErrorMessages([msg]),
     });
 
-  useEffect(() => {
-    checkIfAuthed({ setDone });
-  }, []);
-
   return done ? (
-    <Redirect to="/home" />
+    <Redirect to="/login" />
   ) : (
     <div className="Register">
       <div className="Register__inputs">

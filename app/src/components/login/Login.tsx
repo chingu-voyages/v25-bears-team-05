@@ -4,9 +4,10 @@ import "./Login.css";
 import Button from "../button";
 import { Link, Redirect } from "react-router-dom";
 import googleIcon from "../../images/googleicon.svg";
-import axios from "axios";
 import getInvalidPasswordMessage from "../../utils/getInvalidPasswordMessage";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
+import googleAuth from "../../services/googleAuth";
+import localLogin from "../../services/localLogin";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -15,69 +16,16 @@ function Login() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [done, setDone] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const handleSignin = async () => {
-    const errors = {
-      email: getInvalidEmailMessage(email),
-      password: getInvalidPasswordMessage(password),
-    };
-    setEmailErrorMessage(errors.email);
-    setPasswordErrorMessage(errors.password);
-    const thereAreErrors = !Object.values(errors).some((error) => error);
-    if (thereAreErrors) {
-      try {
-        const res = await axios({
-          method: "post",
-          url: "/auth/local",
-          data: {
-            email,
-            password,
-          },
-        });
-        if (res.status === 200) {
-          setDone(true);
-        }
-      } catch (error) {
-        if (error.response.status === 401) {
-          setPasswordErrorMessage("Invalid login!");
-          setEmailErrorMessage(" ");
-        } else {
-          setPasswordErrorMessage("Woppps something went wrong!");
-          console.error(error);
-        }
-      }
-    }
-  };
-  const handleGoogleSignin = async () => {
-    const requestAuth = async () => {
-      try {
-        const res = await axios("/auth");
-        if (res.status === 200) {
-          setDone(true);
-        }
-      } catch (error) {
-        if (error.response.status === 401) {
-          typeof error?.message === "string" &&
-            setErrorMessage(
-              "Authentication unsuccessful, please select a google acoount to sign in with."
-            );
-        } else {
-          setErrorMessage("Woppps something went wrong!");
-          console.error(error);
-        }
-      }
-    };
-    const googleAuthPage = window.open(
-      `http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`,
-      "googleAuthPage",
-      "onclose"
-    );
-    let intTest = setInterval(() => {
-      if (googleAuthPage?.closed) {
-        setTimeout(() => requestAuth(), 1000);
-        clearInterval(intTest);
-      }
-    }, 1000);
-  };
+  const handleLocalSignin = () =>
+    localLogin({
+      email,
+      password,
+      setDone,
+      setEmailErrorMessage,
+      setPasswordErrorMessage,
+    });
+  const handleGoogleSignin = () => googleAuth({ setDone, setErrorMessage });
+
   return done ? (
     <Redirect to="/home" />
   ) : (
@@ -107,7 +55,7 @@ function Login() {
       </div>
       <div className="Login__buttons">
         <Button
-          onClick={handleSignin}
+          onClick={handleLocalSignin}
           type="submit"
           aria-label="Sign in"
           className="round primary"

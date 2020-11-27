@@ -9,6 +9,7 @@ import { updateUser, getUser } from "../../services/user";
 import { IUserPatch, IUserAPI } from "../../types/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
+import PhotoUploader from "../../components/photoUploader";
 
 function Profile() {
   const match: any = useRouteMatch("/profile/:userId");
@@ -76,13 +77,22 @@ function Profile() {
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
         </div>
         <figure className="Profile-page__avatar">
-          <Avatar
-            url={avatar}
-            userName={
-              `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
-              "user avatar"
-            }
-          />
+          <PhotoUploader
+            route={{
+              url: "/users/me",
+              method: "patch",
+              urlPropertyName: "avatar",
+            }}
+            onUpload={(url) => setAvatar(url)}
+          >
+            <Avatar
+              url={avatar}
+              userName={
+                `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
+                "user avatar"
+              }
+            />
+          </PhotoUploader>
         </figure>
         <div className="Profile-page__info">
           {userId.current === "me" && (

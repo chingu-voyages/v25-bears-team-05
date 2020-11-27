@@ -5,20 +5,21 @@ const convertDateStringToTimeAgo = ({
   date: string;
   precision?: number;
 }) => {
-  const now = new Date();
-  const then = new Date(date);
-  if (!Number.isInteger(then.valueOf())) {
+  const nowDate = new Date();
+  const thenDate = new Date(date);
+  if (!Number.isInteger(thenDate.valueOf())) {
     throw Error(`Invalid date value ${date}`);
   }
   let nOfStringsRequired = precision;
   let timeAgo = "";
-  const yearDiff = now.getUTCFullYear() - then.getUTCFullYear();
-  const monthDiff = now.getUTCMonth() - then.getUTCMonth();
-  const dateDiff = now.getUTCDate() - then.getUTCDate();
-  const hourDiff = now.getUTCHours() - then.getUTCHours();
-  const minuteDiff = now.getUTCMinutes() - then.getUTCMinutes();
-  const secondDiff = now.getUTCSeconds() - then.getUTCSeconds();
-  const millisecondDiff = now.getUTCMilliseconds() - then.getUTCMilliseconds();
+  const yearDiff = nowDate.getUTCFullYear() - thenDate.getUTCFullYear();
+  const monthDiff = nowDate.getUTCMonth() - thenDate.getUTCMonth();
+  const dateDiff = nowDate.getUTCDate() - thenDate.getUTCDate();
+  const hourDiff = nowDate.getUTCHours() - thenDate.getUTCHours();
+  const minuteDiff = nowDate.getUTCMinutes() - thenDate.getUTCMinutes();
+  const secondDiff = nowDate.getUTCSeconds() - thenDate.getUTCSeconds();
+  const millisecondDiff =
+    nowDate.getUTCMilliseconds() - thenDate.getUTCMilliseconds();
   const addToTimeAgo = (number: number, baseName: string) => {
     timeAgo += `${number} ${Math.abs(number) > 1 ? baseName + "s" : baseName} `;
     nOfStringsRequired--;

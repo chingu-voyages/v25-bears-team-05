@@ -1,5 +1,7 @@
 .Login {
   width: 100%;
+  display: grid;
+  place-items: stretch stretch;
 }
 .Login__inputs {
   display: grid;
@@ -39,4 +41,12 @@
   display: grid;
   row-gap: 6px;
   margin: 24px 0;
+}
+.Login__error {
+  color: var(--error-color);
+  text-align: center;
+}
+.Login__spinner {
+  max-width: 50%;
+  place-self: center center;
 }

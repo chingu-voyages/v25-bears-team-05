@@ -1,0 +1,47 @@
+.wrapper__Spinner {
+  display: grid;
+  place-items: center center;
+}
+.Spinner {
+  animation: 2s linear infinite spin;
+}
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+.Spinner circle {
+  display: block;
+  fill: transparent;
+  stroke: var(--primary-green-color);
+  stroke-width: 1px;
+  stroke-dasharray: 283;
+  stroke-linecap: round;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 280;
+  animation: 1.4s ease-in-out infinite both circle-animation;
+}
+@keyframes circle-animation {
+  0%,
+  25% {
+    stroke-width: 5px;
+    stroke: var(--green-background-color);
+    stroke-dashoffset: 280;
+    transform: rotate(0);
+  }
+  50% {
+    stroke-width: 10px;
+    stroke: var(--primary-green-color);
+    stroke-dashoffset: 75;
+    transform: rotate(45deg);
+  }
+  100% {
+    stroke-width: 5px;
+    stroke: var(--color-purple);
+    stroke-dashoffset: 280;
+    transform: rotate(360deg);
+  }
+}

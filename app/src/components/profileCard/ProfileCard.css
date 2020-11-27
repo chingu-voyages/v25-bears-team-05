@@ -1,0 +1,18 @@
+.Profile-card__name {
+  font-size: 18px;
+  margin: 4px 0;
+  font-weight: 400;
+}
+.Profile-card__title {
+  font-size: 14px;
+  margin: 4px 0;
+  font-weight: 400;
+}
+.Profile-card__info {
+  font-size: 11px;
+  margin: 4px 0;
+}
+.Profile-card__info a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+}

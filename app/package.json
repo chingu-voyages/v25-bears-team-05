@@ -55,5 +55,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,html,css}": "prettier --write"
-  }
+  },
+  "proxy": "http://localhost:7000"
 }

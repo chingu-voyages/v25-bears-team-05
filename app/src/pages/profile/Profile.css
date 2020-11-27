@@ -1,0 +1,68 @@
+.Profile-page__header {
+  height: 60px;
+}
+.Profile-page__profile {
+  background: var(--color-black);
+}
+.wrapper__Profile-page__wall-paper {
+  overflow: hidden;
+}
+.Profile-page__wall-paper {
+  width: 150%;
+  margin-left: -25%;
+  background: linear-gradient(
+    to right,
+    var(--color-green-4),
+    var(--color-green-2)
+  );
+}
+.Profile-page__avatar {
+  position: relative;
+  top: -60px;
+  margin: 0 8%;
+}
+.Profile-page__info {
+  position: relative;
+  top: -60px;
+  margin: 12px 8%;
+  font-family: "Roboto", sans-serif;
+  display: grid;
+  place-items: start start;
+  grid-template-columns: 9fr 1fr;
+  column-gap: 4%;
+  row-gap: 12%;
+  grid-template-areas:
+    "inputs edit"
+    "inputs save";
+}
+.Profile-page__connections-count {
+  font-size: 11px;
+  margin: 4px 0;
+}
+.Profile-page__connections-count a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+.Profile-page__info__edit {
+  grid-area: edit;
+  place-self: start end;
+}
+.Profile-page__info__save {
+  grid-area: save;
+  place-self: end end;
+}
+.Profile-page__editor {
+  grid-area: inputs;
+}
+@media (orientation: landscape) {
+  .Profile-page__wall-paper {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+.Profile-page__get-data-error {
+  position: absolute;
+  bottom: -40px;
+  font-size: 11px;
+  color: var(--error-color);
+}

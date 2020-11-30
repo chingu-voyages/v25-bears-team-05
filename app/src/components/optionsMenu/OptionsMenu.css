@@ -1,0 +1,7 @@
+.Options-menu__toggle {
+  transform: rotate(90deg);
+}
+
+.Options-menu__list {
+  position: absolute;
+}

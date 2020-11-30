@@ -70,47 +70,7 @@ const getConnections = async ({
   queryParams.append("offset", offset.toString());
   queryParams.append("limit", limit.toString());
   try {
-    // const res = await axios(`/users/${userId}/connections?${queryParams}`);
-    const res = {
-      data: {
-        "123": {
-          firstName: "lil",
-          lastName: "ka",
-          jobTitle: "something",
-          avatar: undefined,
-          nOfConnections: 0,
-          dateTimeConnected: Date(),
-          id: "123",
-        },
-        "124": {
-          firstName: "fgds",
-          lastName: "ka",
-          jobTitle: "something",
-          avatar: undefined,
-          nOfConnections: 0,
-          dateTimeConnected: Date(),
-          id: "124",
-        },
-        "125": {
-          firstName: "nbce",
-          lastName: "ka",
-          jobTitle: "something",
-          avatar: undefined,
-          nOfConnections: 0,
-          dateTimeConnected: Date(),
-          id: "125",
-        },
-        "126": {
-          firstName: "csa",
-          lastName: "ka",
-          jobTitle: "something",
-          avatar: undefined,
-          nOfConnections: 0,
-          dateTimeConnected: Date(),
-          id: "126",
-        },
-      },
-    };
+    const res = await axios(`/users/${userId}/connections?${queryParams}`);
     onSuccess(res.data);
   } catch (error) {
     console.error(error);
@@ -119,4 +79,30 @@ const getConnections = async ({
   }
 };
 
-export { getUser, updateUser, getConnections };
+const removeConnection = async ({
+  connectionId,
+  onSuccess,
+  onError,
+}: {
+  connectionId: string;
+  onSuccess: () => void;
+  onError: (message: string) => void;
+}) => {
+  try {
+    const req = await axios({
+      method: "delete",
+      url: `/users/connections/${connectionId}`,
+    });
+    if (req.status === 200) {
+      onSuccess();
+    } else {
+      onError(req.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError("User not removed, please try again later");
+  }
+};
+
+export { getUser, updateUser, getConnections, removeConnection };

@@ -4,7 +4,7 @@ import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { IUserConnection } from "../../types/user.type";
-import { getConnections } from "../../services/user";
+import { getConnections, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
@@ -19,7 +19,18 @@ function Network() {
   const [page, setPage] = useState(0);
   const [isEndPage, setIsEndPage] = useState(false);
   const isLoadingNextPage = useRef(true);
-  const handleRemoveConnection = (id: string) => {};
+  const handleRemoveConnection = (connectionId: string) => {
+    const onSuccess = () => {
+      setConnections((connections) =>
+        connections.filter(({ id }) => id !== connectionId)
+      );
+    };
+    removeConnection({
+      connectionId,
+      onSuccess,
+      onError: (msg) => setErrorMessage(msg),
+    });
+  };
   const nextPage = useCallback(() => {
     if (!isLoadingNextPage.current) {
       setPage((page) => page + 1);

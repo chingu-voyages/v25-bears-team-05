@@ -1,7 +1,25 @@
 .Options-menu__toggle {
   transform: rotate(90deg);
+  z-index: 50;
 }
 
 .Options-menu__list {
+  background: var(--color-black);
+  color: var(--primary-text-color);
+  z-index: 100;
+}
+
+.Options-menu__hidden-input {
+  opacity: 0;
   position: absolute;
+  z-index: 0;
+}
+
+.Options-menu__confirmation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.Options-menu__confirmation__message {
+  grid-column: span 2;
 }

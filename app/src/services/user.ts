@@ -63,14 +63,54 @@ const getConnections = async ({
   userId: string;
   offset: number;
   limit: number;
-  onSuccess: (data: IUserConnection[]) => void;
+  onSuccess: (data: { [keyof: string]: IUserConnection }) => void;
   onError: (message: string) => void;
 }) => {
   const queryParams = new URLSearchParams();
   queryParams.append("offset", offset.toString());
   queryParams.append("limit", limit.toString());
   try {
-    const res = await axios(`/users/${userId}/connections?${queryParams}`);
+    // const res = await axios(`/users/${userId}/connections?${queryParams}`);
+    const res = {
+      data: {
+        "123": {
+          firstName: "lil",
+          lastName: "ka",
+          jobTitle: "something",
+          avatar: undefined,
+          nOfConnections: 0,
+          dateTimeConnected: Date(),
+          id: "123",
+        },
+        "124": {
+          firstName: "fgds",
+          lastName: "ka",
+          jobTitle: "something",
+          avatar: undefined,
+          nOfConnections: 0,
+          dateTimeConnected: Date(),
+          id: "124",
+        },
+        "125": {
+          firstName: "nbce",
+          lastName: "ka",
+          jobTitle: "something",
+          avatar: undefined,
+          nOfConnections: 0,
+          dateTimeConnected: Date(),
+          id: "125",
+        },
+        "126": {
+          firstName: "csa",
+          lastName: "ka",
+          jobTitle: "something",
+          avatar: undefined,
+          nOfConnections: 0,
+          dateTimeConnected: Date(),
+          id: "126",
+        },
+      },
+    };
     onSuccess(res.data);
   } catch (error) {
     console.error(error);

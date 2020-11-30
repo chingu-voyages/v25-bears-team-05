@@ -1,3 +1,7 @@
+.Network-page {
+  background: var(--color-black);
+  min-height: 100vh;
+}
 .Network-page__top-bar {
   display: grid;
   grid-template-columns: 1fr 9fr;
@@ -17,4 +21,21 @@
   width: 20px;
   padding: 16px;
   fill: var(--color-black);
+}
+
+.Network-page__connections-list {
+  list-style: none;
+  padding: 0;
+  margin: 6px 12px;
+}
+.Network-page__connections-list li {
+  display: grid;
+  place-items: center start;
+  grid-template-columns: 4fr 1fr;
+}
+.Network-page__connections-list li:after {
+  content: "";
+  width: 100%;
+  margin-left: 50px;
+  border-bottom: 1px solid var(--color-grey-2);
 }

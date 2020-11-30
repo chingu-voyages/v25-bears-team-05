@@ -57,8 +57,8 @@ function ProfileCard({
 
   return (
     <div
-      className={`Profile-card ${className ? className : ""} ${
-        !profileInfo ? "Profile-card--incl-avatar" : ""
+      className={`Profile-card ${className ? className : ""} Profile-card--${
+        profileInfo ? "profile" : connectionInfo ? "connection" : "thread"
       }`}
     >
       {!profileInfo && (

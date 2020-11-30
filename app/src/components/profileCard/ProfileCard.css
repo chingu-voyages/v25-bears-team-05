@@ -1,4 +1,5 @@
-.Profile-card--incl-avatar {
+.Profile-card--connection,
+.Profile-card--thread {
   height: 50px;
   display: grid;
   grid-template-columns: 60px auto;
@@ -19,7 +20,7 @@
   font-weight: 400;
   grid-area: name;
 }
-.Profile-card--incl-avatar .Profile-card__name {
+.Profile-card--connection .Profile-card__name {
   font-size: 14px;
   margin: 0;
 }
@@ -29,7 +30,7 @@
   font-weight: 400;
   grid-area: title;
 }
-.Profile-card--incl-avatar .Profile-card__title {
+.Profile-card--connection .Profile-card__title {
   font-size: 12px;
   margin: 0;
 }
@@ -38,7 +39,7 @@
   margin: 4px 0;
   grid-area: info;
 }
-.Profile-card--incl-avatar .Profile-card__info {
+.Profile-card--connection .Profile-card__info {
   font-size: 9px;
   margin: 0;
 }

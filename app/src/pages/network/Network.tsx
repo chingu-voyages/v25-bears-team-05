@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./Network.css";
 import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { IUserConnection } from "../../types/user.type";
 import { getConnections } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
@@ -62,7 +62,12 @@ function Network() {
         <ul className="Network-page__connections-list">
           {connections.map((connectionData: IUserConnection) => (
             <li key={connectionData.id}>
-              <ProfileCard connectionInfo={{ ...connectionData }} />
+              <Link
+                className="connections-list__link"
+                to={`/${connectionData.id}/profile`}
+              >
+                <ProfileCard connectionInfo={{ ...connectionData }} />
+              </Link>
               <OptionsMenu
                 buttons={{
                   "Remove connection": {

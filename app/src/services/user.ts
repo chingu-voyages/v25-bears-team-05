@@ -1,4 +1,8 @@
-import IUser, { IUserPatch, IUserAPI } from "../types/user.type";
+import IUser, {
+  IUserPatch,
+  IUserAPI,
+  IUserConnection,
+} from "../types/user.type";
 import axios from "axios";
 
 const getUser = async ({
@@ -49,4 +53,30 @@ const updateUser = async ({
   }
 };
 
-export { getUser, updateUser };
+const getConnections = async ({
+  userId,
+  offset,
+  limit,
+  onSuccess,
+  onError,
+}: {
+  userId: string;
+  offset: number;
+  limit: number;
+  onSuccess: (data: IUserConnection[]) => void;
+  onError: (message: string) => void;
+}) => {
+  const queryParams = new URLSearchParams();
+  queryParams.append("offset", offset.toString());
+  queryParams.append("limit", limit.toString());
+  try {
+    const res = await axios(`/users/${userId}/connections?${queryParams}`);
+    onSuccess(res.data);
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError("Unable to get info from server, please try again later");
+  }
+};
+
+export { getUser, updateUser, getConnections };

@@ -15,16 +15,21 @@ export interface IUserPatch {
   avatar?: string | undefined;
 }
 
-export interface IUserConnection extends IUserNameAndJob {
+export interface IUserConnection extends IUser {
   dateTimeConnected: string;
+  id: string;
 }
 
-export interface IUserThread extends IUserNameAndJob {
+export interface IUserThread extends IUser {
   dateTimePosted: string;
   visibility: "anyone" | "connections";
+  id: string;
 }
 
 export interface IUserAPI extends IUserNameAndJob {
   connections: { [keyof: string]: any };
   avatar: { url: string; _id: string }[];
+  connectionOf: { [keyof: string]: any };
+  threads: { [keyof: string]: any };
+  id: string;
 }

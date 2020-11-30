@@ -6,10 +6,12 @@ function Avatar({
   url,
   userName,
   size,
+  className,
 }: {
   url?: string;
   userName: string;
   size?: "small" | "medium" | "large";
+  className?: string;
 }) {
   const addDefaultSrc = (e: React.ChangeEvent<HTMLImageElement>) => {
     e.target.src = defaultAvatar;
@@ -18,7 +20,7 @@ function Avatar({
     url = defaultAvatar;
   }
   return (
-    <div className={`Avatar ${size}`}>
+    <div className={`Avatar ${size ? size : ""} ${className ? className : ""}`}>
       <img
         className="Avatar__img"
         src={url}

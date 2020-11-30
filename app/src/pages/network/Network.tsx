@@ -66,6 +66,8 @@ function Network() {
                 className="connections-list__link"
                 to={`/${connectionData.id}/profile`}
               >
+                refTitle=
+                {`${connectionData.firstName} ${connectionData.lastName}`}
                 <ProfileCard connectionInfo={{ ...connectionData }} />
               </Link>
               <OptionsMenu

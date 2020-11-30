@@ -1,0 +1,20 @@
+.Network-page__top-bar {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+  width: 100%;
+  place-items: center start;
+  background: var(--primary-green-color);
+  color: var(--color-black);
+}
+
+.Network-page__title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.Network-page__back-icon {
+  width: 20px;
+  padding: 16px;
+  fill: var(--color-black);
+}

@@ -18,7 +18,7 @@ function ProfileCard({
     name = `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim();
     title = jobTitle;
     info = (
-      <Link to="/network">{`${
+      <Link to="network">{`${
         Number.isInteger(nOfConnections) ? nOfConnections : "..."
       } Connections`}</Link>
     );

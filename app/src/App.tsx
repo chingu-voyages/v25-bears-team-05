@@ -34,13 +34,13 @@ function App() {
           <Login setIsLoggedIn={setIsLoggedIn} />
         </Route>
         <ProtectedRoute
-          path="/network"
+          path="/:userId/network"
           allowed={isLoggedIn}
           component={Network}
           redirectTo="/"
         />
         <ProtectedRoute
-          path="/profile/:userId"
+          path="/:userId/profile"
           allowed={isLoggedIn}
           component={Profile}
           redirectTo="/"

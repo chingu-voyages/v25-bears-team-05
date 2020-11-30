@@ -12,7 +12,7 @@ import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 
 function Profile() {
-  const match: any = useRouteMatch("/profile/:userId");
+  const match: any = useRouteMatch("/:userId");
   const userId = useRef(match.params.userId.toLowerCase());
   const [nOfConnections, setNOfConnections]: [
     number | null,

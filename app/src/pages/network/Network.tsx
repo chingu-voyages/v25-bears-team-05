@@ -3,7 +3,7 @@ import "./Network.css";
 import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { IUserConnection } from "../../types/user.type";
+import { IUserConnection } from "../../services/user/user.type";
 import { getConnections, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";

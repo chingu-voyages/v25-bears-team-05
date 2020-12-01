@@ -1,4 +1,7 @@
-import IUser, { IUserConnection, IUserThread } from "../../types/user.type";
+import IUser, {
+  IUserConnection,
+  IUserThread,
+} from "../../services/user/user.type";
 
 export default interface IProfileCard {
   profileInfo?: IUser;

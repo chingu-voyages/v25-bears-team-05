@@ -1,5 +1,5 @@
 import React from "react";
-import { IUserPatch } from "../../types/user.type";
+import { IUserPatch } from "../../services/user/user.type";
 
 export default interface IProfileEditor {
   inputs: IUserPatch;

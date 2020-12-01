@@ -6,7 +6,7 @@ import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
 import { updateUser, getUser } from "../../services/user";
-import { IUserPatch, IUserAPI } from "../../types/user.type";
+import { IUserPatch, IUserAPI } from "../../services/user/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";

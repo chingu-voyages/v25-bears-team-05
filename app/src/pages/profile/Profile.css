@@ -68,3 +68,6 @@
   font-size: 11px;
   color: var(--error-color);
 }
+.Profile-page__follow {
+  grid-area: edit;
+}

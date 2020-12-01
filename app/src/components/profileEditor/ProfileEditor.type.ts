@@ -1,8 +1,8 @@
 import React from "react";
-import { IUserPatch } from "../../services/user/user.type";
+import { IUserPatchRequest } from "../../services/user/user.type";
 
 export default interface IProfileEditor {
-  inputs: IUserPatch;
+  inputs: IUserPatchRequest;
   setInputs: React.Dispatch<
     React.SetStateAction<{
       firstName: string;

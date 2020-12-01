@@ -37,7 +37,7 @@ function ProfileCard({
     info = convertDateStringToTimeAgo({
       date: dateTimeConnected,
     });
-    avatarUrl = avatar;
+    avatarUrl = avatar?.[0]?.url;
   } else if (threadInfo) {
     const {
       firstName,
@@ -52,7 +52,7 @@ function ProfileCard({
     info = `${convertDateStringToTimeAgo({
       date: dateTimePosted,
     })} &bull; ${visibility}`;
-    avatarUrl = avatar;
+    avatarUrl = avatar?.[0]?.url;
   }
 
   return (

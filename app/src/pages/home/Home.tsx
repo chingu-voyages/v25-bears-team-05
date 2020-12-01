@@ -5,11 +5,22 @@ import "./Home.css";
 
 function Home() {
   return (
-    <div className="Home-page">
-      <h1>Home page - TODO</h1>
-      <Button onClick={logout} className="square">
-        Temporary logout button
-      </Button>
+    <div className="navigationGroup">
+      <div>
+        <span>Logo</span>
+      </div>
+      <div>
+        <input type="text" placeholder="Search" className="searchBar" />
+      </div>
+      <div>
+        <span>Home</span>
+      </div>
+      <div>
+        <span>My Network</span>
+      </div>
+      <div>
+        <span>Me</span>
+      </div>
     </div>
   );
 }

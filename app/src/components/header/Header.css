@@ -1,0 +1,23 @@
+.navigationGroup {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 40px;
+  height: 70px;
+  margin: 0 auto;
+  background-color: rgb(104, 104, 104);
+  align-items: center;
+  color: black;
+  text-align: center;
+}
+
+.navigationGroup div span {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+.searchBar {
+  width: 244px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+}

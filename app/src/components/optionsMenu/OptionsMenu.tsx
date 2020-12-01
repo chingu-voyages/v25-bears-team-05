@@ -10,6 +10,8 @@ interface IOption {
 interface IOptions {
   buttons: { [keyof: string]: IOption };
   refTitle?: string;
+  children?: JSX.Element;
+  className?: string;
 }
 
 interface IConfirmData {
@@ -18,7 +20,7 @@ interface IConfirmData {
   handleCancel: () => void;
 }
 
-function OptionsMenu({ buttons, refTitle }: IOptions) {
+function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmData, setConfirmData] = useState<IConfirmData | null>(null);
   const handleCallAction = ({ action, confirm }: IOption, title: string) => {
@@ -57,12 +59,16 @@ function OptionsMenu({ buttons, refTitle }: IOptions) {
     };
   }, [isOpen]);
   return (
-    <div className="Options-menu">
+    <div className={`Options-menu ${className ? className : ""}`}>
       <Button
         onClick={() => setIsOpen((open) => !open)}
         className="Options-menu__toggle"
       >
-        ...
+        {children ? (
+          children
+        ) : (
+          <span className="Options-menu__toggle__default-dots">...</span>
+        )}
       </Button>
       {isOpen && (
         <dialog
@@ -95,7 +101,7 @@ function OptionsMenu({ buttons, refTitle }: IOptions) {
                 <Button
                   key={title + JSON.stringify(option)}
                   onClick={() => handleCallAction(option, title)}
-                  className="Options-menu__button"
+                  className="Options-menu__button square"
                 >
                   {title}
                 </Button>

@@ -1,6 +1,9 @@
 .Options-menu__toggle {
-  transform: rotate(90deg);
   z-index: 50;
+}
+
+.Options-menu__toggle__default-dots {
+  transform: rotate(90deg);
 }
 
 .Options-menu__list {
@@ -22,4 +25,9 @@
 
 .Options-menu__confirmation__message {
   grid-column: span 2;
+}
+
+.Options-menu__button {
+  width: 100%;
+  margin-bottom: 12px;
 }

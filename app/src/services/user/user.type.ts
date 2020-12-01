@@ -1,35 +1,55 @@
-export interface IUserNameAndJob {
+import { Avatar } from "../../components/avatar/Avatar.type";
+import {
+  IThread,
+  IThreadComment,
+  IThreadLike,
+  IThreadShare,
+} from "../thread/thread.type";
+
+export interface IUserInfo {
   firstName: string;
   lastName: string;
   jobTitle: string;
-}
-export default interface IUser extends IUserNameAndJob {
-  avatar: string | undefined;
-  nOfConnections: number | null;
+  avatar: Array<Avatar>;
+  id: string;
 }
 
-export interface IUserPatch {
+export interface IUserRawResponse extends IUserInfo {
+  connections: { [keyof: string]: IUserConnection };
+  connectionOf: { [keyof: string]: IUserConnection };
+  threads: {
+    started?: { [keyof: string]: IThread };
+    commented?: { [keyof: string]: IThreadComment };
+    liked?: { [keyof: string]: IThreadLike };
+    shared?: { [keyof: string]: IThreadShare };
+  };
+}
+
+export interface IUserPatchRequest {
   firstName?: string;
   lastName?: string;
   jobTitle?: string;
   avatar?: string | undefined;
 }
 
-export interface IUserConnection extends IUser {
-  dateTimeConnected: string;
-  id: string;
+export interface IUserProcessed extends IUserInfo {
+  nOfConnections?: number | null;
+  isAConnection?: boolean;
 }
 
-export interface IUserThread extends IUser {
+export interface IUserProfile {
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  avatar: string | undefined;
+  nOfConnections: number | null;
+  isAConnection: boolean;
+}
+export interface IUserConnection extends IUserProcessed {
+  dateTimeConnected: string;
+  isTeamMate: boolean;
+}
+export interface IUserThread extends IUserProcessed {
   dateTimePosted: string;
   visibility: "anyone" | "connections";
-  id: string;
-}
-
-export interface IUserAPI extends IUserNameAndJob {
-  connections: { [keyof: string]: any };
-  avatar: { url: string; _id: string }[];
-  connectionOf: { [keyof: string]: any };
-  threads: { [keyof: string]: any };
-  id: string;
 }

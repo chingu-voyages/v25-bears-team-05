@@ -1,4 +1,4 @@
 import { getUser, updateUser } from "./User";
-import { getConnections, removeConnection } from "./Connections";
+import { getConnections, removeConnection, addConnection } from "./Connections";
 
-export { getUser, updateUser, getConnections, removeConnection };
+export { getUser, updateUser, getConnections, removeConnection, addConnection };

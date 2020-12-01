@@ -1,5 +1,13 @@
-import { IUserPatch, IUserAPI } from "./user.type";
+import {
+  IUserPatchRequest,
+  IUserProcessed,
+  IUserRawResponse,
+} from "./user.type";
 import axios from "axios";
+
+const storeActiveUsersId = (id: string) => {
+  sessionStorage.setItem("currentUserId", id);
+};
 
 const getUser = async ({
   userId,
@@ -7,12 +15,33 @@ const getUser = async ({
   onError,
 }: {
   userId: string;
-  onSuccess: (data: IUserAPI) => void;
+  onSuccess: (data: IUserProcessed) => void;
   onError: (message: string) => void;
 }) => {
   try {
     const res = await axios(`/users/${userId}`);
-    onSuccess(res.data);
+    let currentUserId;
+    if (userId === "me") {
+      currentUserId = res.data.id;
+      storeActiveUsersId(currentUserId);
+    } else {
+      currentUserId = sessionStorage.getItem("currentUserId");
+    }
+    const { firstName, lastName, jobTitle, avatar, id } = res.data;
+    const connectionIds = Object.keys(res.data.connections);
+    const connectionOfIds = Object.keys(res.data.connectionOf);
+    const processedUserData: IUserProcessed = {
+      firstName,
+      lastName,
+      jobTitle,
+      avatar,
+      nOfConnections: connectionIds.length,
+      isAConnection: !!(
+        currentUserId && connectionOfIds.includes(currentUserId)
+      ),
+      id,
+    };
+    onSuccess(processedUserData);
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
@@ -25,8 +54,8 @@ const updateUser = async ({
   onSuccess,
   onError,
 }: {
-  data: IUserPatch;
-  onSuccess: (data: {}) => void;
+  data: IUserPatchRequest;
+  onSuccess: (data: IUserPatchRequest) => void;
   onError: (message: string) => void;
 }) => {
   try {

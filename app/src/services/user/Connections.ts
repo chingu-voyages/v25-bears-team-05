@@ -55,4 +55,33 @@ const removeConnection = async ({
   }
 };
 
-export { getConnections, removeConnection };
+const addConnection = async ({
+  connectionId,
+  isTeamMate,
+  onSuccess,
+  onError,
+}: {
+  connectionId: string;
+  isTeamMate: boolean;
+  onSuccess: () => void;
+  onError: (message: string) => void;
+}) => {
+  try {
+    const req = await axios({
+      method: "put",
+      url: `/users/connections/${connectionId}`,
+      data: { isTeamMate },
+    });
+    if (req.status === 200) {
+      onSuccess();
+    } else {
+      onError(req.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError("Connection not added, please try again later");
+  }
+};
+
+export { getConnections, removeConnection, addConnection };

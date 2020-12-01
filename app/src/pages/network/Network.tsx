@@ -3,11 +3,11 @@ import "./Network.css";
 import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { IUserConnection } from "../../services/user/user.type";
 import { getConnections, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
+import { IUserConnection } from "../../services/user/user.type";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -40,10 +40,13 @@ function Network() {
   useEffect(() => {
     const limitToNResults = 10;
     const onSuccess = (connections: { [keyof: string]: IUserConnection }) => {
-      const connectionsArray = Object.values(connections);
+      const connectionsArray = Object.entries(
+        connections
+      ).map(([id, data]) => ({ ...data, id }));
       if (connectionsArray.length < limitToNResults) {
         setIsEndPage(true);
       }
+      console.log(connectionsArray);
       page === 0
         ? setConnections(connectionsArray)
         : setConnections((currentConnections) => [
@@ -77,8 +80,6 @@ function Network() {
                 className="connections-list__link"
                 to={`/${connectionData.id}/profile`}
               >
-                refTitle=
-                {`${connectionData.firstName} ${connectionData.lastName}`}
                 <ProfileCard connectionInfo={{ ...connectionData }} />
               </Link>
               <OptionsMenu
@@ -90,6 +91,7 @@ function Network() {
                     confirm: true,
                   },
                 }}
+                refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
               />
             </li>
           ))}

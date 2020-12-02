@@ -26,12 +26,14 @@
 .Network-page__connections-list {
   list-style: none;
   padding: 0;
-  margin: 6px 12px;
+  margin: 6px 0;
+  margin-left: 12px;
 }
 .Network-page__connections-list li {
   display: grid;
   place-items: center stretch;
   grid-template-columns: 1fr auto;
+  width: 100%;
 }
 .Network-page__connections-list li:after {
   content: "";
@@ -39,6 +41,7 @@
   margin-left: 50px;
   margin-top: 4px;
   border-bottom: 1px solid var(--color-grey-2);
+  grid-column: span 2;
 }
 
 .connections-list__link {

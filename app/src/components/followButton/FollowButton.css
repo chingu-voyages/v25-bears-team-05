@@ -10,7 +10,6 @@
   color: var(--error-color);
 }
 .Follow-button__text {
-  padding: 24px 0;
   white-space: nowrap;
 }
 .Follow-button__progress__spinner {

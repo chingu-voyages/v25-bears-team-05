@@ -46,7 +46,6 @@ function Network() {
       if (connectionsArray.length < limitToNResults) {
         setIsEndPage(true);
       }
-      console.log(connectionsArray);
       page === 0
         ? setConnections(connectionsArray)
         : setConnections((currentConnections) => [

@@ -27,7 +27,13 @@ const getUser = async ({
     } else {
       currentUserId = sessionStorage.getItem("currentUserId");
     }
-    const { firstName, lastName, jobTitle, avatar, id } = res.data;
+    const {
+      firstName,
+      lastName,
+      jobTitle,
+      avatar,
+      id,
+    } = res.data as IUserRawResponse;
     const connectionIds = Object.keys(res.data.connections);
     const connectionOfIds = Object.keys(res.data.connectionOf);
     const processedUserData: IUserProcessed = {

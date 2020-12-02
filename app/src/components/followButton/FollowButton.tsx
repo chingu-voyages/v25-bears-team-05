@@ -21,7 +21,6 @@ function FollowButton({
   const [isDone, setIsDone] = useState(false);
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
     const onSuccess = () => {
-      onFollow();
       setIsDone(true);
       setIsInProgress(false);
     };
@@ -34,6 +33,7 @@ function FollowButton({
     });
   };
   const handleClose = () => {
+    isDone && onFollow();
     setErrorMessage("");
     setIsDone(false);
     setIsInProgress(false);

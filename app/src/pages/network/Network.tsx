@@ -109,7 +109,7 @@ function Network() {
         {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">
           {connections.map((connectionData: IUserConnection) => (
-            <ConnectionItem {...{ connectionData }} />
+            <ConnectionItem key={connectionData.id} {...{ connectionData }} />
           ))}
         </ul>
         <Pagenator

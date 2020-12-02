@@ -14,7 +14,7 @@ function FollowButton({
   connectionName: string;
   connectionId: string;
   onFollow: () => void;
-  className: string;
+  className?: string;
 }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [isInProgress, setIsInProgress] = useState(false);

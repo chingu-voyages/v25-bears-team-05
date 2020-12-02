@@ -8,6 +8,7 @@ import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
+import FollowButton from "../../components/followButton";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -30,6 +31,15 @@ function Network() {
       onSuccess,
       onError: (msg) => setErrorMessage(msg),
     });
+  };
+  const onAddConnection = (connectionId: string) => {
+    setConnections((connections) =>
+      connections.map((connection) =>
+        connection.id !== connectionId
+          ? connection
+          : { ...connection, isAConnection: true }
+      )
+    );
   };
   const nextPage = useCallback(() => {
     if (!isLoadingNextPage.current) {
@@ -81,17 +91,30 @@ function Network() {
               >
                 <ProfileCard connectionInfo={{ ...connectionData }} />
               </Link>
-              <OptionsMenu
-                buttons={{
-                  "Remove connection": {
-                    action: () => {
-                      handleRemoveConnection(connectionData.id);
+              {connectionData.isAConnection ? (
+                <OptionsMenu
+                  buttons={{
+                    "Remove connection": {
+                      action: () => {
+                        handleRemoveConnection(connectionData.id);
+                      },
+                      confirm: true,
                     },
-                    confirm: true,
-                  },
-                }}
-                refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
-              />
+                  }}
+                  refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
+                />
+              ) : (
+                <FollowButton
+                  className="Network-page__follow"
+                  {...{
+                    connectionName: `${connectionData.firstName} ${connectionData.lastName}`,
+                    connectionId: connectionData.id,
+                    onFollow: () => {
+                      onAddConnection(connectionData.id);
+                    },
+                  }}
+                />
+              )}
             </li>
           ))}
         </ul>

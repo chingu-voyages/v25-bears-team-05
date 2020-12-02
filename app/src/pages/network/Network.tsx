@@ -8,7 +8,6 @@ import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
-import FollowButton from "../../components/followButton";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -31,15 +30,6 @@ function Network() {
       onSuccess,
       onError: (msg) => setErrorMessage(msg),
     });
-  };
-  const onAddConnection = (connectionId: string) => {
-    setConnections((connections) =>
-      connections.map((connection) =>
-        connection.id !== connectionId
-          ? connection
-          : { ...connection, isAConnection: true }
-      )
-    );
   };
   const nextPage = useCallback(() => {
     if (!isLoadingNextPage.current) {
@@ -72,6 +62,38 @@ function Network() {
       onError: setErrorMessage,
     });
   }, [page]);
+  const RemoveOption = ({
+    connectionData,
+  }: {
+    connectionData: IUserConnection;
+  }) => (
+    <OptionsMenu
+      buttons={{
+        "Remove connection": {
+          action: () => {
+            handleRemoveConnection(connectionData.id);
+          },
+          confirm: true,
+        },
+      }}
+      refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
+    />
+  );
+  const ConnectionItem = ({
+    connectionData,
+  }: {
+    connectionData: IUserConnection;
+  }) => (
+    <li key={connectionData.id}>
+      <Link
+        className="connections-list__link"
+        to={`/${connectionData.id}/profile`}
+      >
+        <ProfileCard connectionInfo={{ ...connectionData }} />
+      </Link>
+      {userId.current === "me" && <RemoveOption {...{ connectionData }} />}
+    </li>
+  );
   return (
     <div className="Network-page">
       <header className="Network-page__top-bar">
@@ -84,38 +106,7 @@ function Network() {
         {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">
           {connections.map((connectionData: IUserConnection) => (
-            <li key={connectionData.id}>
-              <Link
-                className="connections-list__link"
-                to={`/${connectionData.id}/profile`}
-              >
-                <ProfileCard connectionInfo={{ ...connectionData }} />
-              </Link>
-              {connectionData.isAConnection ? (
-                <OptionsMenu
-                  buttons={{
-                    "Remove connection": {
-                      action: () => {
-                        handleRemoveConnection(connectionData.id);
-                      },
-                      confirm: true,
-                    },
-                  }}
-                  refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
-                />
-              ) : (
-                <FollowButton
-                  className="Network-page__follow"
-                  {...{
-                    connectionName: `${connectionData.firstName} ${connectionData.lastName}`,
-                    connectionId: connectionData.id,
-                    onFollow: () => {
-                      onAddConnection(connectionData.id);
-                    },
-                  }}
-                />
-              )}
-            </li>
+            <ConnectionItem {...{ connectionData }} />
           ))}
         </ul>
         <Pagenator

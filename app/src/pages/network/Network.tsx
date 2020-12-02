@@ -12,6 +12,9 @@ import { IUserConnection } from "../../services/user/user.type";
 function Network() {
   const match: any = useRouteMatch("/:userId");
   const userId = useRef(match.params.userId.toLowerCase());
+  const currentUserId = useRef(sessionStorage.getItem("currentUserId"));
+  const isMe =
+    userId.current === "me" || currentUserId.current === userId.current;
   const history = useHistory();
   const handleGoBack = () => history.goBack();
   const [connections, setConnections] = useState<IUserConnection[]>([]);
@@ -91,7 +94,7 @@ function Network() {
       >
         <ProfileCard connectionInfo={{ ...connectionData }} />
       </Link>
-      {userId.current === "me" && <RemoveOption {...{ connectionData }} />}
+      {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
   );
   return (

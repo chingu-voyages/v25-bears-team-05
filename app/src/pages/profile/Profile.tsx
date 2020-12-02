@@ -58,7 +58,14 @@ function Profile() {
 
   useEffect(() => {
     const onSuccess = (newData: IUserProcessed) => {
-      const { nOfConnections, firstName, lastName, jobTitle, avatar } = newData;
+      const {
+        nOfConnections,
+        firstName,
+        lastName,
+        jobTitle,
+        avatar,
+        isAConnection,
+      } = newData;
       setUserInfo((oldData) => ({
         ...oldData,
         firstName,
@@ -67,6 +74,7 @@ function Profile() {
       }));
       setNOfConnections(nOfConnections);
       setAvatar(avatar?.[0]?.url || "");
+      setIsAConnection(!!isAConnection);
     };
     getUser({
       userId: userId.current,

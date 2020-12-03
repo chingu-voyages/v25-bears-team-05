@@ -7,9 +7,12 @@ const port = process.env.PORT || 5000;
 
 const { createProxyMiddleware } = require('http-proxy-middleware');
 console.log(process.env.API_SERVICE_URL)
-app.use('', createProxyMiddleware({
+app.use('/api', createProxyMiddleware({
   target: process.env.API_SERVICE_URL,
-  changeOrigin: true
+  changeOrigin: true,
+  pathRewrite: {
+    [`^/api`]: '',
+  },
 }));
 
 if (process.env.NODE_ENV === "production") {

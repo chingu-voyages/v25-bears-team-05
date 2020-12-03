@@ -36,7 +36,6 @@ const getUser = async ({
     } = res.data as IUserRawResponse;
     const connectionIds = Object.keys(res.data.connections);
     const connectionOfIds = Object.keys(res.data.connectionOf);
-    const isMe = id === currentUserId;
     const processedUserData: IUserProcessed = {
       firstName,
       lastName,

@@ -11,6 +11,8 @@ const checkIfAuthed = async ({
     const res = await axios("/auth");
     if (res.status === 200) {
       setDone(true);
+    } else {
+      setDone(false);
     }
   } catch (error) {
     setDone(false);

@@ -18,6 +18,9 @@ import FollowButton from "../../components/followButton";
 function Profile() {
   const match: any = useRouteMatch("/:userId");
   const userId = useRef<string>(match.params.userId.toLowerCase());
+  const storedUserId = useRef(sessionStorage.getItem("currentUserId"));
+  const isMe =
+    userId.current === "me" || storedUserId.current === userId.current;
   const [nOfConnections, setNOfConnections]: [
     number | null,
     React.Dispatch<React.SetStateAction<any>>
@@ -126,7 +129,8 @@ function Profile() {
               )}
             </>
           ) : (
-            !isAConnection && (
+            !isAConnection &&
+            !isMe && (
               <FollowButton
                 className="Profile-page__follow"
                 {...{

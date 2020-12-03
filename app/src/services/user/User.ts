@@ -43,8 +43,9 @@ const getUser = async ({
       jobTitle,
       avatar,
       nOfConnections: connectionIds.length,
-      isAConnection:
-        isMe || !!(currentUserId && connectionOfIds.includes(currentUserId)),
+      isAConnection: !!(
+        currentUserId && connectionOfIds.includes(currentUserId)
+      ),
       id,
     };
     onSuccess(processedUserData);

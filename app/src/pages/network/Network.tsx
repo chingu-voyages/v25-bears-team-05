@@ -12,9 +12,9 @@ import { IUserConnection } from "../../services/user/user.type";
 function Network() {
   const match: any = useRouteMatch("/:userId");
   const userId = useRef(match.params.userId.toLowerCase());
-  const currentUserId = useRef(sessionStorage.getItem("currentUserId"));
+  const storedUserId = useRef(sessionStorage.getItem("currentUserId"));
   const isMe =
-    userId.current === "me" || currentUserId.current === userId.current;
+    userId.current === "me" || storedUserId.current === userId.current;
   const history = useHistory();
   const handleGoBack = () => history.goBack();
   const [connections, setConnections] = useState<IUserConnection[]>([]);

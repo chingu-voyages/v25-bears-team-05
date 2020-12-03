@@ -9,7 +9,7 @@ const checkIfAuthed = async ({
 }) => {
   try {
     const res = await axios("/auth");
-    if (res.status === 200) {
+    if (res.data.authed) {
       setDone(true);
     } else {
       setDone(false);

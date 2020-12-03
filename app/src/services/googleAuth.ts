@@ -13,10 +13,12 @@ const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
   const requestAuth = async () => {
     try {
       const res = await axios("/auth");
+      console.log({ res });
       if (res.status === 200) {
         setDone(true);
       }
     } catch (error) {
+      console.log({ error });
       if (error.response.status === 401) {
         typeof error?.message === "string" &&
           setErrorMessage(
@@ -28,8 +30,9 @@ const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
       }
     }
   };
+  console.log(process.env.REACT_APP_GOOGLE_AUTH_LINK);
   const googleAuthPage = window.open(
-    `http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`,
+    process.env.REACT_APP_GOOGLE_AUTH_LINK,
     "googleAuthPage",
     "onclose"
   );

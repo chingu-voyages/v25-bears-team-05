@@ -30,7 +30,11 @@ const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
     }
   };
   const googleAuthPage = window.open(
-    `${process.env.REACT_APP_API_URL}/auth/google`,
+    `${
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_DEV_API_URL
+    }/auth/google`,
     "googleAuthPage",
     "onclose"
   );

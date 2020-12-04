@@ -30,9 +30,12 @@ Clone and setup the API repo above for full functionality
 
 ## Heroku Deployment guide
 ### Setup
-1. Add heroku as global package and signin (if you've not already done so)
-    - `$ npm install -g heroku`
+1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+1. Login
     - `$ heroku login`
+1. Create Heroku app 
+    - `$ heroku create <your heroku app name>`
+    - Or using the [Heroku dashboard](https://dashboard.heroku.com/)
 1. Set a git remote named heroku to your Heroku app
     - `$ heroku git:remote -a <your heroku app name>`
 

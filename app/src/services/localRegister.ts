@@ -36,7 +36,7 @@ const localRegister = async ({
     try {
       const res = await axios({
         method: "post",
-        url: "/register/local",
+        url: "/api/register/local",
         data: {
           firstName,
           lastName,

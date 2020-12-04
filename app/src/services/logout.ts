@@ -4,7 +4,7 @@ const logout = async () => {
   try {
     await axios({
       method: "post",
-      url: "/logout",
+      url: "/api/logout",
     });
     window.location.replace("/");
   } catch (error) {

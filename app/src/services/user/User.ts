@@ -19,7 +19,7 @@ const getUser = async ({
   onError: (message: string) => void;
 }) => {
   try {
-    const res = await axios(`/users/${userId}`);
+    const res = await axios(`/api/users/${userId}`);
     let currentUserId;
     if (userId === "me") {
       currentUserId = res.data.id;
@@ -67,7 +67,7 @@ const updateUser = async ({
   try {
     const req = await axios({
       method: "patch",
-      url: `/users/me`,
+      url: `/api/users/me`,
       data,
     });
     if (req.status === 200) {

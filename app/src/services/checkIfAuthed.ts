@@ -8,7 +8,7 @@ const checkIfAuthed = async ({
     | ((isDone: boolean) => void);
 }) => {
   try {
-    const res = await axios("/auth");
+    const res = await axios("/api/auth");
     if (res.data.authed) {
       setDone(true);
     } else {

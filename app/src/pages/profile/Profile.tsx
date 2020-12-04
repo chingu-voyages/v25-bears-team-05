@@ -95,7 +95,7 @@ function Profile() {
         <figure className="Profile-page__avatar">
           <PhotoUploader
             route={{
-              url: "/users/me",
+              url: "/api/users/me",
               method: "patch",
               urlPropertyName: "avatar",
             }}

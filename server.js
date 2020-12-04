@@ -13,6 +13,7 @@ app.use('/api', createProxyMiddleware({
   pathRewrite: {
     [`^/api`]: '',
   },
+  auth: process.env.CLIENT_API_PASS,
 }));
 
 if (process.env.NODE_ENV === "production") {

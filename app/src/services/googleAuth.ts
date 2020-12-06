@@ -12,7 +12,7 @@ interface IGoogleAuthProps {
 const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
   const requestAuth = async () => {
     try {
-      const res = await axios("/auth");
+      const res = await axios("/api/auth");
       if (res.status === 200) {
         setDone(true);
       }

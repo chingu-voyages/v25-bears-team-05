@@ -9,6 +9,15 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const apiUrl = process.env.NODE_ENV === "development" ? process.env.DEV_API_SERVICE_URL : process.env.API_SERVICE_URL;
 
+// redirect http traffic to https 
+if (process.env.NODE_ENV === "production") {
+  app.enable('trust proxy');
+  app.use(function(request, response, next) {
+    !request.secure && response.redirect("https://" + request.headers.host + request.url);
+    next();
+  });
+}
+
 const corsOptions = {
   origin: apiUrl,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,

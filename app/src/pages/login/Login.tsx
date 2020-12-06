@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import checkIfAuthed from "../../services/checkIfAuthed";
 
@@ -7,9 +7,7 @@ function Login({
 }: {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  useEffect(() => {
-    checkIfAuthed({ setDone: setIsLoggedIn });
-  }, []);
+  checkIfAuthed({ setDone: setIsLoggedIn });
   return (
     <div>
       <h1>logging in</h1>

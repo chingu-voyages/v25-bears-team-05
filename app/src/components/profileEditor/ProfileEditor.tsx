@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import Input from "../../components/input";
 import IProfileEditor from "./ProfileEditor.type";
 import "./ProfileEditor.css";

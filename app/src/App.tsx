@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
@@ -34,13 +34,13 @@ function App() {
           <Login setIsLoggedIn={setIsLoggedIn} />
         </Route>
         <ProtectedRoute
-          path="/network"
+          path="/:userId/network"
           allowed={isLoggedIn}
           component={Network}
           redirectTo="/"
         />
         <ProtectedRoute
-          path="/profile/:userId"
+          path="/:userId/profile"
           allowed={isLoggedIn}
           component={Profile}
           redirectTo="/"

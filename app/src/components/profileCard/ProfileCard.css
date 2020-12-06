@@ -1,16 +1,50 @@
+.Profile-card--connection,
+.Profile-card--thread {
+  height: 50px;
+  display: grid;
+  grid-template-columns: 60px auto;
+  row-gap: 0;
+  column-gap: 12px;
+  grid-template-areas:
+    "avatar ."
+    "avatar name"
+    "avatar title"
+    "avatar info"
+    "avatar .";
+  padding: 5px 0;
+  place-items: center start;
+}
 .Profile-card__name {
   font-size: 18px;
   margin: 4px 0;
   font-weight: 400;
+  grid-area: name;
+}
+.Profile-card--connection .Profile-card__name {
+  font-size: 14px;
+  margin: 0;
 }
 .Profile-card__title {
   font-size: 14px;
   margin: 4px 0;
   font-weight: 400;
+  grid-area: title;
+}
+.Profile-card--connection .Profile-card__title {
+  font-size: 12px;
+  margin: 0;
 }
 .Profile-card__info {
   font-size: 11px;
   margin: 4px 0;
+  grid-area: info;
+}
+.Profile-card--connection .Profile-card__info {
+  font-size: 9px;
+  margin: 0;
+}
+.Profile-card__avatar {
+  grid-area: avatar;
 }
 .Profile-card__info a {
   color: var(--primary-text-color);

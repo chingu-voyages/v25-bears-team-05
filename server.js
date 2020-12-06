@@ -4,11 +4,22 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const path = require('path');
 const port = process.env.PORT || 5000;
-
+const cors = require('cors');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
+const apiUrl = process.env.NODE_ENV === "development" ? process.env.DEV_API_SERVICE_URL : process.env.API_SERVICE_URL;
+
+const corsOptions = {
+  origin: apiUrl,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,
+  credentials: true
+};
+
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
+
 app.use('/api', createProxyMiddleware({
-  target: process.env.NODE_ENV === "production" ? process.env.API_SERVICE_URL : process.env.DEV_API_SERVICE_URL,
+  target: apiUrl,
   changeOrigin: true,
   pathRewrite: {
     [`^/api`]: '',

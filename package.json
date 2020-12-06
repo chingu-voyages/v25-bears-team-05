@@ -8,7 +8,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "app": "npm start --prefix app",
-    "dev": "concurrently \"npm run server\" \"npm run app\"",
+    "dev": "NODE_ENV=development concurrently \"npm run server\" \"npm run app\"",
     "heroku-postbuild": "npm install --prefix app && npm run build --prefix app"
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/chingu-voyages/v25-bears-team-05#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.6"

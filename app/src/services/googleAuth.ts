@@ -21,7 +21,7 @@ const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
       if (error.response.status === 401) {
         typeof error?.message === "string" &&
           setErrorMessage(
-            "Authentication unsuccessful, please select a google acoount to sign in with."
+            "Authentication unsuccessful, please select a google account to sign in with."
           );
       } else {
         setErrorMessage("Woppps something went wrong!");

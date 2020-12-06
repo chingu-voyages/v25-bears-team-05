@@ -29,3 +29,14 @@
 .Landing-page__feature-graphic {
   max-width: 100%;
 }
+
+@media only screen and (min-width: 1024px) {
+  .Landing-page main {
+    box-sizing: border-box;
+    width: 100%;
+    background: var(--black-background-color);
+    height: 70%;
+    padding-left: 30%;
+    padding-right: 30%;
+  }
+}

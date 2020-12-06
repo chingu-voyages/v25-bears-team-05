@@ -1,4 +1,4 @@
-# ![SyncedUp](./assets/logodark.svg) | v25-bears-team-05
+# [![SyncedUp](./assets/logodark.svg)](https://syncedup.live/) | v25-bears-team-05
 A LinkedIn style app for developers | Voyage-25 | https://chingu.io/
 
 ## Tech Stack

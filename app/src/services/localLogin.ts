@@ -31,7 +31,7 @@ const localLogin = async ({
     try {
       const res = await axios({
         method: "post",
-        url: "/auth/local",
+        url: "/api/auth/local",
         data: {
           email,
           password,

@@ -19,7 +19,7 @@ const getUser = async ({
   onError: (message: string) => void;
 }) => {
   try {
-    const res = await axios(`/users/${userId}`);
+    const res = await axios(`/api/users/${userId}`);
     let currentUserId;
     if (userId === "me") {
       currentUserId = res.data.id;
@@ -36,7 +36,6 @@ const getUser = async ({
     } = res.data as IUserRawResponse;
     const connectionIds = Object.keys(res.data.connections);
     const connectionOfIds = Object.keys(res.data.connectionOf);
-    const isMe = id === currentUserId;
     const processedUserData: IUserProcessed = {
       firstName,
       lastName,
@@ -68,7 +67,7 @@ const updateUser = async ({
   try {
     const req = await axios({
       method: "patch",
-      url: `/users/me`,
+      url: `/api/users/me`,
       data,
     });
     if (req.status === 200) {

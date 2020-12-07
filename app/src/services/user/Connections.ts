@@ -18,7 +18,7 @@ const getConnections = async ({
   queryParams.append("offset", offset.toString());
   queryParams.append("limit", limit.toString());
   try {
-    const res = await axios(`/users/${userId}/connections?${queryParams}`);
+    const res = await axios(`/api/users/${userId}/connections?${queryParams}`);
     onSuccess(res.data);
   } catch (error) {
     console.error(error);
@@ -41,7 +41,7 @@ const removeConnection = async ({
   try {
     const req = await axios({
       method: "delete",
-      url: `/users/connections/${connectionId}`,
+      url: `/api/users/connections/${connectionId}`,
     });
     if (req.status === 200) {
       onSuccess();
@@ -69,7 +69,7 @@ const addConnection = async ({
   try {
     const req = await axios({
       method: "put",
-      url: `/users/connections/${connectionId}`,
+      url: `/api/users/connections/${connectionId}`,
       data: { isTeamMate },
     });
     if (req.status === 200) {

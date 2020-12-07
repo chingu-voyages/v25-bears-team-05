@@ -12,15 +12,16 @@ interface IGoogleAuthProps {
 const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
   const requestAuth = async () => {
     try {
-      const res = await axios("/auth");
+      const res = await axios("/api/auth");
       if (res.status === 200) {
         setDone(true);
       }
     } catch (error) {
+      setDone(false);
       if (error.response.status === 401) {
         typeof error?.message === "string" &&
           setErrorMessage(
-            "Authentication unsuccessful, please select a google acoount to sign in with."
+            "Authentication unsuccessful, please select a google account to sign in with."
           );
       } else {
         setErrorMessage("Woppps something went wrong!");
@@ -29,7 +30,11 @@ const googleAuth = async ({ setDone, setErrorMessage }: IGoogleAuthProps) => {
     }
   };
   const googleAuthPage = window.open(
-    `http://localhost:${process.env.REACT_APP_API_PORT}/auth/google`,
+    `${
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_URL
+        : process.env.REACT_APP_DEV_API_URL
+    }/auth/google`,
     "googleAuthPage",
     "onclose"
   );

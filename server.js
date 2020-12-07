@@ -6,11 +6,12 @@ const path = require('path');
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const isProduction = !(process.env.NODE_ENV && process.env.NODE_ENV.match("development"));
 
-const apiUrl = process.env.NODE_ENV === "development" ? process.env.DEV_API_SERVICE_URL : process.env.API_SERVICE_URL;
+const apiUrl = !isProduction ? process.env.DEV_API_SERVICE_URL : process.env.API_SERVICE_URL;
 
 // redirect http traffic to https 
-if (process.env.NODE_ENV === "production") {
+if (isProduction) {
   app.enable('trust proxy');
   app.use(function(request, response, next) {
     !request.secure && response.redirect("https://" + request.headers.host + request.url);

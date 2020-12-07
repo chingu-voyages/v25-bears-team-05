@@ -4,11 +4,12 @@
   "description": "A LinkedIn style app for developers | Voyage-25 | https://chingu.io/",
   "main": "server.js",
   "scripts": {
-    "app-install": "npm install --prefix app",
+    "app-install": "cd app & npm install",
     "start": "node server.js",
     "server": "nodemon server.js",
     "app": "npm start --prefix app",
     "dev": "NODE_ENV=development concurrently \"npm run server\" \"npm run app\"",
+    "dev-win": "SET NODE_ENV=development & concurrently \"npm run server\" \"npm run app\"",
     "heroku-postbuild": "npm install --prefix app && npm run build --prefix app"
   },
   "repository": {

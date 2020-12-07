@@ -24,7 +24,7 @@ This app works in conjunction with a backend server: https://github.com/chingu-v
     - [Create your Imgur client id here](https://api.imgur.com/oauth2/addclient)
 1. `$ npm install`
 1. `$ npm run app-install`
-1. `$ npm run dev`
+1. `$ npm run dev` or `$ npm run dev-win` if you're on windows OS
 
 Clone and setup the API repo above for full functionality 
 

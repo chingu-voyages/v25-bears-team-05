@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../components/button";
+import PostMaker from "../../components/postMaker";
 import logout from "../../services/logout";
 import "./Home.css";
 
@@ -10,6 +11,7 @@ function Home() {
       <Button onClick={logout} className="square">
         Temporary logout button
       </Button>
+      <PostMaker/>
     </div>
   );
 }

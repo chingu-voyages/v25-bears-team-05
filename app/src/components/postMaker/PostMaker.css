@@ -1,0 +1,5 @@
+
+.Post-maker__content:empty::after {
+    color: rgba(0,0,0,0.6);
+    content: attr(data-placeholder);
+}

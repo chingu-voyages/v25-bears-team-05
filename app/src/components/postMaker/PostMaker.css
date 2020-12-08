@@ -1,16 +1,15 @@
-
-.Post-maker--open {
+.Post-maker {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 48px auto 48px;
+}
+.Post-maker--full-window {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
     background: var(--grey-background-color);
-}
-.Post-maker__window {
-    display: grid;
-    height: 100%;
-    grid-template-rows: 48px auto 48px;
 }
 .Post-maker__top-bar {
     display: grid;
@@ -46,4 +45,14 @@
     display: flex;
     flex-flow: row wrap;
     font-size: 32px;
+    justify-content: space-around;
+}
+
+.tool-bar__markdown-options {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.Post-maker__visibility-option {
+    font-size: 14px;
 }

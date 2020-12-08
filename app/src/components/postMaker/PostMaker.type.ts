@@ -1,7 +1,9 @@
+import { ThreadVisibility } from "../../services/thread/thread.type";
+
 export interface IPostMakerProps {
     title: string;
     placeholder: string;
-    onSubmit: ({content}: {content: string}) => void;
+    onSubmit: ({content, threadVisibility}: {content: string, threadVisibility: ThreadVisibility}) => void;
     handleCancel: () => void;
     errorMessage?: string;
     className?: string;

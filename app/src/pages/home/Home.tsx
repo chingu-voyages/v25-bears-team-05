@@ -22,7 +22,7 @@ function Home() {
   const postMakerOptions: IPostMakerProps = {
     title: "Share",
     placeholder: "Share your thoughts. Add photos or hashtags.",
-    onSubmit: ({content}) => {
+    onSubmit: ({content, threadVisibility}) => {
       setInProgress(true);
       const onSuccess = (data: IThread) => {
         console.log(data);
@@ -33,7 +33,7 @@ function Home() {
         data: {
           htmlContent: content,
           threadType: 0,
-          visibility: 0,
+          visibility: threadVisibility,
           hashTags: []
         },
         onSuccess,

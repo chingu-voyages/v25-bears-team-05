@@ -54,7 +54,7 @@ function PostMaker({title, placeholder, onSubmit, handleCancel, errorMessage = "
         });
     };
     const handleSubmit = () => {
-        content && onSubmit({content});
+        content && onSubmit({content, threadVisibility});
     };
 
     return (

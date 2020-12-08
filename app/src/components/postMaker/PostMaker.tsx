@@ -4,6 +4,13 @@ import Button from "../button";
 import "./PostMaker.css";
 import OptionsMenu from "../optionsMenu";
 import { IPostMakerProps, IPasteIntoContentHalfs, IPasteIntoContentOptions } from "./PostMaker.type";
+import mdHeadingIcon from "../../images/mdheadingicon.svg";
+import mdBoldIcon from "../../images/mdboldicon.svg";
+import mdItalicsIcon from "../../images/mditalicsicon.svg";
+import mdQuoteIcon from "../../images/mdquoteicon.svg";
+import mdCodeIcon from "../../images/mdcodeicon.svg";
+import mdLinkIcon from "../../images/mdlinkicon.svg";
+import visibilityIcon from "../../images/visibilityicon.svg";
 
 function PostMaker({title, placeholder, onSubmit, handleCancel, errorMessage = "", className = "", fullView}: IPostMakerProps) {
     const [content, setContent] = useState("");
@@ -77,13 +84,13 @@ function PostMaker({title, placeholder, onSubmit, handleCancel, errorMessage = "
                                 "H3": { action: () => { pasteIntoContent({firstHalf:"### "}, {pasteWithNewLine: true}) } },
                             }}
                         >
-                            <span>H</span>
+                            <span><img src={mdHeadingIcon} alt="heading" /></span>
                         </OptionsMenu>
-                        <Button style={{fontWeight: "bold"}} onClick={() => pasteIntoContent({firstHalf: "**", secondHalf: "**"})}>B</Button>
-                        <Button style={{fontStyle: "italic"}} onClick={() => pasteIntoContent({firstHalf: "_", secondHalf: "_"})}>I</Button>
-                        <Button onClick={() => pasteIntoContent({firstHalf: ">"}, {pasteWithNewLine: true, repeatForEachLine: true})}>quote</Button>
-                        <Button onClick={() => pasteIntoContent({firstHalf: "`", secondHalf: "`"}, {multilineAltHalfs: {firstHalf: "```", secondHalf: "```"}})}>&lt;&gt;</Button>
-                        <Button onClick={() => pasteIntoContent({firstHalf: "[", secondHalf: "](url)"}, {withSelectionAltHalfs: {firstHalf: "[", secondHalf: "]()"}, offsetCursorPosition: 2})}>link</Button>
+                        <Button style={{fontWeight: "bold"}} onClick={() => pasteIntoContent({firstHalf: "**", secondHalf: "**"})}><img src={mdBoldIcon} alt="bold" /></Button>
+                        <Button style={{fontStyle: "italic"}} onClick={() => pasteIntoContent({firstHalf: "_", secondHalf: "_"})}><img src={mdItalicsIcon} alt="italics" /></Button>
+                        <Button onClick={() => pasteIntoContent({firstHalf: ">"}, {pasteWithNewLine: true, repeatForEachLine: true})}><img src={mdQuoteIcon} alt="quote" /></Button>
+                        <Button onClick={() => pasteIntoContent({firstHalf: "`", secondHalf: "`"}, {multilineAltHalfs: {firstHalf: "```", secondHalf: "```"}})}><img src={mdCodeIcon} alt="code" /></Button>
+                        <Button onClick={() => pasteIntoContent({firstHalf: "[", secondHalf: "](url)"}, {withSelectionAltHalfs: {firstHalf: "[", secondHalf: "]()"}, offsetCursorPosition: 2})}><img src={mdLinkIcon} alt="link" /></Button>
                     </div>
                     <div className="Post-maker__config">
                         <OptionsMenu 
@@ -99,7 +106,7 @@ function PostMaker({title, placeholder, onSubmit, handleCancel, errorMessage = "
                                 }
                             }}
                         >
-                            <span>V</span>
+                            <span><img src={visibilityIcon} alt="visibility" /></span>
                         </OptionsMenu>
                     </div>
                 </div>

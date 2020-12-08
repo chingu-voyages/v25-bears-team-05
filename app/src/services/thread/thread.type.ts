@@ -62,3 +62,10 @@ export interface IThread {
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
 }
+
+export interface INewThreadData {
+  htmlContent: string,
+  threadType: ThreadType,
+  visibility: ThreadVisibility,
+  hashTags: Array<string>
+}

@@ -28,7 +28,6 @@ function PostMaker({title, placeholder, onSubmit, handleCancel, errorMessage = "
         setContent(value);
     };
     const pasteIntoContent = ({firstHalf, secondHalf}: IPasteIntoContentHalfs, options?: IPasteIntoContentOptions) => {
-        console.log(lastCursorPosition.current)
         setContent(value => {
             const {start, end} = lastCursorPosition.current;
             const isSelection = end > start;

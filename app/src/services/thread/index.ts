@@ -1,3 +1,3 @@
-import addThread from "./thread";
+import { addThread } from "./Thread";
 
 export { addThread };

@@ -30,4 +30,4 @@ const addThread = async ({
     }
 };
 
-export default addThread;
+export { addThread };

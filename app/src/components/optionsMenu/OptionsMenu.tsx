@@ -5,6 +5,7 @@ import "./OptionsMenu.css";
 interface IOption {
   action: () => void;
   confirm?: boolean;
+  className?: string;
 }
 
 interface IOptions {
@@ -60,16 +61,6 @@ function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
   }, [isOpen]);
   return (
     <div className={`Options-menu ${className ? className : ""}`}>
-      <Button
-        onClick={() => setIsOpen((open) => !open)}
-        className="Options-menu__toggle"
-      >
-        {children ? (
-          children
-        ) : (
-          <span className="Options-menu__toggle__default-dots">...</span>
-        )}
-      </Button>
       {isOpen && (
         <dialog
           open={true}
@@ -101,7 +92,7 @@ function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
                 <Button
                   key={title + JSON.stringify(option)}
                   onClick={() => handleCallAction(option, title)}
-                  className="Options-menu__button square"
+                  className={`Options-menu__button square ${option.className || ""}`}
                 >
                   {title}
                 </Button>
@@ -110,6 +101,16 @@ function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
           )}
         </dialog>
       )}
+      <Button
+        onClick={() => setIsOpen((open) => !open)}
+        className="Options-menu__toggle"
+      >
+        {children ? (
+          children
+        ) : (
+          <span className="Options-menu__toggle__default-dots">...</span>
+        )}
+      </Button>
     </div>
   );
 }

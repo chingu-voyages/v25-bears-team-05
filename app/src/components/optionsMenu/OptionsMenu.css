@@ -1,7 +1,3 @@
-.Options-menu {
-  position: relative;
-}
-
 .Options-menu__toggle {
   z-index: 50;
 }
@@ -35,6 +31,15 @@
 .Options-menu__button {
   width: 100%;
   margin-bottom: 12px;
+}
+
+.Options-menu.above {
+  position: relative;
+}
+.Options-menu.above-center .Options-menu__list {
+  position: absolute;
+  bottom: 10%;
+  margin: auto;
 }
 
 .Options-menu.above .Options-menu__list {

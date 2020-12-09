@@ -15,7 +15,7 @@ const getUser = async ({
   onError,
 }: {
   userId: string;
-  onSuccess: (data: IUserProcessed) => void;
+  onSuccess?: (data: IUserProcessed) => void;
   onError: (message: string) => void;
 }) => {
   try {
@@ -47,7 +47,8 @@ const getUser = async ({
       ),
       id,
     };
-    onSuccess(processedUserData);
+    onSuccess?.(processedUserData);
+    return processedUserData;
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&

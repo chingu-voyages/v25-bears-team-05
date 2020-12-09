@@ -10,7 +10,6 @@ import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";
 import { IThreadCardInfo } from "../profileCard/profileCard.type";
 import "./Post.css";
-const md = require("markdown-it")();
 import starIcon from "../../images/staricon.svg";
 import heartIcon from "../../images/hearticon.svg";
 import processingIcon from "../../images/processingicon.svg";
@@ -20,6 +19,7 @@ import smallProcessingIcon from "../../images/processingicon.svg";
 import starButton from "../../images/starbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
+const md = require("markdown-it")();
 
 function Post({
   threadData,
@@ -39,7 +39,7 @@ function Post({
   const [currentUserReactions, setCurrentUserReactions] = useState(
     threadData.currentUserReactions
   );
-  const nOfComments = Object.keys(threadData.comments).length;
+  const nOfComments = threadData.comments && Object.keys(threadData.comments).length;
 
   const ReactionOptions = {
     Star: {
@@ -81,9 +81,7 @@ function Post({
           />
         )}
       </header>
-      <main className="Post__content">
-        {md.render(threadData.content.html)}
-      </main>
+      <main className="Post__content" dangerouslySetInnerHTML={{__html: md.render(threadData.content.html)}}></main>
       <footer className="Post__actions">
         <ul className="Post__reactions">
           {Object.entries(threadReactionsCounts).map(([type, amount]) => (

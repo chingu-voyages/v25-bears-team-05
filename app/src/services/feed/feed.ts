@@ -1,7 +1,8 @@
 import axios from "axios";
-import { IThread } from "../thread/thread.type";
-import { IUserConnection } from "../user/user.type";
-import { IThreadFeed } from "./feed.type";
+import { IThread, IThreadDataProcessed } from "../thread/thread.type";
+import { getUser } from "../user";
+import { IFeedProcessedResponse, IFeedRawResponse, IProcessedThreadFeed } from "./feed.type";
+const currentUserId = sessionStorage.getItem("currentUserId");
 
 const getFeed = async ({
   query,
@@ -9,11 +10,11 @@ const getFeed = async ({
   onError,
 }: {
   query: string;
-  onSuccess: (data: {
-    connectionThreads: IThreadFeed;
-    connectionSuggestions: IUserConnection;
-    publicThreads: IThreadFeed;
-  }) => void;
+  onSuccess: ({
+    connectionThreads,
+    connectionSuggestions,
+    publicThreads,
+  }: IFeedProcessedResponse) => void;
   onError: (message: string) => void;
 }) => {
   try {
@@ -22,19 +23,62 @@ const getFeed = async ({
       connectionThreads,
       connectionSuggestions,
       publicThreads,
-    } = res.data;
-    const processThread = (threadData: IThread) => {};
-    const processedConnectionThreads = connectionThreads.map(
+    }: IFeedRawResponse = res.data;
+    const processThread = async (threadData: IThread) => {
+      const processedThreadData: IThreadDataProcessed = {
+        id: threadData._id,
+        content: threadData.content,
+        postedByUserId: threadData.postedByUserId,
+        threadType: threadData.threadType,
+        visibility: threadData.visibility,
+        reactionsCount: {},
+        currentUserReactions: {},
+        comments: threadData.comments,
+      }
+      threadData.likes && Object.values(threadData.likes)?.forEach(reaction => {
+        const type = reaction.threadLikeType.title;
+        processedThreadData.reactionsCount[type] = (processedThreadData.reactionsCount[type] || 0) + 1;
+        if (currentUserId === reaction.postedByUserId) {
+          processedThreadData.currentUserReactions[type] = true;
+        }
+      });
+      const userData = await getUser({ userId: threadData.postedByUserId, onError: (msg) => {throw Error(msg)} });
+      if (!userData) {
+        throw Error("Unable to get user info");
+      }
+      const {
+        firstName,
+        lastName,
+        jobTitle,
+        avatar,
+        id
+      } = userData;
+        const data = {
+          threadData: processedThreadData,
+          profileData: {
+            firstName,
+            lastName,
+            jobTitle,
+            dateTimePosted: threadData.updatedAt,
+            visibility: threadData.visibility,
+            avatar,
+            id
+          }
+        };
+        return data; 
+    };
+    const processedConnectionThreads = await Promise.all(connectionThreads.map(
       (threadData: IThread) => processThread(threadData)
-    );
+    ));
     const processedPublicThreads = publicThreads.map((threadData: IThread) =>
       processThread(threadData)
     );
-    onSuccess({
-      connectionThreads: processedConnectionThreads,
+    const processedData = {
+      connectionThreads: (processedConnectionThreads as unknown as IProcessedThreadFeed[]),
       connectionSuggestions,
-      publicThreads: processedPublicThreads,
-    });
+      publicThreads: (processedPublicThreads as unknown as IProcessedThreadFeed[]),
+    }
+    onSuccess(processedData);
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&

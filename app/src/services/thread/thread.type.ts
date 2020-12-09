@@ -50,6 +50,7 @@ export enum ThreadVisibility {
 }
 
 export interface IThread {
+  _id: string;
   postedByUserId: string;
   threadType: ThreadType;
   visibility: ThreadVisibility;
@@ -61,6 +62,7 @@ export interface IThread {
   comments: { [keyof: string]: IThreadComment };
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
+  updatedAt: string;
 }
 
 export interface INewThreadData {

@@ -10,6 +10,7 @@
   background: var(--color-black);
   color: var(--primary-text-color);
   z-index: 100;
+  border: solid var(--primary-text-color) 1px;
 }
 
 .Options-menu__hidden-input {
@@ -30,4 +31,29 @@
 .Options-menu__button {
   width: 100%;
   margin-bottom: 12px;
+}
+
+.Options-menu.above {
+  position: relative;
+}
+.Options-menu.above-center .Options-menu__list {
+  position: absolute;
+  bottom: 10%;
+  margin: auto;
+}
+
+.Options-menu.above .Options-menu__list {
+  position: absolute;
+  margin: 0;
+  bottom: 110%;
+}
+
+.Options-menu.bar .Options-menu__list {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 6px;
+  gap: 12px;
+}
+.Options-menu.bar .Options-menu__button {
+  margin-bottom: 0;
 }

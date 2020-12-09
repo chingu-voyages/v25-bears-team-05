@@ -1,0 +1,58 @@
+.Post-maker {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 48px auto 48px;
+}
+.Post-maker--full-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--grey-background-color);
+}
+.Post-maker__top-bar {
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    place-items: center start;
+    background-color: var(--primary-green-color);
+}
+.Post-maker__top-bar__cancel {
+    margin: 0 16px;
+}
+.Post-maker__top-bar__title {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+.Post-maker__top-bar__submit {
+    align-self: stretch;
+    padding: 0 16px;
+}
+
+.Post-maker__content {
+    background-color: var(--color-black);
+    resize: none;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 12px;
+    box-sizing: border-box;
+    color: var(--primary-text-color);
+}
+
+.Post-maker__tool-bar {
+    display: flex;
+    flex-flow: row wrap;
+    font-size: 32px;
+    justify-content: space-around;
+}
+
+.tool-bar__markdown-options {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.Post-maker__visibility-option {
+    font-size: 14px;
+}

@@ -9,9 +9,9 @@ export interface IThreadComment {
 }
 
 export enum ThreadLikeTypeTitle {
-  Like = "like",
-  Celebrate = "celebrate",
-  Love = "love",
+  Star = "star",
+  Heart = "heart",
+  Processing = "Processing",
 }
 
 export interface IThreadLike {

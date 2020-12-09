@@ -64,8 +64,33 @@ export interface IThread {
 }
 
 export interface INewThreadData {
-  htmlContent: string,
-  threadType: ThreadType,
-  visibility: ThreadVisibility,
-  hashTags: Array<string>
+  htmlContent: string;
+  threadType: ThreadType;
+  visibility: ThreadVisibility;
+  hashTags: Array<string>;
+}
+
+export interface IThreadReferral {
+  userId: string;
+  userName: string;
+  reason: string;
+}
+
+export interface IThreadDataProcessed {
+  id: string;
+  content: {
+    html: string;
+    hashTags?: Array<string>;
+    attachments?: Array<string>;
+  };
+  postedByUserId: string;
+  threadType: ThreadType;
+  visibility: ThreadVisibility;
+  reactionsCount: {
+    [reactionType: string]: number;
+  };
+  currentUserReactions: {
+    [reactionType: string]: boolean;
+  };
+  comments: { [keyof: string]: IThreadComment };
 }

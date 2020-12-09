@@ -51,7 +51,7 @@ function ProfileCard({
     title = jobTitle;
     info = `${convertDateStringToTimeAgo({
       date: dateTimePosted,
-    })} &bull; ${visibility}`;
+    })} &bull; ${visibility === 0 ? "anyone" : "connections"}`;
     avatarUrl = avatar?.[0]?.url;
   }
 

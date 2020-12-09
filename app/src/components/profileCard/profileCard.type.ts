@@ -1,3 +1,4 @@
+import { ThreadVisibility } from "../../services/thread/thread.type";
 import { Avatar } from "../avatar/Avatar.type";
 
 export interface IBasicCardInfo {
@@ -17,7 +18,9 @@ export interface IConnectionCardInfo extends IBasicCardInfo {
 export interface IThreadCardInfo extends IBasicCardInfo {
   avatar: Array<Avatar>;
   dateTimePosted: string;
-  visibility: "anyone" | "connections";
+  visibility: ThreadVisibility;
+  id: string;
+  isAConnection: boolean;
 }
 
 export default interface IProfileCard {

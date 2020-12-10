@@ -15,3 +15,6 @@
   margin: 16px 0;
   list-style: none;
 }
+.Home-page__error {
+  color: var(--error-color);
+}

@@ -5,18 +5,9 @@ import logout from "../../services/logout";
 import "./Home.css";
 import editIcon from "../../images/editicon.svg";
 import { IPostMakerProps } from "../../components/postMaker/PostMaker.type";
-import {
-  IThread,
-  IThreadDataProcessed,
-  IThreadReferral,
-} from "../../services/thread/thread.type";
 import { addThread } from "../../services/thread";
 import Spinner from "../../components/spinner";
 import Post from "../../components/post";
-import {
-  IConnectionCardInfo,
-  IThreadCardInfo,
-} from "../../components/profileCard/profileCard.type";
 import ProfileCard from "../../components/profileCard";
 import { getFeed } from "../../services/feed/feed";
 import {
@@ -132,6 +123,7 @@ function Home() {
         )}
       </div>
       <div className="Home-page__feed">
+        {errorMessage && <div className="Home-page__error">{errorMessage}</div>}
         <ul className="Home-page__feed__list">
           {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
             <FeedItem

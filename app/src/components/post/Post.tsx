@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   IThreadReferral,
@@ -16,9 +16,10 @@ import processingIcon from "../../images/processingicon.svg";
 import smallStarIcon from "../../images/staricon.svg";
 import smallHeartIcon from "../../images/hearticon.svg";
 import smallProcessingIcon from "../../images/processingicon.svg";
-import starButton from "../../images/starbutton.svg";
+import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
+import { getCurrentUserId } from "../../services/user/currentUserId";
 const md = require("markdown-it")();
 
 function Post({
@@ -39,8 +40,13 @@ function Post({
   const [currentUserReactions, setCurrentUserReactions] = useState(
     threadData.currentUserReactions
   );
-  const nOfComments =
-    threadData.comments && Object.keys(threadData.comments).length;
+  const [isMe, setIsMe] = useState(true);
+  useEffect(() => {
+    getCurrentUserId().then((id) => setIsMe(id === profileData.id));
+  }, [profileData.id]);
+  const [nOfComments, setNOfComments] = useState(
+    threadData.comments && Object.keys(threadData.comments).length
+  );
 
   const ReactionOptions = {
     Star: {
@@ -71,7 +77,7 @@ function Post({
         </header>
       )}
       <ProfileCard className="Post__profile-card" threadInfo={profileData} />
-      {!isAConnection && (
+      {!isMe && !isAConnection && (
         <FollowButton
           className="Post__follow"
           connectionName={profileData.firstName + " " + profileData.lastName}
@@ -93,10 +99,14 @@ function Post({
           </li>
         ))}
       </ul>
-      <Button className="Post__n-of-comments">{nOfComments}</Button>
+      <Button className="Post__n-of-comments">
+        {nOfComments === 1
+          ? "1 Comment"
+          : nOfComments && `${nOfComments} Comments`}
+      </Button>
       <footer className="Post__actions">
-        <OptionsMenu buttons={ReactionOptions}>
-          <img src={starButton} alt="React" />
+        <OptionsMenu buttons={ReactionOptions} className="above bar">
+          <img src={reactButton} alt="React" />
         </OptionsMenu>
         <Button onClick={() => {}}>
           <img src={commentButton} alt="Comment" />

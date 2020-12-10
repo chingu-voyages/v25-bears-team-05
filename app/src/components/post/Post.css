@@ -10,6 +10,7 @@
     "actions actions actions";
   padding: 16px;
   place-items: center center;
+  box-sizing: border-box;
 }
 
 .Post__relational-info {
@@ -22,10 +23,13 @@
 }
 .Post__follow {
   grid-area: followButton;
+  margin: 8px;
+  place-self: end end;
 }
 .Post__content {
   grid-area: postContent;
   width: 100%;
+  margin: 16px;
 }
 .Post__reactions {
   grid-area: reactions;
@@ -35,6 +39,9 @@
 }
 .Post__actions {
   grid-area: actions;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  justify-self: start;
+  width: 100%;
+  max-width: 320px;
+  justify-content: space-between;
 }

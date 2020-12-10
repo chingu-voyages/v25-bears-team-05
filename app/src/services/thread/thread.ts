@@ -1,5 +1,7 @@
 import { INewThreadData, IThread } from "./thread.type";
 import axios from "axios";
+import { processThread } from "../feed/feed";
+import { IProcessedThreadFeed } from "../feed/feed.type";
 
 const addThread = async ({
   data,
@@ -7,7 +9,7 @@ const addThread = async ({
   onError,
 }: {
   data: INewThreadData;
-  onSuccess: (data: IThread) => void;
+  onSuccess: (data: IProcessedThreadFeed) => void;
   onError: (message: string) => void;
 }) => {
   try {
@@ -17,7 +19,8 @@ const addThread = async ({
       data,
     });
     if (req.status === 200) {
-      onSuccess(req.data);
+      const processedThreadData = await processThread(req.data);
+      onSuccess(processedThreadData);
     } else {
       onError(req.statusText);
     }

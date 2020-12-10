@@ -22,6 +22,7 @@ import { getFeed } from "../../services/feed/feed";
 import {
   IFeedItemsProps,
   IFeedProcessedResponse,
+  IProcessedThreadFeed,
 } from "../../services/feed/feed.type";
 
 function Home() {
@@ -40,9 +41,10 @@ function Home() {
     placeholder: "Share your thoughts. Add photos or hashtags.",
     onSubmit: ({ content, threadVisibility }) => {
       setInProgress(true);
-      const onSuccess = (data: IThread) => {
-        console.log(data);
+      const onSuccess = (data: IProcessedThreadFeed) => {
         setInProgress(false);
+        console.log(data)
+        setFeed(feed => [{thread: data}, ...feed]);
         resetPostMaker();
       };
       addThread({

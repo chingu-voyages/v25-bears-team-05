@@ -124,4 +124,4 @@ async function processThread(
   return data;
 }
 
-export { getFeed };
+export { getFeed, processThread };

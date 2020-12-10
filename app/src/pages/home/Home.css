@@ -12,5 +12,6 @@
   padding: 0;
 }
 .Home-page__feed__list__item {
+  margin: 16px 0;
   list-style: none;
 }

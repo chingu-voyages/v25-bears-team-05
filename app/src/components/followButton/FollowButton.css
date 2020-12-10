@@ -5,6 +5,7 @@
   color: var(--primary-text-color);
   display: grid;
   place-items: center center;
+  height: auto;
 }
 .Follow-button__error__message {
   color: var(--error-color);

@@ -89,7 +89,9 @@ function Home() {
         })
         .flat();
       setFeed(feed);
+      setInProgress(false);
     };
+    setInProgress(true);
     getFeed({
       query: "",
       onSuccess,

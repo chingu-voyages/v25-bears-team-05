@@ -73,8 +73,8 @@ export interface INewThreadData {
 }
 
 export interface IThreadReferral {
-  userId: string;
-  userName: string;
+  userId?: string;
+  userName?: string;
   reason: string;
 }
 

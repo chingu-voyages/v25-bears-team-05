@@ -72,12 +72,23 @@ function Home() {
       connectionSuggestions,
       publicThreads,
     }: IFeedProcessedResponse) => {
-      console.log({
-        connectionThreads,
-        connectionSuggestions,
-        publicThreads,
-      });
-      setFeed(connectionThreads.map((thread) => ({ thread })));
+      const threads = [...connectionThreads, ...publicThreads];
+      const putNSuggestions = Math.ceil(
+        connectionSuggestions.length / threads.length
+      );
+      const everyNThreads = Math.ceil(
+        threads.length / connectionSuggestions.length
+      );
+      let suggestionsQueue = connectionSuggestions.slice();
+      const feed = threads
+        .map((thread, index) => {
+          if (!(index % everyNThreads)) {
+            return [thread, ...suggestionsQueue.splice(0, putNSuggestions)];
+          }
+          return thread;
+        })
+        .flat();
+      setFeed(feed);
     };
     getFeed({
       query: "",

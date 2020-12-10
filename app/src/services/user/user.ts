@@ -4,10 +4,7 @@ import {
   IUserRawResponse,
 } from "./user.type";
 import axios from "axios";
-
-const storeActiveUsersId = (id: string) => {
-  sessionStorage.setItem("currentUserId", id);
-};
+import { setCurrentUserId } from "./currentUserId";
 
 const getUser = async ({
   userId,
@@ -23,7 +20,7 @@ const getUser = async ({
     let currentUserId;
     if (userId === "me") {
       currentUserId = res.data.id;
-      storeActiveUsersId(currentUserId);
+      setCurrentUserId(currentUserId);
     } else {
       currentUserId = sessionStorage.getItem("currentUserId");
     }

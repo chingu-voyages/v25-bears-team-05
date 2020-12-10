@@ -17,8 +17,8 @@ export interface IConnectionCardInfo extends IBasicCardInfo {
 }
 export interface IThreadCardInfo extends IBasicCardInfo {
   avatar: Array<Avatar>;
-  dateTimePosted: string;
-  visibility: ThreadVisibility;
+  dateTimePosted?: string;
+  visibility?: ThreadVisibility;
   id: string;
   isAConnection: boolean;
 }

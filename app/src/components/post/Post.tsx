@@ -39,7 +39,8 @@ function Post({
   const [currentUserReactions, setCurrentUserReactions] = useState(
     threadData.currentUserReactions
   );
-  const nOfComments = threadData.comments && Object.keys(threadData.comments).length;
+  const nOfComments =
+    threadData.comments && Object.keys(threadData.comments).length;
 
   const ReactionOptions = {
     Star: {
@@ -63,46 +64,46 @@ function Post({
 
   return (
     <article className={`Post ${className}`}>
-      <header className="Post__user-info">
-        {referral && (
-          <div className="Post__relational-info">
-            <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>{" "}
-            {referral.reason}
-          </div>
-        )}
-        <ProfileCard threadInfo={profileData} />
-        {!isAConnection && (
-          <FollowButton
-            connectionName={profileData.firstName + " " + profileData.lastName}
-            connectionId={profileData.id}
-            onFollow={() => {
-              setIsAConnection(true);
-            }}
-          />
-        )}
-      </header>
-      <main className="Post__content" dangerouslySetInnerHTML={{__html: md.render(threadData.content.html)}}></main>
+      {referral && (
+        <header className="Post__relational-info">
+          <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>{" "}
+          {referral.reason}
+        </header>
+      )}
+      <ProfileCard className="Post__profile-card" threadInfo={profileData} />
+      {!isAConnection && (
+        <FollowButton
+          className="Post__follow"
+          connectionName={profileData.firstName + " " + profileData.lastName}
+          connectionId={profileData.id}
+          onFollow={() => {
+            setIsAConnection(true);
+          }}
+        />
+      )}
+      <main
+        className="Post__content"
+        dangerouslySetInnerHTML={{ __html: md.render(threadData.content.html) }}
+      ></main>
+      <ul className="Post__reactions">
+        {Object.entries(threadReactionsCounts).map(([type, amount]) => (
+          <li key={threadData.id + type + amount}>
+            <img src={(reactionIcons as any)[type] || ""} alt="type" />
+            {amount}
+          </li>
+        ))}
+      </ul>
+      <Button className="Post__n-of-comments">{nOfComments}</Button>
       <footer className="Post__actions">
-        <ul className="Post__reactions">
-          {Object.entries(threadReactionsCounts).map(([type, amount]) => (
-            <li key={threadData.id + type + amount}>
-              <img src={(reactionIcons as any)[type] || ""} alt="type" />
-              {amount}
-            </li>
-          ))}
-        </ul>
-        <Button className="Post__n-of-comments">{nOfComments}</Button>
-        <div className="Post__actions">
-          <OptionsMenu buttons={ReactionOptions}>
-            <img src={starButton} alt="React" />
-          </OptionsMenu>
-          <Button onClick={() => {}}>
-            <img src={commentButton} alt="Comment" />
-          </Button>
-          <Button onClick={() => {}}>
-            <img src={folkButton} alt="Fork" />
-          </Button>
-        </div>
+        <OptionsMenu buttons={ReactionOptions}>
+          <img src={starButton} alt="React" />
+        </OptionsMenu>
+        <Button onClick={() => {}}>
+          <img src={commentButton} alt="Comment" />
+        </Button>
+        <Button onClick={() => {}}>
+          <img src={folkButton} alt="Fork" />
+        </Button>
       </footer>
     </article>
   );

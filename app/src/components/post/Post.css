@@ -1,0 +1,40 @@
+.Post {
+  width: 100%;
+  background: var(--color-black);
+  display: grid;
+  grid-template-areas:
+    "relationalInfo relationalInfo relationalInfo"
+    "profileCard profileCard followButton"
+    "postContent postContent postContent"
+    "reactions . nOfComments"
+    "actions actions actions";
+  padding: 16px;
+  place-items: center center;
+}
+
+.Post__relational-info {
+  grid-area: relationalInfo;
+  border-bottom: solid 1px var(--primary-text-color);
+}
+.Post__profile-card {
+  width: 100%;
+  grid-area: profileCard;
+}
+.Post__follow {
+  grid-area: followButton;
+}
+.Post__content {
+  grid-area: postContent;
+  width: 100%;
+}
+.Post__reactions {
+  grid-area: reactions;
+}
+.Post__n-of-comments {
+  grid-area: nOfComments;
+}
+.Post__actions {
+  grid-area: actions;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}

@@ -7,3 +7,10 @@
   display: grid;
   place-items: center center;
 }
+.Home-page__feed__list {
+  margin: 0;
+  padding: 0;
+}
+.Home-page__feed__list__item {
+  list-style: none;
+}

@@ -50,8 +50,8 @@ function ProfileCard({
     name = `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim();
     title = jobTitle;
     info = `${convertDateStringToTimeAgo({
-      date: dateTimePosted,
-    })} &bull; ${visibility === 0 ? "anyone" : "connections"}`;
+      date: dateTimePosted || "",
+    })} • ${visibility === 0 ? "anyone" : "connections"}`;
     avatarUrl = avatar?.[0]?.url;
   }
 

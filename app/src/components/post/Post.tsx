@@ -20,6 +20,7 @@ import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
 import { getCurrentUserId } from "../../services/user/currentUserId";
+import { addThreadReaction, removeThreadReaction } from "../../services/thread/thread";
 const md = require("markdown-it")();
 
 function Post({
@@ -47,18 +48,37 @@ function Post({
   const [nOfComments, setNOfComments] = useState(
     threadData.comments && Object.keys(threadData.comments).length
   );
+  const handleThreadReaction = (title: string) => {
+    let countValue = 0;
+    const onSuccess = () => {
+      setCurrentUserReactions(reactions => ({...reactions, [title]: countValue > 0}))
+      setThreadReactionsCounts(counts => {
+        const newCount = (counts[title] || 0) + countValue;
+        return {...counts, [title]: newCount > 0 ? newCount : 0};
+      })
+    };
+    const onError = (msg: string) => {console.error(msg)};
+    if (currentUserReactions[title]) {
+      countValue = -1;
+      removeThreadReaction({threadId: threadData.id, title, onSuccess, onError });
+    }
+    else {
+      countValue = 1;
+      addThreadReaction({threadId: threadData.id, title, onSuccess, onError });
+    }
+  }
 
   const ReactionOptions = {
     Star: {
-      action: () => {},
+      action: () => {handleThreadReaction("star")},
       children: <img src={starIcon} alt="Star" />,
     },
     Heart: {
-      action: () => {},
+      action: () => {handleThreadReaction("heart")},
       children: <img src={heartIcon} alt="Heart" />,
     },
     Process: {
-      action: () => {},
+      action: () => {handleThreadReaction("process")},
       children: <img src={processingIcon} alt="Process" />,
     },
   };
@@ -72,7 +92,7 @@ function Post({
     <article className={`Post ${className}`}>
       <header className="Post__relational-info">
         {referral?.userId && referral.userName && <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>}
-        {referral?.reason || "test info here"}
+        {referral?.reason}
       </header>
       <Link className="Post__profile-card" to={`/${profileData.id}/profile`}>
         <ProfileCard threadInfo={profileData} />

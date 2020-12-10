@@ -13,9 +13,9 @@ import "./Post.css";
 import starIcon from "../../images/staricon.svg";
 import heartIcon from "../../images/hearticon.svg";
 import processingIcon from "../../images/processingicon.svg";
-import smallStarIcon from "../../images/staricon.svg";
-import smallHeartIcon from "../../images/hearticon.svg";
-import smallProcessingIcon from "../../images/processingicon.svg";
+import smallStarIcon from "../../images/smallstaricon.svg";
+import smallHeartIcon from "../../images/smallhearticon.svg";
+import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
@@ -70,13 +70,13 @@ function Post({
 
   return (
     <article className={`Post ${className}`}>
-      {referral && (
-        <header className="Post__relational-info">
-          <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>{" "}
-          {referral.reason}
-        </header>
-      )}
-      <ProfileCard className="Post__profile-card" threadInfo={profileData} />
+      <header className="Post__relational-info">
+        {referral?.userId && referral.userName && <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>}
+        {referral?.reason || "test info here"}
+      </header>
+      <Link className="Post__profile-card" to={`/${profileData.id}/profile`}>
+        <ProfileCard threadInfo={profileData} />
+      </Link>
       {!isMe && !isAConnection && (
         <FollowButton
           className="Post__follow"

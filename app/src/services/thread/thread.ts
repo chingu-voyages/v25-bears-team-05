@@ -50,10 +50,14 @@ const addThreadReaction = async ({
       url: `/api/threads/${threadId}/likes`,
       data: { title },
     });
-    if (req.status === 200) {
-      onSuccess(req.data);
+    if (req.status && req.data.threadLikeDocument._id) {
+      onSuccess(req.data.threadLikeDocument._id);
     } else {
-      onError(req.statusText);
+      throw Error(
+        `Unable to get _id from req.data.threadLikeDocument: ${JSON.stringify(
+          req.data.threadLikeDocument
+        )}`
+      );
     }
   } catch (error) {
     console.error(error);

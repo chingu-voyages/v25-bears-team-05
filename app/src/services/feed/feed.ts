@@ -90,12 +90,12 @@ async function processThread(
     comments: threadData.comments,
   };
   threadData.likes &&
-    Object.values(threadData.likes)?.forEach((reaction) => {
-      const type = reaction.threadLikeType.title;
+    Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
+      const type = reaction.title;
       processedThreadData.reactionsCount[type] =
         (processedThreadData.reactionsCount[type] || 0) + 1;
       if (currentUserId === reaction.postedByUserId) {
-        processedThreadData.currentUserReactions[type] = true;
+        processedThreadData.currentUserReactions[type] = id;
       }
     });
   const userData = await getUser({

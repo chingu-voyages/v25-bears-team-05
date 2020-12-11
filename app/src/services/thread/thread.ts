@@ -1,4 +1,4 @@
-import { INewThreadData, IThread } from "./thread.type";
+import { INewThreadData } from "./thread.type";
 import axios from "axios";
 import { processThread } from "../feed/feed";
 import { IProcessedThreadFeed } from "../feed/feed.type";
@@ -34,21 +34,21 @@ const addThread = async ({
 };
 
 const addThreadReaction = async ({
-  threadId, 
+  threadId,
   title,
   onSuccess,
   onError,
 }: {
   threadId: string;
   title: string;
-  onSuccess: (data: IThread) => void;
+  onSuccess: (data: string | false) => void;
   onError: (message: string) => void;
 }) => {
   try {
     const req = await axios({
       method: "post",
-      url: `/api/threads/${threadId}`,
-      data: {title},
+      url: `/api/threads/${threadId}/likes`,
+      data: { title },
     });
     if (req.status === 200) {
       onSuccess(req.data);
@@ -65,24 +65,24 @@ const addThreadReaction = async ({
 };
 
 const removeThreadReaction = async ({
-  threadId, 
-  title,
+  threadId,
+  threadLikeId,
   onSuccess,
   onError,
 }: {
   threadId: string;
-  title: string;
-  onSuccess: (data: IThread) => void;
+  threadLikeId: string;
+  onSuccess: (clearReaction: string | false) => void;
   onError: (message: string) => void;
 }) => {
   try {
     const req = await axios({
       method: "delete",
-      url: `/api/threads/${threadId}`,
-      data: {title},
+      url: `/api/threads/${threadId}/likes`,
+      data: { threadLikeId },
     });
     if (req.status === 200) {
-      onSuccess(req.data);
+      onSuccess(false);
     } else {
       onError(req.statusText);
     }
@@ -94,6 +94,5 @@ const removeThreadReaction = async ({
       );
   }
 };
-
 
 export { addThread, addThreadReaction, removeThreadReaction };

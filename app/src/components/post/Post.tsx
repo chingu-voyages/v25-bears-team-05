@@ -20,7 +20,10 @@ import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
 import { getCurrentUserId } from "../../services/user/currentUserId";
-import { addThreadReaction, removeThreadReaction } from "../../services/thread/thread";
+import {
+  addThreadReaction,
+  removeThreadReaction,
+} from "../../services/thread/thread";
 const md = require("markdown-it")();
 
 function Post({
@@ -50,48 +53,65 @@ function Post({
   );
   const handleThreadReaction = (title: string) => {
     let countValue = 0;
-    const onSuccess = () => {
-      setCurrentUserReactions(reactions => ({...reactions, [title]: countValue > 0}))
-      setThreadReactionsCounts(counts => {
+    const onSuccess = (threadLikeId: string | false) => {
+      setCurrentUserReactions((reactions) => ({
+        ...reactions,
+        [title]: threadLikeId,
+      }));
+      setThreadReactionsCounts((counts) => {
         const newCount = (counts[title] || 0) + countValue;
-        return {...counts, [title]: newCount > 0 ? newCount : 0};
-      })
+        return { ...counts, [title]: newCount > 0 ? newCount : 0 };
+      });
     };
-    const onError = (msg: string) => {console.error(msg)};
+    const onError = (msg: string) => {
+      console.error(msg);
+    };
     if (currentUserReactions[title]) {
       countValue = -1;
-      removeThreadReaction({threadId: threadData.id, title, onSuccess, onError });
-    }
-    else {
+      removeThreadReaction({
+        threadId: threadData.id,
+        threadLikeId: currentUserReactions[title] || "",
+        onSuccess,
+        onError,
+      });
+    } else {
       countValue = 1;
-      addThreadReaction({threadId: threadData.id, title, onSuccess, onError });
+      addThreadReaction({ threadId: threadData.id, title, onSuccess, onError });
     }
-  }
+  };
 
   const ReactionOptions = {
     Star: {
-      action: () => {handleThreadReaction("star")},
+      action: () => {
+        handleThreadReaction("star");
+      },
       children: <img src={starIcon} alt="Star" />,
     },
     Heart: {
-      action: () => {handleThreadReaction("heart")},
+      action: () => {
+        handleThreadReaction("heart");
+      },
       children: <img src={heartIcon} alt="Heart" />,
     },
     Process: {
-      action: () => {handleThreadReaction("process")},
+      action: () => {
+        handleThreadReaction("process");
+      },
       children: <img src={processingIcon} alt="Process" />,
     },
   };
   const reactionIcons = {
     star: smallStarIcon,
     heart: smallHeartIcon,
-    processing: smallProcessingIcon,
+    process: smallProcessingIcon,
   };
 
   return (
     <article className={`Post ${className}`}>
       <header className="Post__relational-info">
-        {referral?.userId && referral.userName && <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>}
+        {referral?.userId && referral.userName && (
+          <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>
+        )}
         {referral?.reason}
       </header>
       <Link className="Post__profile-card" to={`/${profileData.id}/profile`}>
@@ -112,12 +132,15 @@ function Post({
         dangerouslySetInnerHTML={{ __html: md.render(threadData.content.html) }}
       ></main>
       <ul className="Post__reactions">
-        {Object.entries(threadReactionsCounts).map(([type, amount]) => (
-          <li key={threadData.id + type + amount}>
-            <img src={(reactionIcons as any)[type] || ""} alt="type" />
-            {amount}
-          </li>
-        ))}
+        {Object.entries(threadReactionsCounts).map(
+          ([type, amount]) =>
+            !!amount && (
+              <li key={threadData.id + type + amount}>
+                <img src={(reactionIcons as any)[type] || ""} alt="type" />
+                {amount}
+              </li>
+            )
+        )}
       </ul>
       <Button className="Post__n-of-comments">
         {nOfComments === 1

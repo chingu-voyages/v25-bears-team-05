@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
@@ -9,19 +10,26 @@ function TopBar() {
     url: string;
     firstName: string;
     lastName: string;
+    id: string;
   }>();
   useEffect(() => {
     getCurrentUserInfo().then((userInfo) => {
       setUserInfo(userInfo);
     });
   }, []);
+  const history = useHistory();
   return (
     <nav className="Top-bar">
       <OptionsMenu
         buttons={{
-          "View Profile": { action: () => {} },
-          "Edit Profile": { action: () => {} },
-          Logout: { action: () => {}, confirm: true },
+          "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
+          "Edit Profile": { type: "link", linkTo: "/me/profile" },
+          Logout: {
+            action: () => {
+              history.push("/logout");
+            },
+            confirm: true,
+          },
         }}
       >
         <Avatar

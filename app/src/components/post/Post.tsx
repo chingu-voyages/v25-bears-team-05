@@ -19,8 +19,11 @@ import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
-import { getCurrentUserId } from "../../services/user/currentUserId";
-import { addThreadReaction, removeThreadReaction } from "../../services/thread/thread";
+import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import {
+  addThreadReaction,
+  removeThreadReaction,
+} from "../../services/thread/thread";
 const md = require("markdown-it")();
 
 function Post({
@@ -43,7 +46,7 @@ function Post({
   );
   const [isMe, setIsMe] = useState(true);
   useEffect(() => {
-    getCurrentUserId().then((id) => setIsMe(id === profileData.id));
+    getCurrentUserInfo().then(({ id }) => setIsMe(id === profileData.id));
   }, [profileData.id]);
   const [nOfComments, setNOfComments] = useState(
     threadData.comments && Object.keys(threadData.comments).length
@@ -51,34 +54,49 @@ function Post({
   const handleThreadReaction = (title: string) => {
     let countValue = 0;
     const onSuccess = () => {
-      setCurrentUserReactions(reactions => ({...reactions, [title]: countValue > 0}))
-      setThreadReactionsCounts(counts => {
+      setCurrentUserReactions((reactions) => ({
+        ...reactions,
+        [title]: countValue > 0,
+      }));
+      setThreadReactionsCounts((counts) => {
         const newCount = (counts[title] || 0) + countValue;
-        return {...counts, [title]: newCount > 0 ? newCount : 0};
-      })
+        return { ...counts, [title]: newCount > 0 ? newCount : 0 };
+      });
     };
-    const onError = (msg: string) => {console.error(msg)};
+    const onError = (msg: string) => {
+      console.error(msg);
+    };
     if (currentUserReactions[title]) {
       countValue = -1;
-      removeThreadReaction({threadId: threadData.id, title, onSuccess, onError });
-    }
-    else {
+      removeThreadReaction({
+        threadId: threadData.id,
+        title,
+        onSuccess,
+        onError,
+      });
+    } else {
       countValue = 1;
-      addThreadReaction({threadId: threadData.id, title, onSuccess, onError });
+      addThreadReaction({ threadId: threadData.id, title, onSuccess, onError });
     }
-  }
+  };
 
   const ReactionOptions = {
     Star: {
-      action: () => {handleThreadReaction("star")},
+      action: () => {
+        handleThreadReaction("star");
+      },
       children: <img src={starIcon} alt="Star" />,
     },
     Heart: {
-      action: () => {handleThreadReaction("heart")},
+      action: () => {
+        handleThreadReaction("heart");
+      },
       children: <img src={heartIcon} alt="Heart" />,
     },
     Process: {
-      action: () => {handleThreadReaction("process")},
+      action: () => {
+        handleThreadReaction("process");
+      },
       children: <img src={processingIcon} alt="Process" />,
     },
   };
@@ -91,7 +109,9 @@ function Post({
   return (
     <article className={`Post ${className}`}>
       <header className="Post__relational-info">
-        {referral?.userId && referral.userName && <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>}
+        {referral?.userId && referral.userName && (
+          <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>
+        )}
         {referral?.reason}
       </header>
       <Link className="Post__profile-card" to={`/${profileData.id}/profile`}>

@@ -44,12 +44,20 @@ body {
   color: var(--primary-text-color);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
 }
 
 button {
+  font: unset;
+  font-family: "Roboto", sans-serif;
+}
+
+a {
   font: unset;
   font-family: "Roboto", sans-serif;
 }

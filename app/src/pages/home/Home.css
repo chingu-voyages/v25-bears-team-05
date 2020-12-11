@@ -1,4 +1,9 @@
-.Home__spinner {
+.Home-page {
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.Home-page__spinner {
   position: fixed;
   top: 0;
   left: 0;

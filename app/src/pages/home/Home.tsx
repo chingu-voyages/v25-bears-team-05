@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../components/button";
 import PostMaker from "../../components/postMaker";
-import logout from "../../services/logout";
 import "./Home.css";
 import editIcon from "../../images/editicon.svg";
 import { IPostMakerProps } from "../../components/postMaker/PostMaker.type";
@@ -16,6 +15,8 @@ import {
   IProcessedThreadFeed,
 } from "../../services/feed/feed.type";
 import TopBar from "../../components/topBar";
+import Nav from "../../components/nav";
+import { useHistory } from "react-router-dom";
 
 function Home() {
   const [feed, setFeed] = useState<any[]>([]);
@@ -23,10 +24,12 @@ function Home() {
   const [makePostError, setMakePostError] = useState("");
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
 
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);
     setMakePostError("");
+    history.location.hash.match("#newpost") && history.push("/home");
   };
   const postMakerOptions: IPostMakerProps = {
     title: "Share",
@@ -95,6 +98,14 @@ function Home() {
     });
   }, []);
 
+  useEffect(() => {
+    if (history.location.hash.match("#newpost")) {
+      setIsPostMakerOpen(true);
+    } else {
+      setIsPostMakerOpen(false);
+    }
+  }, [history.location.hash]);
+
   const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => (
     <li className="Home-page__feed__list__item">
       {thread && <Post {...thread} />}
@@ -132,12 +143,8 @@ function Home() {
         </ul>
         {/* <Pagenator {...{ page, nextPage, active: isEndPage || connections.length > 0 }} />  */}
       </div>
-      <nav>
-        <Button>Home</Button>
-        <Button>Post</Button>
-        <Button>My Network</Button>
-      </nav>
-      {inProgress && <Spinner className="Home__spinner" />}
+      <Nav />
+      {inProgress && <Spinner className="Home-page__spinner" />}
     </div>
   );
 }

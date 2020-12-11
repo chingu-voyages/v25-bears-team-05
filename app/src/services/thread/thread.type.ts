@@ -16,10 +16,7 @@ export enum ThreadLikeTypeTitle {
 
 export interface IThreadLike {
   postedByUserId: string;
-  threadLikeType: {
-    emoji: string;
-    title: ThreadLikeTypeTitle;
-  };
+  title: ThreadLikeTypeTitle;
 }
 
 export interface IThreadShare {
@@ -92,7 +89,7 @@ export interface IThreadDataProcessed {
     [reactionType: string]: number;
   };
   currentUserReactions: {
-    [reactionType: string]: boolean;
+    [reactionType: string]: string | false;
   };
   comments: { [keyof: string]: IThreadComment };
 }

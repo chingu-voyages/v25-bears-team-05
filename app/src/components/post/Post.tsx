@@ -53,10 +53,10 @@ function Post({
   );
   const handleThreadReaction = (title: string) => {
     let countValue = 0;
-    const onSuccess = () => {
+    const onSuccess = (threadLikeId: string | false) => {
       setCurrentUserReactions((reactions) => ({
         ...reactions,
-        [title]: countValue > 0,
+        [title]: threadLikeId,
       }));
       setThreadReactionsCounts((counts) => {
         const newCount = (counts[title] || 0) + countValue;
@@ -70,7 +70,7 @@ function Post({
       countValue = -1;
       removeThreadReaction({
         threadId: threadData.id,
-        title,
+        threadLikeId: currentUserReactions[title] || "",
         onSuccess,
         onError,
       });
@@ -103,7 +103,7 @@ function Post({
   const reactionIcons = {
     star: smallStarIcon,
     heart: smallHeartIcon,
-    processing: smallProcessingIcon,
+    process: smallProcessingIcon,
   };
 
   return (
@@ -132,12 +132,15 @@ function Post({
         dangerouslySetInnerHTML={{ __html: md.render(threadData.content.html) }}
       ></main>
       <ul className="Post__reactions">
-        {Object.entries(threadReactionsCounts).map(([type, amount]) => (
-          <li key={threadData.id + type + amount}>
-            <img src={(reactionIcons as any)[type] || ""} alt="type" />
-            {amount}
-          </li>
-        ))}
+        {Object.entries(threadReactionsCounts).map(
+          ([type, amount]) =>
+            !!amount && (
+              <li key={threadData.id + type + amount}>
+                <img src={(reactionIcons as any)[type] || ""} alt="type" />
+                {amount}
+              </li>
+            )
+        )}
       </ul>
       <Button className="Post__n-of-comments">
         {nOfComments === 1

@@ -15,6 +15,7 @@ import {
   IFeedProcessedResponse,
   IProcessedThreadFeed,
 } from "../../services/feed/feed.type";
+import TopBar from "../../components/topBar";
 
 function Home() {
   const [feed, setFeed] = useState<any[]>([]);
@@ -34,8 +35,8 @@ function Home() {
       setInProgress(true);
       const onSuccess = (data: IProcessedThreadFeed) => {
         setInProgress(false);
-        console.log(data)
-        setFeed(feed => [{thread: data}, ...feed]);
+        console.log(data);
+        setFeed((feed) => [{ thread: data }, ...feed]);
         resetPostMaker();
       };
       addThread({
@@ -103,12 +104,7 @@ function Home() {
 
   return (
     <div className="Home-page">
-      <div>
-        <h1>Home page - TODO</h1>
-        <Button onClick={logout} className="square">
-          Temporary logout button
-        </Button>
-      </div>
+      <TopBar />
       <div>
         {!isPostMakerOpen ? (
           <Button

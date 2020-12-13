@@ -4,7 +4,7 @@ import {
   IUserRawResponse,
 } from "./user.type";
 import axios from "axios";
-import { setCurrentUserId } from "./currentUserId";
+import { getCurrentUserInfo, setCurrentUserInfo } from "./currentUserInfo";
 
 const getUser = async ({
   userId,
@@ -19,10 +19,14 @@ const getUser = async ({
     const res = await axios(`/api/users/${userId}`);
     let currentUserId;
     if (userId === "me") {
-      currentUserId = res.data.id;
-      setCurrentUserId(currentUserId);
+      const { id, avatar, firstName, lastName, jobTitle } = res.data;
+      setCurrentUserInfo(
+        JSON.stringify({ id, avatar, firstName, lastName, jobTitle })
+      );
+      currentUserId = id;
     } else {
-      currentUserId = sessionStorage.getItem("currentUserId");
+      const currentUserInfo = await getCurrentUserInfo();
+      currentUserId = currentUserInfo?.id;
     }
     const {
       firstName,

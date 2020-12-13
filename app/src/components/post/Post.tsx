@@ -19,7 +19,7 @@ import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
-import { getCurrentUserId } from "../../services/user/currentUserId";
+import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import {
   addThreadReaction,
   removeThreadReaction,
@@ -46,7 +46,7 @@ function Post({
   );
   const [isMe, setIsMe] = useState(true);
   useEffect(() => {
-    getCurrentUserId().then((id) => setIsMe(id === profileData.id));
+    getCurrentUserInfo().then(({ id }) => setIsMe(id === profileData.id));
   }, [profileData.id]);
   const [nOfComments, setNOfComments] = useState(
     threadData.comments && Object.keys(threadData.comments).length

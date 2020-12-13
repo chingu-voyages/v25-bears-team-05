@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
+import Spinner from "../../components/spinner";
+import logout from "../../services/logout";
 
 function Logout({ onLogout }: { onLogout: () => void }) {
-  onLogout();
+  useEffect(() => {
+    onLogout();
+    logout();
+  }, []);
   return (
     <div>
-      <h1>logging out</h1>
+      <Spinner message="logging out" />
       <Redirect to="/" />
     </div>
   );

@@ -14,9 +14,11 @@ const apiUrl = !isProduction ? process.env.DEV_API_SERVICE_URL : process.env.API
 if (isProduction) {
   app.enable('trust proxy');
   app.use(function(request, response, next) {
+    request.hostname.match('heroku') && response.redirect(301, NODE_ENV.APP_HOST_URL + req.path);
     !request.secure && response.redirect("https://" + request.headers.host + request.url);
     next();
   });
+  
 }
 
 const corsOptions = {

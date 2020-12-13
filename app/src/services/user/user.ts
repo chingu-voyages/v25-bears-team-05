@@ -4,10 +4,7 @@ import {
   IUserRawResponse,
 } from "./user.type";
 import axios from "axios";
-
-const storeActiveUsersId = (id: string) => {
-  sessionStorage.setItem("currentUserId", id);
-};
+import { setCurrentUserId } from "./currentUserId";
 
 const getUser = async ({
   userId,
@@ -15,7 +12,7 @@ const getUser = async ({
   onError,
 }: {
   userId: string;
-  onSuccess: (data: IUserProcessed) => void;
+  onSuccess?: (data: IUserProcessed) => void;
   onError: (message: string) => void;
 }) => {
   try {
@@ -23,7 +20,7 @@ const getUser = async ({
     let currentUserId;
     if (userId === "me") {
       currentUserId = res.data.id;
-      storeActiveUsersId(currentUserId);
+      setCurrentUserId(currentUserId);
     } else {
       currentUserId = sessionStorage.getItem("currentUserId");
     }
@@ -47,7 +44,8 @@ const getUser = async ({
       ),
       id,
     };
-    onSuccess(processedUserData);
+    onSuccess?.(processedUserData);
+    return processedUserData;
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&

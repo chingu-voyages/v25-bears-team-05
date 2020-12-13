@@ -112,9 +112,7 @@ function Network() {
             <ConnectionItem key={connectionData.id} {...{ connectionData }} />
           ))}
         </ul>
-        <Pagenator
-          {...{ page, nextPage, active: isEndPage || connections.length > 0 }}
-        />
+        <Pagenator {...{ page, nextPage, active: !isEndPage }} />
       </main>
     </div>
   );

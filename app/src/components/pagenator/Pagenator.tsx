@@ -14,7 +14,7 @@ function Pagenator({
   useEffect(() => {
     if (ref.current) {
       const refCurrent = ref.current;
-      if (!active) {
+      if (active) {
         const observer = new IntersectionObserver((entries) => {
           if (entries[0].isIntersecting) {
             refCurrent && nextPage();

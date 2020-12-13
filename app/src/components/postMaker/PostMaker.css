@@ -2,6 +2,7 @@
     display: grid;
     height: 100%;
     grid-template-rows: 48px auto 48px;
+    z-index: 1000;
 }
 .Post-maker--full-window {
     position: absolute;

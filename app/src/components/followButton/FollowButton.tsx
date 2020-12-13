@@ -39,7 +39,7 @@ function FollowButton({
     setIsInProgress(false);
   };
   return (
-    <div className={`Follow-button ${className}`}>
+    <div className={`Follow-button ${className || ""}`}>
       <OptionsMenu
         className="Follow-button__options-menu"
         buttons={{

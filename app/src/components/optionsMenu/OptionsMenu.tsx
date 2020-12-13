@@ -6,13 +6,14 @@ interface IOption {
   action: () => void;
   confirm?: boolean;
   className?: string;
+  children?: JSX.Element;
 }
 
 interface IOptions {
   buttons: { [keyof: string]: IOption };
   refTitle?: string;
-  children?: JSX.Element;
   className?: string;
+  children?: JSX.Element;
 }
 
 interface IConfirmData {
@@ -21,7 +22,7 @@ interface IConfirmData {
   handleCancel: () => void;
 }
 
-function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
+function OptionsMenu({ buttons, refTitle, className, children }: IOptions) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmData, setConfirmData] = useState<IConfirmData | null>(null);
   const handleCallAction = ({ action, confirm }: IOption, title: string) => {
@@ -88,13 +89,13 @@ function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
             </div>
           ) : (
             Object.entries(buttons).map(
-              ([title, option]: [string, IOption]) => (
+              ([title, option]: [string, IOption], index) => (
                 <Button
-                  key={title + JSON.stringify(option)}
+                  key={title + index}
                   onClick={() => handleCallAction(option, title)}
-                  className={`Options-menu__button square ${option.className || ""}`}
+                  className={`Options-menu__button ${option.className || ""}`}
                 >
-                  {title}
+                  {option.children ? option.children : title}
                 </Button>
               )
             )

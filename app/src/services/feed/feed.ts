@@ -30,25 +30,25 @@ const getFeed = async ({
       connectionSuggestions,
       publicThreads,
     }: IFeedRawResponse = res.data;
-    const processedConnectionThreads = await Promise.all(
+    const processedConnectionThreads = connectionThreads ? await Promise.all(
       connectionThreads.map((threadData: IThread) => processThread(threadData))
-    );
-    const processedPublicThreads = await Promise.all(
+    ) : [];
+    const processedPublicThreads = publicThreads ? await Promise.all(
       publicThreads.map((threadData: IThread) => processThread(threadData))
-    );
-    const processedConnectionSuggestions = connectionSuggestions.map(
+    ) : [];
+    const processedConnectionSuggestions = connectionSuggestions ? connectionSuggestions.map(
       (suggestionData: IUserConnection) => processSuggestion(suggestionData)
-    );
+    ) : [];
     const processedData = {
       connectionThreads: (processedConnectionThreads.map((data) => ({
         thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }>,
+      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
       connectionSuggestions: (processedConnectionSuggestions.map((data) => ({
         suggestion: data,
-      })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }>,
+      })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }> || [],
       publicThreads: (processedPublicThreads.map((data) => ({
         thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }>,
+      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
     };
     onSuccess(processedData);
   } catch (error) {

@@ -1,0 +1,28 @@
+.Profile-editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "firstName lastName"
+    "jobTitle jobTitle";
+}
+.Profile-editor__first-name {
+  grid-area: firstName;
+}
+.Profile-editor__last-name {
+  grid-area: lastName;
+}
+.Profile-editor__job-title {
+  grid-area: jobTitle;
+}
+.Profile-editor__first-name .Input,
+.Profile-editor__first-name label,
+.Profile-editor__last-name .Input,
+.Profile-editor__last-name label {
+  font-size: 18px;
+  font-weight: 400;
+}
+.Profile-editor__job-title .Input,
+.Profile-editor__job-title label {
+  font-size: 14px;
+  font-weight: 400;
+}

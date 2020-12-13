@@ -1,0 +1,18 @@
+.Follow-button__error,
+.Follow-button__done,
+.Follow-button__progress {
+  background-color: var(--color-black);
+  color: var(--primary-text-color);
+  display: grid;
+  place-items: center center;
+  height: auto;
+}
+.Follow-button__error__message {
+  color: var(--error-color);
+}
+.Follow-button__text {
+  white-space: nowrap;
+}
+.Follow-button__progress__spinner {
+  width: 50px;
+}

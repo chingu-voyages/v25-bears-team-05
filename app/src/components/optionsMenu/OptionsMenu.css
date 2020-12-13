@@ -1,0 +1,68 @@
+.Options-menu__toggle {
+  z-index: 50;
+}
+
+.Options-menu__toggle__default-dots {
+  transform: rotate(90deg);
+}
+
+.Options-menu__list {
+  background: var(--color-black);
+  color: var(--primary-text-color);
+  z-index: 100;
+  border: solid var(--primary-text-color) 1px;
+}
+
+.Options-menu__hidden-input {
+  opacity: 0;
+  position: absolute;
+  z-index: 0;
+}
+
+.Options-menu__confirmation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.Options-menu__confirmation__message {
+  grid-column: span 2;
+}
+
+.Options-menu__button,
+.Options-menu__link {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.Options-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+
+.Options-menu.above {
+  position: relative;
+}
+.Options-menu.above-center .Options-menu__list {
+  position: absolute;
+  bottom: 10%;
+  margin: auto;
+}
+
+.Options-menu.above .Options-menu__list {
+  position: absolute;
+  margin: 0;
+  bottom: 110%;
+}
+
+.Options-menu.bar .Options-menu__list {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 6px;
+  gap: 12px;
+}
+.Options-menu.bar .Options-menu__button {
+  margin-bottom: 0;
+}

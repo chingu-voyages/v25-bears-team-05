@@ -1,0 +1,28 @@
+.Nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 48px;
+  padding: 6px 0;
+  position: fixed;
+  bottom: 0;
+  background: var(--color-black);
+  width: 100%;
+  z-index: 1500;
+}
+.Nav img {
+  width: 30px;
+}
+.Nav a {
+  display: grid;
+  place-items: center center;
+  color: var(--secondary-text-color);
+  text-decoration: none;
+}
+.Nav svg {
+  fill: var(--secondary-text-color);
+}
+.Nav a.active,
+.Nav a.active svg {
+  color: var(--primary-green-color);
+  fill: var(--primary-green-color);
+}

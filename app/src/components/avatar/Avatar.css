@@ -1,0 +1,38 @@
+.Avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  overflow: hidden;
+  background: var(--color-black);
+  display: grid;
+  place-items: center center;
+  border: 1px solid var(--color-grey-2);
+  box-shadow: 0 2px 2px var(--color-white);
+}
+.Avatar.small {
+  width: 50px;
+  height: 50px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}
+.Avatar.medium {
+  width: 100px;
+  height: 100px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}
+.Avatar.large {
+  width: 150px;
+  height: 150px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}
+.Avatar__img {
+  width: 100%;
+}
+.Avatar.xsmall {
+  width: 35px;
+  height: 35px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}

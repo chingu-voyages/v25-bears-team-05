@@ -14,6 +14,8 @@ import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import FollowButton from "../../components/followButton";
+import Nav from "../../components/nav";
+import TopBar from "../../components/topBar";
 
 function Profile() {
   const match: any = useRouteMatch("/:userId");
@@ -87,7 +89,7 @@ function Profile() {
   }, []);
   return (
     <div className="Profile-page">
-      <header className="Profile-page__header"></header>
+      <TopBar />
       <main className="Profile-page__profile">
         <div className="wrapper__Profile-page__wall-paper">
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
@@ -161,6 +163,7 @@ function Profile() {
           )}
         </div>
       </main>
+      <Nav />
     </div>
   );
 }

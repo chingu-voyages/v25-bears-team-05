@@ -1,0 +1,6 @@
+.Top-bar {
+  background: var(--primary-green-color);
+  display: grid;
+  place-items: center start;
+  padding: 12px;
+}

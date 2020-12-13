@@ -1,18 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Button from "../button";
 import "./OptionsMenu.css";
 
 interface IOption {
-  action: () => void;
+  type?: "button" | "link";
+  linkTo?: string;
+  action?: () => void;
   confirm?: boolean;
   className?: string;
+  children?: JSX.Element;
 }
 
 interface IOptions {
-  buttons: { [keyof: string]: IOption };
+  links?: { [keyof: string]: IOption };
+  buttons?: { [keyof: string]: IOption };
   refTitle?: string;
-  children?: JSX.Element;
   className?: string;
+  children?: JSX.Element;
 }
 
 interface IConfirmData {
@@ -21,23 +26,29 @@ interface IConfirmData {
   handleCancel: () => void;
 }
 
-function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
+function OptionsMenu({
+  buttons,
+  links,
+  refTitle,
+  className,
+  children,
+}: IOptions) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmData, setConfirmData] = useState<IConfirmData | null>(null);
   const handleCallAction = ({ action, confirm }: IOption, title: string) => {
-    const execute = (func: () => any) => {
+    const execute = (func: () => any | undefined) => {
       setIsOpen(false);
       setConfirmData(null);
-      func();
+      func?.();
     };
     if (confirm) {
       setConfirmData({
         title,
-        handleYes: () => execute(action),
+        handleYes: () => action && execute(action),
         handleCancel: () => execute(() => null),
       });
     } else {
-      execute(action);
+      action && execute(action);
     }
   };
   const clickedInMenuRef = useRef(false);
@@ -87,17 +98,33 @@ function OptionsMenu({ buttons, refTitle, children, className }: IOptions) {
               </Button>
             </div>
           ) : (
-            Object.entries(buttons).map(
-              ([title, option]: [string, IOption]) => (
-                <Button
-                  key={title + JSON.stringify(option)}
-                  onClick={() => handleCallAction(option, title)}
-                  className={`Options-menu__button square ${option.className || ""}`}
-                >
-                  {title}
-                </Button>
-              )
-            )
+            <>
+              {buttons &&
+                Object.entries(buttons).map(
+                  ([title, option]: [string, IOption], index) =>
+                    option.type === "link" ? (
+                      <Link
+                        key={title + index}
+                        to={option.linkTo || ""}
+                        className={`Options-menu__link ${
+                          option.className || ""
+                        }`}
+                      >
+                        {option.children ? option.children : title}
+                      </Link>
+                    ) : (
+                      <Button
+                        key={title + index}
+                        onClick={() => handleCallAction(option, title)}
+                        className={`Options-menu__button ${
+                          option.className || ""
+                        }`}
+                      >
+                        {option.children ? option.children : title}
+                      </Button>
+                    )
+                )}
+            </>
           )}
         </dialog>
       )}

@@ -6,7 +6,7 @@ const logout = async () => {
       method: "post",
       url: "/api/logout",
     });
-    window.location.replace("/");
+    sessionStorage.clear();
   } catch (error) {
     console.error(error);
   }

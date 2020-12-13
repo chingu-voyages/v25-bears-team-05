@@ -9,17 +9,14 @@ export interface IThreadComment {
 }
 
 export enum ThreadLikeTypeTitle {
-  Like = "like",
-  Celebrate = "celebrate",
-  Love = "love",
+  Star = "star",
+  Heart = "heart",
+  Processing = "Processing",
 }
 
 export interface IThreadLike {
   postedByUserId: string;
-  threadLikeType: {
-    emoji: string;
-    title: ThreadLikeTypeTitle;
-  };
+  title: ThreadLikeTypeTitle;
 }
 
 export interface IThreadShare {
@@ -50,6 +47,7 @@ export enum ThreadVisibility {
 }
 
 export interface IThread {
+  _id: string;
   postedByUserId: string;
   threadType: ThreadType;
   visibility: ThreadVisibility;
@@ -61,11 +59,37 @@ export interface IThread {
   comments: { [keyof: string]: IThreadComment };
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
+  updatedAt: string;
 }
 
 export interface INewThreadData {
-  htmlContent: string,
-  threadType: ThreadType,
-  visibility: ThreadVisibility,
-  hashTags: Array<string>
+  htmlContent: string;
+  threadType: ThreadType;
+  visibility: ThreadVisibility;
+  hashTags: Array<string>;
+}
+
+export interface IThreadReferral {
+  userId?: string;
+  userName?: string;
+  reason: string;
+}
+
+export interface IThreadDataProcessed {
+  id: string;
+  content: {
+    html: string;
+    hashTags?: Array<string>;
+    attachments?: Array<string>;
+  };
+  postedByUserId: string;
+  threadType: ThreadType;
+  visibility: ThreadVisibility;
+  reactionsCount: {
+    [reactionType: string]: number;
+  };
+  currentUserReactions: {
+    [reactionType: string]: string | false;
+  };
+  comments: { [keyof: string]: IThreadComment };
 }

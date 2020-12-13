@@ -8,6 +8,7 @@ import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
+import Nav from "../../components/nav";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -112,10 +113,9 @@ function Network() {
             <ConnectionItem key={connectionData.id} {...{ connectionData }} />
           ))}
         </ul>
-        <Pagenator
-          {...{ page, nextPage, active: isEndPage || connections.length > 0 }}
-        />
+        <Pagenator {...{ page, nextPage, active: !isEndPage }} />
       </main>
+      <Nav />
     </div>
   );
 }

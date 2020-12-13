@@ -6,7 +6,7 @@ A LinkedIn style app for developers | Voyage-25 | https://chingu.io/
 - Typescript
 - axios
 ## Features
-- Local and google login/registation
+- Local and google login/registration
 - User profile 
   - Upload an avatar
   - Edit first and last names
@@ -14,6 +14,10 @@ A LinkedIn style app for developers | Voyage-25 | https://chingu.io/
 - Network
   - Add/remove connections
   - View users connections
+- Home Page
+  - Create new thread (post)
+  - View feed of user threads, sorted by connections, connection suggestions, and then all public threads
+  - React to a thread with a star, heart, or processing icon
 
 ## API Repo
 This app works in conjunction with a backend server: https://github.com/chingu-voyages/v25-bears-team-05-repo2
@@ -40,7 +44,7 @@ Clone and setup the API repo above for full functionality
     - `$ heroku git:remote -a <your heroku app name>`
 
 ### Deploy
-1. Set environment varibles on Heroku app (if first time or they've changed)
+1. Set environment variables on Heroku app (if first time or they've changed)
     - `$ heroku config:set $(<.env) $(<app/.env)`
 1. Deploy a branch to heroku master
     - `$ git push heroku <your branch to deploy>:master`

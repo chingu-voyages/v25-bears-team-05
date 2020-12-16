@@ -38,7 +38,6 @@ function Home() {
       setInProgress(true);
       const onSuccess = (data: IProcessedThreadFeed) => {
         setInProgress(false);
-        console.log(data);
         setFeed((feed) => [{ thread: data }, ...feed]);
         resetPostMaker();
       };

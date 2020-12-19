@@ -73,3 +73,7 @@
   height: 48px;
   border-top: solid 1px var(--primary-text-color);
 }
+.Post__actions .Options-menu__list button, .Post__actions .Options-menu__list img {
+  width: 32px;
+  height: 32px;
+}

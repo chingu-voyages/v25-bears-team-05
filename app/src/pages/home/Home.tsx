@@ -25,6 +25,7 @@ function Home() {
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
+  const [expandedThreadId, setExpandedThreadId] = useState<null | string>(null);
 
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);
@@ -102,6 +103,21 @@ function Home() {
       setIsPostMakerOpen(true);
     } else {
       setIsPostMakerOpen(false);
+    }
+  }, [history.location.hash]);
+
+  useEffect(() => {
+    if (history.location.hash.match(/^#thread\S*/)) {
+      const threadId = history.location.hash.split("#thread-")[1];
+      setExpandedThreadId(threadId);
+      if (!feed.some((item) => item?.thread.threadData?.id === threadId)) {
+        setInProgress(true);
+        // get thread
+        // append to feed
+        // scroll to/open comments view
+      }
+    } else {
+      setExpandedThreadId(null);
     }
   }, [history.location.hash]);
 

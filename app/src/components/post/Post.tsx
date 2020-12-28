@@ -24,6 +24,7 @@ import {
   addThreadReaction,
   removeThreadReaction,
 } from "../../services/thread/thread";
+import { HashLink } from "react-router-hash-link";
 const md = require("markdown-it")();
 
 function Post({
@@ -107,7 +108,7 @@ function Post({
   };
 
   return (
-    <article className={`Post ${className}`}>
+    <article id={`thread-${threadData.id}`} className={`Post ${className}`}>
       <header className="Post__relational-info">
         {referral?.userId && referral.userName && (
           <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>
@@ -143,17 +144,19 @@ function Post({
         )}
       </ul>
       <Button className="Post__n-of-comments">
-        {nOfComments === 1
-          ? "1 Comment"
-          : nOfComments && `${nOfComments} Comments`}
+        {nOfComments && (
+          <HashLink to={`#thread-${threadData.id}`}>
+            {nOfComments === 1 ? "1 Comment" : `${nOfComments} Comments`}
+          </HashLink>
+        )}
       </Button>
       <footer className="Post__actions">
         <OptionsMenu buttons={ReactionOptions} className="above bar">
           <img src={reactButton} alt="React" />
         </OptionsMenu>
-        <Button onClick={() => {}}>
+        <HashLink to={`?commenting=true#thread-${threadData.id}`}>
           <img src={commentButton} alt="Comment" />
-        </Button>
+        </HashLink>
         <Button onClick={() => {}}>
           <img src={folkButton} alt="Fork" />
         </Button>

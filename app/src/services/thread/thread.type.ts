@@ -3,6 +3,7 @@ export interface IAttachmentType {
 }
 
 export interface IThreadComment {
+  id: string;
   postedByUserId: string;
   content: string;
   attachments?: Array<IAttachmentType>;
@@ -92,4 +93,5 @@ export interface IThreadDataProcessed {
     [reactionType: string]: string | false;
   };
   comments: { [keyof: string]: IThreadComment };
+  updatedAt: string;
 }

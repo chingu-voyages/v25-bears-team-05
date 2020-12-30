@@ -1,33 +1,47 @@
-.Profile-card--connection,
-.Profile-card--thread {
-  height: 50px;
+.Profile-card a {
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
+}
+.Profile-card {
+  width: 100%;
   display: grid;
-  grid-template-columns: 60px auto;
   row-gap: 0;
   column-gap: 12px;
   grid-template-areas:
-    "avatar ."
-    "avatar name"
-    "avatar title"
-    "avatar info"
-    "avatar .";
+    "name . ."
+    "title . follow"
+    "info . .";
   padding: 5px 0;
   place-items: center start;
 }
-.Profile-card__name {
+.Profile-card--connection, .Profile-card--thread {
+  grid-template-columns: 60px auto auto auto;
+  grid-template-areas:
+    "avatar . . ."
+    "avatar name . ."
+    "avatar title . follow"
+    "avatar info . ."
+    "avatar . . .";
+}
+.Profile-card__name h1 {
   font-size: 18px;
   margin: 4px 0;
   font-weight: 400;
+}
+.Profile-card__name {
   grid-area: name;
 }
 .Profile-card--connection .Profile-card__name {
   font-size: 14px;
   margin: 0;
 }
-.Profile-card__title {
+.Profile-card__title h2 {
   font-size: 14px;
   margin: 4px 0;
   font-weight: 400;
+}
+.Profile-card__title {
   grid-area: title;
 }
 .Profile-card--connection .Profile-card__title {
@@ -49,4 +63,8 @@
 .Profile-card__info a {
   color: var(--primary-text-color);
   text-decoration: none;
+}
+.Profile-card__follow {
+  grid-area: follow;
+  justify-self: end;
 }

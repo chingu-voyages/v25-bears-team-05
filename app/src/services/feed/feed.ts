@@ -1,6 +1,5 @@
 import axios from "axios";
 import { IThread, IThreadDataProcessed } from "../thread/thread.type";
-import { getUser } from "../user";
 import {
   IFeedProcessedResponse,
   IFeedRawResponse,
@@ -88,6 +87,7 @@ async function processThread(
     reactionsCount: {},
     currentUserReactions: {},
     comments: threadData.comments,
+    updatedAt: threadData.updatedAt,
   };
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
@@ -98,28 +98,8 @@ async function processThread(
         processedThreadData.currentUserReactions[type] = id;
       }
     });
-  const userData = await getUser({
-    userId: threadData.postedByUserId,
-    onError: (msg) => {
-      throw Error(msg);
-    },
-  });
-  if (!userData) {
-    throw Error("Unable to get user info");
-  }
-  const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
   const data = {
-    threadData: processedThreadData,
-    profileData: {
-      firstName,
-      lastName,
-      jobTitle,
-      dateTimePosted: threadData.updatedAt,
-      visibility: threadData.visibility,
-      avatar,
-      id,
-      isAConnection: isAConnection || false,
-    },
+    threadData: processedThreadData
   };
   return data;
 }

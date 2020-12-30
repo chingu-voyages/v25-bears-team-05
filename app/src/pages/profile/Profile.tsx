@@ -13,16 +13,12 @@ import {
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
-import FollowButton from "../../components/followButton";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 
 function Profile() {
   const match: any = useRouteMatch("/:userId");
-  const userId = useRef<string>(match.params.userId.toLowerCase());
-  const storedUserId = useRef(sessionStorage.getItem("currentUserId"));
-  const isMe =
-    userId.current === "me" || storedUserId.current === userId.current;
+  const [userId, setUserId] = useState(match.params.userId.toLowerCase());
   const [nOfConnections, setNOfConnections]: [
     number | null,
     React.Dispatch<React.SetStateAction<any>>
@@ -44,7 +40,10 @@ function Profile() {
     }
     setIsEditing(editingMode);
   };
-  const [isAConnection, setIsAConnection] = useState(false);
+
+  useEffect(() => {
+    setUserId(match.params.userId.toLowerCase())
+  }, [match.params.userId])
 
   const handleUpdateInfo = () => {
     const onSuccess = (newData: IUserPatchRequest) => {
@@ -69,20 +68,18 @@ function Profile() {
         lastName,
         jobTitle,
         avatar,
-        isAConnection,
       } = newData;
       setUserInfo((oldData) => ({
         ...oldData,
         firstName,
         lastName,
-        jobTitle: jobTitle || "New SyncedUp Member",
+        jobTitle: jobTitle,
       }));
       setNOfConnections(nOfConnections);
       setAvatar(avatar?.[0]?.url || "");
-      setIsAConnection(!!isAConnection);
     };
     getUser({
-      userId: userId.current,
+      userId,
       onSuccess,
       onError: setGetDataErrorMessage,
     });
@@ -113,7 +110,7 @@ function Profile() {
           </PhotoUploader>
         </figure>
         <div className="Profile-page__info">
-          {userId.current === "me" ? (
+          {userId === "me" && (
             <>
               <Button
                 onClick={handleToggleEditMode}
@@ -130,20 +127,6 @@ function Profile() {
                 </Button>
               )}
             </>
-          ) : (
-            !isAConnection &&
-            !isMe && (
-              <FollowButton
-                className="Profile-page__follow"
-                {...{
-                  connectionName: `${userInfo.firstName} ${userInfo.lastName}`,
-                  connectionId: userId.current,
-                  onFollow: () => {
-                    setIsAConnection(true);
-                  },
-                }}
-              />
-            )
           )}
           {isEditing ? (
             <ProfileEditor
@@ -152,7 +135,8 @@ function Profile() {
             />
           ) : (
             <ProfileCard
-              profileInfo={{ ...userInfo, nOfConnections }}
+              type="profile" 
+              data={{ ...userInfo, id: userId, nOfConnections }}
               className="Profile-page__info__text"
             />
           )}

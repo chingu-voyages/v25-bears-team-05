@@ -1,6 +1,4 @@
-import IProfileCard, {
-  IThreadCardInfo,
-} from "../../components/profileCard/profileCard.type";
+import {ICardInfo} from "../../components/profileCard/profileCard.type";
 import {
   IThreadReferral,
   IThreadDataProcessed,
@@ -10,13 +8,12 @@ import { IUserConnection } from "../user/user.type";
 
 export interface IProcessedThreadFeed {
   threadData?: IThreadDataProcessed;
-  profileData: IThreadCardInfo;
   referral?: IThreadReferral;
   className?: string;
 }
 
 export interface IProcessedSuggestionFeed {
-  profileData: IThreadCardInfo;
+  profileData: ICardInfo;
   referral?: IThreadReferral;
 }
 
@@ -34,12 +31,11 @@ export interface IFeedProcessedResponse {
 
 export interface IThreadProps {
   threadData: IThreadDataProcessed;
-  profileData: IThreadCardInfo;
   referral?: IThreadReferral;
   className?: string;
 }
 
 export interface IFeedItemsProps {
-  suggestion?: IThreadCardInfo;
+  suggestion?: ICardInfo;
   thread?: IThreadProps;
 }

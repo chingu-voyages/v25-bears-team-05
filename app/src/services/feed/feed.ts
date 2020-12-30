@@ -88,6 +88,7 @@ async function processThread(
     currentUserReactions: {},
     comments: threadData.comments,
     updatedAt: threadData.updatedAt,
+    createdAt: threadData.createdAt,
   };
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {

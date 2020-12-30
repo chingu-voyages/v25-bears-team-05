@@ -6,7 +6,8 @@ export interface IThreadComment {
   id: string;
   postedByUserId: string;
   content: string;
-  attachments?: Array<IAttachmentType>;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export enum ThreadLikeTypeTitle {
@@ -61,6 +62,7 @@ export interface IThread {
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
   updatedAt: string;
+  createdAt: string;
 }
 
 export interface INewThreadData {
@@ -94,4 +96,5 @@ export interface IThreadDataProcessed {
   };
   comments: { [keyof: string]: IThreadComment };
   updatedAt: string;
+  createdAt: string;
 }

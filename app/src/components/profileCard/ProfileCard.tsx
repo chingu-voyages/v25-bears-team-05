@@ -70,7 +70,14 @@ function ProfileCard({
         }
         else if (type === "thread") {
           const {avatar} = (data as ICardInfo);
-          setInfo(`${convertDateStringToTimeAgo({date: threadData?.updatedAt || "",})} • ${threadData?.visibility === 0 ? "anyone" : threadData?.visibility ? "connections" : ""}`);
+          const actionTitle = threadData?.updatedAt !== threadData?.createdAt ? "Edited" : "Posted";
+          setInfo(`${actionTitle} ${convertDateStringToTimeAgo({date: threadData?.updatedAt || "",})} • ${threadData?.visibility === 0 ? "anyone" : threadData?.visibility ? "connections" : ""}`);
+          setAvatarUrl(avatar?.[0]?.url);
+        }
+        else if (type === "comment") {
+          const {avatar} = (data as ICardInfo);
+          const actionTitle = threadData?.updatedAt !== threadData?.createdAt ? "Edited" : "Posted";
+          setInfo(`${actionTitle} ${convertDateStringToTimeAgo({date: threadData?.updatedAt || ""})}`);
           setAvatarUrl(avatar?.[0]?.url);
         }
         const currentUserInfo = await getCurrentUserInfo();
@@ -89,7 +96,7 @@ function ProfileCard({
             <Avatar
               url={avatarUrl || ""}
               userName={`${title}`.trim() || "user avatar"}
-              size="small"
+              size={type === "comment" ? "xsmall" : "small"}
             />
           </Link>
         )}

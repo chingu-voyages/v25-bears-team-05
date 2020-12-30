@@ -17,6 +17,7 @@ import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 
 function Profile() {
+  const firstLoad = useRef(true);
   const match: any = useRouteMatch("/:userId");
   const [userId, setUserId] = useState(match.params.userId.toLowerCase());
   const [nOfConnections, setNOfConnections]: [
@@ -30,20 +31,25 @@ function Profile() {
     firstName: "",
     lastName: "",
     jobTitle: "",
+    isAConnection: true,
   });
-  const [inputs, setInputs] = useState(userInfo);
+
+  const getUserDataForInputs = () => {
+    return {
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      jobTitle: userInfo.jobTitle,
+    }
+  }
+  const [inputs, setInputs] = useState(getUserDataForInputs());
   const [isEditing, setIsEditing] = useState(false);
   const handleToggleEditMode = () => {
     const editingMode = !isEditing;
     if (editingMode) {
-      setInputs(userInfo);
+      setInputs(getUserDataForInputs());
     }
     setIsEditing(editingMode);
   };
-
-  useEffect(() => {
-    setUserId(match.params.userId.toLowerCase())
-  }, [match.params.userId])
 
   const handleUpdateInfo = () => {
     const onSuccess = (newData: IUserPatchRequest) => {
@@ -61,29 +67,37 @@ function Profile() {
   };
 
   useEffect(() => {
-    const onSuccess = (newData: IUserProcessed) => {
-      const {
-        nOfConnections,
-        firstName,
-        lastName,
-        jobTitle,
-        avatar,
-      } = newData;
-      setUserInfo((oldData) => ({
-        ...oldData,
-        firstName,
-        lastName,
-        jobTitle: jobTitle,
-      }));
-      setNOfConnections(nOfConnections);
-      setAvatar(avatar?.[0]?.url || "");
-    };
-    getUser({
-      userId,
-      onSuccess,
-      onError: setGetDataErrorMessage,
-    });
-  }, []);
+    const urlPathUserId = match.params.userId.toLowerCase();
+    if (firstLoad.current || urlPathUserId !== userId) {
+      firstLoad.current = false;
+      setUserId(urlPathUserId)
+      const onSuccess = (newData: IUserProcessed) => {
+        const {
+          nOfConnections,
+          firstName,
+          lastName,
+          jobTitle,
+          avatar,
+          isAConnection,
+        } = newData;
+        setUserInfo((oldData) => ({
+          ...oldData,
+          firstName,
+          lastName,
+          jobTitle: jobTitle,
+          isAConnection: !!isAConnection,
+        }));
+        setNOfConnections(nOfConnections);
+        setAvatar(avatar?.[0]?.url || "");
+      };
+      getUser({
+        userId: urlPathUserId,
+        onSuccess,
+        onError: setGetDataErrorMessage,
+      });
+    }
+  }, [match.params.userId]);
+
   return (
     <div className="Profile-page">
       <TopBar />

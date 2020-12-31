@@ -3,3 +3,10 @@
     margin-top: 2px;
     padding: 6px 32px;
 }
+
+.Comment__header {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+}

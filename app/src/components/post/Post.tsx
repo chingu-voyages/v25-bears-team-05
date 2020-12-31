@@ -18,11 +18,11 @@ import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import {
   addThreadReaction,
   removeThreadReaction,
-  addComment
+  addComment,
+  deleteComment
 } from "../../services/thread";
 import Comment from "../comment";
 import PostMaker from "../postMaker";
@@ -41,10 +41,6 @@ function Post({
 }) {
   const [inProgress, setInProgress] = useState(false);
   const [comments, setComments] = useState(threadData.comments);
-  const [isMe, setIsMe] = useState(true);
-  useEffect(() => {
-    getCurrentUserInfo().then(({ id }) => setIsMe(id === threadData.postedByUserId));
-  }, [threadData.postedByUserId]);
 
   const [nOfComments, setNOfComments] = useState(
     comments && Object.keys(comments).length
@@ -203,16 +199,34 @@ function Post({
     fullView: false,
   };
 
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleDeleteComment = ({commentId}: {commentId: string}) => {
+    setInProgress(true);
+    deleteComment({ 
+      threadId: threadData.id, 
+      commentId,
+      onSuccess: () => {
+        setComments(comments => comments.filter(comment => comment._id !== commentId));
+        setInProgress(false);
+      },
+      onError: (msg) => {
+        setErrorMessage(msg);
+        setInProgress(false);
+      }
+    });
+  };
+
   return (<>
     {showComments ? <main>
       {postArticle}
-      {comments && Object.values(comments).map(commentData => <Comment key={commentData._id} {...{commentData}} />)}
+      {comments && Object.values(comments).map(commentData => <Comment key={commentData._id} {...{commentData}} handleDeleteComment={() => handleDeleteComment({commentId: commentData._id})} />)}
       <div ref={commentMakerRef}></div>
       {commentEditorOpen && (
             <PostMaker {...commentMakerOptions} />
         )
       }
     </main> : postArticle}
+    {errorMessage && <p className="Post__error">{errorMessage}</p>}
     {inProgress && <Spinner />}
   </>);
 }

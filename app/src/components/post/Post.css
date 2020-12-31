@@ -79,3 +79,6 @@
   width: 32px;
   height: 32px;
 }
+.Post__error {
+  color: var(--error-color);
+}

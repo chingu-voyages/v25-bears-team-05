@@ -105,7 +105,7 @@ const addComment = async ({
   onSuccess,
   onError,
 }: {
-  threadId: string
+  threadId: string;
   data: {content: string};
   onSuccess: (data: IThreadComment) => void;
   onError: (message: string) => void;
@@ -135,7 +135,7 @@ const getComments = async ({
   onSuccess,
   onError,
 }: {
-  threadId: string
+  threadId: string;
   onSuccess?: (data: IThreadComment) => void;
   onError?: (message: string) => void;
 }) => {
@@ -150,4 +150,34 @@ const getComments = async ({
   }
 };
 
-export { addThread, addThreadReaction, removeThreadReaction, addComment, getComments };
+const deleteComment = async ({
+  threadId,
+  commentId,
+  onSuccess,
+  onError,
+}: {
+  threadId: string;
+  commentId: string;
+  onSuccess: () => void;
+  onError: (message: string) => void;
+}) => {
+  try {
+    const req = await axios({
+      method: "delete",
+      url: `/api/threads/${threadId}/comments/${commentId}`,
+    });
+    if (req.status === 200) {
+      onSuccess();
+    } else {
+      onError(req.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError(
+        "Sorry, we're unable to delete your comment at this time, please try again later"
+      );
+  }
+};
+
+export { addThread, addThreadReaction, removeThreadReaction, addComment, getComments, deleteComment };

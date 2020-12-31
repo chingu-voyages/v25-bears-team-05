@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IThread, IThreadDataProcessed } from "../thread/thread.type";
+import { IThread, IThreadComment, IThreadDataProcessed } from "../thread/thread.type";
 import {
   IFeedProcessedResponse,
   IFeedRawResponse,
@@ -7,6 +7,7 @@ import {
   IProcessedThreadFeed,
 } from "./feed.type";
 import { IUserConnection } from "../user/user.type";
+import { getComments } from "../thread";
 const currentUserId = sessionStorage.getItem("currentUserId");
 
 const getFeed = async ({
@@ -78,6 +79,8 @@ function processSuggestion(userData: IUserConnection) {
 async function processThread(
   threadData: IThread
 ): Promise<IProcessedThreadFeed> {
+  const comments = await getComments({threadId: threadData._id});
+  const sortCommentsByDate = (arr: IThreadComment[]) => arr.sort((a, b) => parseInt(b.updatedAt.replace(/[-\.\:\D]/g, '')) - parseInt(a.updatedAt.replace(/[-\.\:\D]/g, '')));
   const processedThreadData: IThreadDataProcessed = {
     id: threadData._id,
     content: threadData.content,
@@ -86,7 +89,7 @@ async function processThread(
     visibility: threadData.visibility,
     reactionsCount: {},
     currentUserReactions: {},
-    comments: threadData.comments,
+    comments: comments?.threadComments && sortCommentsByDate(Object.values(comments.threadComments)),
     updatedAt: threadData.updatedAt,
     createdAt: threadData.createdAt,
   };

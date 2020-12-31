@@ -15,7 +15,7 @@ function ContentClipper({children, clippedHeight = "120px"}: {children: JSX.Elem
                 {children}
             </div>
             {
-                isClipping && 
+                (isClipping || isOpen) && 
                 <Button className="Content-clipper__button" onClick={() => setIsOpen(open => !open)}>{isOpen ? "show less" : "show more"}</Button>
             }
         </div>

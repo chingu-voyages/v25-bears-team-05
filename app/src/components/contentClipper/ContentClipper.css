@@ -1,6 +1,6 @@
 .Content-clipper {
     display: grid;
-    place-items: center center;
+    place-items: center stretch;
     grid-template-rows: auto 30px;
 }
 .Content-clipper__content {
@@ -11,4 +11,5 @@
     background: var(--grey-background-color);
     font-size: 12px;
     font-weight: 400;
+    place-self: center;
 }

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   IThreadReferral,
   IThreadDataProcessed,
+  IThreadComment,
 } from "../../services/thread/thread.type";
 import Button from "../button";
-import FollowButton from "../followButton";
 import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";
-import { IThreadCardInfo } from "../profileCard/profileCard.type";
 import "./Post.css";
 import starIcon from "../../images/staricon.svg";
 import heartIcon from "../../images/hearticon.svg";
@@ -23,22 +22,28 @@ import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import {
   addThreadReaction,
   removeThreadReaction,
-} from "../../services/thread/thread";
+  addComment
+} from "../../services/thread";
 import { HashLink } from "react-router-hash-link";
+import Comment from "../comment";
+import PostMaker from "../postMaker";
+import Spinner from "../spinner";
 const md = require("markdown-it")();
 
 function Post({
   threadData,
-  profileData,
   referral,
   className = "",
+  showComments,
 }: {
   threadData: IThreadDataProcessed;
-  profileData: IThreadCardInfo;
   referral?: IThreadReferral;
   className?: string;
+  showComments?: boolean;
 }) {
-  const [isAConnection, setIsAConnection] = useState(profileData.isAConnection);
+  const history = useHistory();
+  const [inProgress, setInProgress] = useState(false);
+  const [comments, setComments] = useState(threadData.comments);
   const [threadReactionsCounts, setThreadReactionsCounts] = useState(
     threadData.reactionsCount
   );
@@ -47,11 +52,15 @@ function Post({
   );
   const [isMe, setIsMe] = useState(true);
   useEffect(() => {
-    getCurrentUserInfo().then(({ id }) => setIsMe(id === profileData.id));
-  }, [profileData.id]);
+    getCurrentUserInfo().then(({ id }) => setIsMe(id === threadData.postedByUserId));
+  }, [threadData.postedByUserId]);
+
   const [nOfComments, setNOfComments] = useState(
-    threadData.comments && Object.keys(threadData.comments).length
+    comments && Object.keys(comments).length
   );
+  useEffect(() => {
+    setNOfComments(comments && Object.keys(comments).length);
+  }, [comments]);
   const handleThreadReaction = (title: string) => {
     let countValue = 0;
     const onSuccess = (threadLikeId: string | false) => {
@@ -106,8 +115,9 @@ function Post({
     heart: smallHeartIcon,
     process: smallProcessingIcon,
   };
+  const [commentEditorOpen, setCommentEditorOpen] = useState(false);
 
-  return (
+  const postArticle = (
     <article id={`thread-${threadData.id}`} className={`Post ${className}`}>
       <header className="Post__relational-info">
         {referral?.userId && referral.userName && (
@@ -115,19 +125,8 @@ function Post({
         )}
         {referral?.reason}
       </header>
-      <Link className="Post__profile-card" to={`/${profileData.id}/profile`}>
-        <ProfileCard threadInfo={profileData} />
-      </Link>
-      {!isMe && !isAConnection && (
-        <FollowButton
-          className="Post__follow"
-          connectionName={profileData.firstName + " " + profileData.lastName}
-          connectionId={profileData.id}
-          onFollow={() => {
-            setIsAConnection(true);
-          }}
-        />
-      )}
+      <ProfileCard className="Post__profile-card" type="thread" userId={threadData.postedByUserId} threadData={threadData} />
+
       <main
         className="Post__content"
         dangerouslySetInnerHTML={{ __html: md.render(threadData.content.html) }}
@@ -145,7 +144,7 @@ function Post({
       </ul>
       <Button className="Post__n-of-comments">
         {nOfComments && (
-          <HashLink to={`#thread-${threadData.id}`}>
+          <HashLink to={showComments ? "" : `#thread-${threadData.id}`}>
             {nOfComments === 1 ? "1 Comment" : `${nOfComments} Comments`}
           </HashLink>
         )}
@@ -154,7 +153,7 @@ function Post({
         <OptionsMenu buttons={ReactionOptions} className="above bar">
           <img src={reactButton} alt="React" />
         </OptionsMenu>
-        <HashLink to={`?commenting=true#thread-${threadData.id}`}>
+        <HashLink to={commentEditorOpen ? `#thread-${threadData.id}` : `?commenting=true#thread-${threadData.id}`}>
           <img src={commentButton} alt="Comment" />
         </HashLink>
         <Button onClick={() => {}}>
@@ -163,6 +162,57 @@ function Post({
       </footer>
     </article>
   );
+
+  const [makeCommentError, setMakeCommentError] = useState("");
+  const resetCommentMaker = () => {
+    setCommentEditorOpen(false);
+    setMakeCommentError("");
+    history.location.hash.match(/^#thread\S*/) && history.push("/home"+history.location.hash);
+  };
+  const commentMakerOptions = {
+    title: "Comment",
+    placeholder: "Your comment",
+    onSubmit: ({content}: {content: string}) => {
+      setInProgress(true);
+      const onSuccess = (data: IThreadComment) => {
+        setInProgress(false);
+        setComments((comments) => ({[data.id]: data, ...comments}));
+        resetCommentMaker();
+      };
+      addComment({
+        threadId: threadData.id,
+        data: { 
+          content,
+        },
+        onSuccess,
+        onError: (msg: string) => {
+          setMakeCommentError(msg);
+        },
+      }); 
+    },
+    handleCancel: () => {
+      resetCommentMaker();
+    },
+    errorMessage: makeCommentError,
+    className: "Home__comment-maker",
+    fullView: false,
+  };
+
+  useEffect(() => {
+    setCommentEditorOpen(!!history.location.search.match("commenting=true"));
+  }, [history.location.search]);
+
+  return (<>
+    {showComments ? <main>
+      {postArticle}
+      {comments && Object.values(comments).map(commentData => <Comment key={commentData.id} {...{commentData}} />)}
+      {commentEditorOpen && (
+            <PostMaker {...commentMakerOptions} />
+        )
+      }
+    </main> : postArticle}
+    {inProgress && <Spinner />}
+  </>);
 }
 
 export default Post;

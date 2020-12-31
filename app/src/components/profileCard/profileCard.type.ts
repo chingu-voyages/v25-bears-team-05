@@ -1,4 +1,4 @@
-import { IThreadDataProcessed, ThreadVisibility } from "../../services/thread/thread.type";
+import { ThreadVisibility } from "../../services/thread/thread.type";
 import { Avatar } from "../avatar/Avatar.type";
 
 export interface IBasicCardInfo {
@@ -22,5 +22,5 @@ export default interface IProfileCard {
   data?: ICardInfo;
   userId?: string
   className?: string;
-  threadData?: IThreadDataProcessed;
+  threadData?: any;
 }

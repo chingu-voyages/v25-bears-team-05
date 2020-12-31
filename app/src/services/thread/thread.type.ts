@@ -3,7 +3,7 @@ export interface IAttachmentType {
 }
 
 export interface IThreadComment {
-  id: string;
+  _id: string;
   postedByUserId: string;
   content: string;
   updatedAt: string;
@@ -31,7 +31,7 @@ export interface IThreadShare {
     hashTags: Array<string>;
     attachments: Array<string>;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
 }
@@ -58,7 +58,7 @@ export interface IThread {
     hashTags: Array<string>;
     attachments: Array<string>;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
   updatedAt: string;
@@ -94,7 +94,7 @@ export interface IThreadDataProcessed {
   currentUserReactions: {
     [reactionType: string]: string | false;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   updatedAt: string;
   createdAt: string;
 }

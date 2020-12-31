@@ -130,4 +130,24 @@ const addComment = async ({
   }
 };
 
-export { addThread, addThreadReaction, removeThreadReaction, addComment };
+const getComments = async ({
+  threadId,
+  onSuccess,
+  onError,
+}: {
+  threadId: string
+  onSuccess?: (data: IThreadComment) => void;
+  onError?: (message: string) => void;
+}) => {
+  try {
+    const res = await axios(`/api/threads/${threadId}/comments`);
+    onSuccess?.(res.data);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError?.("Unable to get comments from server, please try again later");
+  }
+};
+
+export { addThread, addThreadReaction, removeThreadReaction, addComment, getComments };

@@ -62,6 +62,8 @@
 }
 .Post__n-of-comments {
   grid-area: nOfComments;
+  font-weight: 400;
+  font-size: 12px;
 }
 .Post__actions {
   grid-area: actions;

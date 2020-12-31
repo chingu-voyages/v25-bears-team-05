@@ -104,27 +104,10 @@ function Home() {
     }
   }, [history.location.hash]);
 
-  const [expandedThreadId, setExpandedThreadId] = useState<null | string>(null);
-  useEffect(() => {
-    if (history.location.hash.match(/^#thread\S*/)) {
-      const threadId = history.location.hash.split("#thread-")[1];
-      setExpandedThreadId(threadId);
-      if (!feed.some((item) => item?.thread.threadData?.id === threadId)) {
-        setInProgress(true);
-        // get thread
-        // append to feed
-        // scroll to/open comments view
-      }
-    } else {
-      setExpandedThreadId(null);
-    }
-  }, [history.location.hash]);
-
   const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
-    const isExpandedThreadId = thread && thread.threadData.id === expandedThreadId;
     return (
       <li className="Home-page__feed__list__item">
-        {thread && <Post {...thread} showComments={isExpandedThreadId} />}
+        {thread && <Post {...thread} />}
         {suggestion && <ProfileCard type="thread" data={suggestion} />}
       </li>
     )

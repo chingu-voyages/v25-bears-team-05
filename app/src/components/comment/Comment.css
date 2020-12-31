@@ -1,0 +1,5 @@
+.Comment {
+    background: var(--color-black);
+    margin-top: 2px;
+    padding: 6px 32px;
+}

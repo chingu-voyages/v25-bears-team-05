@@ -116,11 +116,11 @@ function Home() {
   return (
     <div className="Home-page">
       <TopBar />
-      <div>
+      <div className="Home-page__post-maker-start">
         {!isPostMakerOpen ? (
           <Button
             onClick={() => setIsPostMakerOpen(true)}
-            className="Post-maker__start"
+            className="Home-page__post-maker-start__button"
           >
             <img src={editIcon} alt="" />
             <h1>Share your thoughts or photos</h1>

@@ -23,3 +23,17 @@
 .Home-page__error {
   color: var(--error-color);
 }
+.Home-page__post-maker-start {
+  box-sizing: border-box;
+  margin: 16px 24px 0 24px;
+}
+.Home-page__post-maker-start__button {
+  width: 100%;
+  display: grid;
+  place-items: center center;
+  grid-template-columns: 30px auto;
+  background: var(--color-black);
+}
+.Home-page__post-maker-start h1 {
+  font-size: 18px;
+}

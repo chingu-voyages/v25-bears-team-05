@@ -23,7 +23,7 @@ function Home() {
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   useEffect(() => {
     const onSuccess = ({
       connectionThreads,
@@ -110,7 +110,7 @@ function Home() {
         {thread && <Post {...thread} />}
         {suggestion && <ProfileCard type="thread" data={suggestion} />}
       </li>
-    )
+    );
   };
 
   return (

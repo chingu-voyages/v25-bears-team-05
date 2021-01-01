@@ -1,4 +1,4 @@
-import {ICardInfo} from "../../components/profileCard/profileCard.type";
+import { ICardInfo } from "../../components/profileCard/profileCard.type";
 import {
   IThreadReferral,
   IThreadDataProcessed,

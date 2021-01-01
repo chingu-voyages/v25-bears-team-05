@@ -15,7 +15,9 @@
   padding: 5px 0;
   place-items: center start;
 }
-.Profile-card--connection, .Profile-card--thread, .Profile-card--comment {
+.Profile-card--connection,
+.Profile-card--thread,
+.Profile-card--comment {
   grid-template-columns: 60px auto auto auto;
   grid-template-areas:
     "avatar . . ."
@@ -35,7 +37,8 @@
 .Profile-card__name {
   grid-area: name;
 }
-.Profile-card--connection .Profile-card__name, .Profile-card--comment .Profile-card__name h1 {
+.Profile-card--connection .Profile-card__name,
+.Profile-card--comment .Profile-card__name h1 {
   font-size: 14px;
   margin: 0;
 }
@@ -47,7 +50,8 @@
 .Profile-card__title {
   grid-area: title;
 }
-.Profile-card--connection .Profile-card__title, .Profile-card--comment .Profile-card__title h2 {
+.Profile-card--connection .Profile-card__title,
+.Profile-card--comment .Profile-card__title h2 {
   font-size: 12px;
   margin: 0;
 }
@@ -56,7 +60,8 @@
   margin: 0;
   grid-area: info;
 }
-.Profile-card--connection .Profile-card__info, .Profile-card--comment .Profile-card__info {
+.Profile-card--connection .Profile-card__info,
+.Profile-card--comment .Profile-card__info {
   font-size: 9px;
   margin: 0;
 }

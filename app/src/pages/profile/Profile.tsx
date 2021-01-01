@@ -39,8 +39,8 @@ function Profile() {
       firstName: userInfo.firstName,
       lastName: userInfo.lastName,
       jobTitle: userInfo.jobTitle,
-    }
-  }
+    };
+  };
   const [inputs, setInputs] = useState(getUserDataForInputs());
   const [isEditing, setIsEditing] = useState(false);
   const handleToggleEditMode = () => {
@@ -70,7 +70,7 @@ function Profile() {
     const urlPathUserId = match.params.userId.toLowerCase();
     if (firstLoad.current || urlPathUserId !== userId) {
       firstLoad.current = false;
-      setUserId(urlPathUserId)
+      setUserId(urlPathUserId);
       const onSuccess = (newData: IUserProcessed) => {
         const {
           nOfConnections,
@@ -149,7 +149,7 @@ function Profile() {
             />
           ) : (
             <ProfileCard
-              type="profile" 
+              type="profile"
               data={{ ...userInfo, id: userId, nOfConnections }}
               className="Profile-page__info__text"
             />

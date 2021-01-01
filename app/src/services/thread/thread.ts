@@ -106,7 +106,7 @@ const addComment = async ({
   onError,
 }: {
   threadId: string;
-  data: {content: string};
+  data: { content: string };
   onSuccess: (data: IThreadComment) => void;
   onError: (message: string) => void;
 }) => {
@@ -180,4 +180,11 @@ const deleteComment = async ({
   }
 };
 
-export { addThread, addThreadReaction, removeThreadReaction, addComment, getComments, deleteComment };
+export {
+  addThread,
+  addThreadReaction,
+  removeThreadReaction,
+  addComment,
+  getComments,
+  deleteComment,
+};

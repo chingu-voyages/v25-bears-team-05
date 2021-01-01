@@ -1,5 +1,9 @@
 import axios from "axios";
-import { IThread, IThreadComment, IThreadDataProcessed } from "../thread/thread.type";
+import {
+  IThread,
+  IThreadComment,
+  IThreadDataProcessed,
+} from "../thread/thread.type";
 import {
   IFeedProcessedResponse,
   IFeedRawResponse,
@@ -30,25 +34,37 @@ const getFeed = async ({
       connectionSuggestions,
       publicThreads,
     }: IFeedRawResponse = res.data;
-    const processedConnectionThreads = connectionThreads ? await Promise.all(
-      connectionThreads.map((threadData: IThread) => processThread(threadData))
-    ) : [];
-    const processedPublicThreads = publicThreads ? await Promise.all(
-      publicThreads.map((threadData: IThread) => processThread(threadData))
-    ) : [];
-    const processedConnectionSuggestions = connectionSuggestions ? connectionSuggestions.map(
-      (suggestionData: IUserConnection) => processSuggestion(suggestionData)
-    ) : [];
+    const processedConnectionThreads = connectionThreads
+      ? await Promise.all(
+          connectionThreads.map((threadData: IThread) =>
+            processThread(threadData)
+          )
+        )
+      : [];
+    const processedPublicThreads = publicThreads
+      ? await Promise.all(
+          publicThreads.map((threadData: IThread) => processThread(threadData))
+        )
+      : [];
+    const processedConnectionSuggestions = connectionSuggestions
+      ? connectionSuggestions.map((suggestionData: IUserConnection) =>
+          processSuggestion(suggestionData)
+        )
+      : [];
     const processedData = {
-      connectionThreads: (processedConnectionThreads.map((data) => ({
-        thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
-      connectionSuggestions: (processedConnectionSuggestions.map((data) => ({
-        suggestion: data,
-      })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }> || [],
-      publicThreads: (processedPublicThreads.map((data) => ({
-        thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
+      connectionThreads:
+        ((processedConnectionThreads.map((data) => ({
+          thread: data,
+        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
+      connectionSuggestions:
+        ((processedConnectionSuggestions.map((data) => ({
+          suggestion: data,
+        })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }>) ||
+        [],
+      publicThreads:
+        ((processedPublicThreads.map((data) => ({
+          thread: data,
+        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
     };
     onSuccess(processedData);
   } catch (error) {
@@ -79,8 +95,13 @@ function processSuggestion(userData: IUserConnection) {
 async function processThread(
   threadData: IThread
 ): Promise<IProcessedThreadFeed> {
-  const comments = await getComments({threadId: threadData._id});
-  const sortCommentsByDate = (arr: IThreadComment[]) => arr.sort((a, b) => parseInt(b.updatedAt.replace(/[-\.\:\D]/g, '')) - parseInt(a.updatedAt.replace(/[-\.\:\D]/g, '')));
+  const comments = await getComments({ threadId: threadData._id });
+  const sortCommentsByDate = (arr: IThreadComment[]) =>
+    arr.sort(
+      (a, b) =>
+        parseInt(b.updatedAt.replace(/[-\.\:\D]/g, "")) -
+        parseInt(a.updatedAt.replace(/[-\.\:\D]/g, ""))
+    );
   const processedThreadData: IThreadDataProcessed = {
     id: threadData._id,
     content: threadData.content,
@@ -89,7 +110,9 @@ async function processThread(
     visibility: threadData.visibility,
     reactionsCount: {},
     currentUserReactions: {},
-    comments: comments?.threadComments && sortCommentsByDate(Object.values(comments.threadComments)),
+    comments:
+      comments?.threadComments &&
+      sortCommentsByDate(Object.values(comments.threadComments)),
     updatedAt: threadData.updatedAt,
     createdAt: threadData.createdAt,
   };
@@ -103,7 +126,7 @@ async function processThread(
       }
     });
   const data = {
-    threadData: processedThreadData
+    threadData: processedThreadData,
   };
   return data;
 }

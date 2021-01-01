@@ -22,7 +22,7 @@ import {
   addThreadReaction,
   removeThreadReaction,
   addComment,
-  deleteComment
+  deleteComment,
 } from "../../services/thread";
 import Comment from "../comment";
 import PostMaker from "../postMaker";
@@ -113,14 +113,20 @@ function Post({
   const articleRef = useRef<any>();
   const commentMakerRef = useRef<any>();
   const handleToggleCommentMaker = () => {
-      if (commentEditorOpen) {
-        setCommentEditorOpen(false);
-      }
-      else {
-        setShowComments(true);
-        setCommentEditorOpen(true);
-        setTimeout(() => commentMakerRef.current?.scrollIntoView({behavior: "smooth", block: "center"}), 0);
-      }
+    if (commentEditorOpen) {
+      setCommentEditorOpen(false);
+    } else {
+      setShowComments(true);
+      setCommentEditorOpen(true);
+      setTimeout(
+        () =>
+          commentMakerRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          }),
+        0
+      );
+    }
   };
   const postArticle = (
     <article ref={articleRef} className={`Post ${className}`}>
@@ -130,7 +136,12 @@ function Post({
         )}
         {referral?.reason}
       </header>
-      <ProfileCard className="Post__profile-card" type="thread" userId={threadData.postedByUserId} threadData={threadData} />
+      <ProfileCard
+        className="Post__profile-card"
+        type="thread"
+        userId={threadData.postedByUserId}
+        threadData={threadData}
+      />
 
       <main
         className="Post__content"
@@ -147,8 +158,12 @@ function Post({
             )
         )}
       </ul>
-      <Button onClick={() => setShowComments(show => !show)} className="Post__n-of-comments">
-        {!!nOfComments && (nOfComments === 1 ? "1 Comment" : `${nOfComments} Comments`)}
+      <Button
+        onClick={() => setShowComments((show) => !show)}
+        className="Post__n-of-comments"
+      >
+        {!!nOfComments &&
+          (nOfComments === 1 ? "1 Comment" : `${nOfComments} Comments`)}
       </Button>
       <footer className="Post__actions">
         <OptionsMenu buttons={ReactionOptions} className="above bar">
@@ -168,12 +183,12 @@ function Post({
   const resetCommentMaker = () => {
     setCommentEditorOpen(false);
     setMakeCommentError("");
-    articleRef.current?.scrollIntoView({behavior: "smooth", block: "start"});
+    articleRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const commentMakerOptions = {
     title: "Comment",
     placeholder: "Your comment",
-    onSubmit: ({content}: {content: string}) => {
+    onSubmit: ({ content }: { content: string }) => {
       setInProgress(true);
       const onSuccess = (data: IThreadComment) => {
         setInProgress(false);
@@ -182,14 +197,14 @@ function Post({
       };
       addComment({
         threadId: threadData.id,
-        data: { 
+        data: {
           content,
         },
         onSuccess,
         onError: (msg: string) => {
           setMakeCommentError(msg);
         },
-      }); 
+      });
     },
     handleCancel: () => {
       resetCommentMaker();
@@ -200,35 +215,49 @@ function Post({
   };
 
   const [errorMessage, setErrorMessage] = useState("");
-  const handleDeleteComment = ({commentId}: {commentId: string}) => {
+  const handleDeleteComment = ({ commentId }: { commentId: string }) => {
     setInProgress(true);
-    deleteComment({ 
-      threadId: threadData.id, 
+    deleteComment({
+      threadId: threadData.id,
       commentId,
       onSuccess: () => {
-        setComments(comments => comments.filter(comment => comment._id !== commentId));
+        setComments((comments) =>
+          comments.filter((comment) => comment._id !== commentId)
+        );
         setInProgress(false);
       },
       onError: (msg) => {
         setErrorMessage(msg);
         setInProgress(false);
-      }
+      },
     });
   };
 
-  return (<>
-    {showComments ? <main>
-      {postArticle}
-      {comments && Object.values(comments).map(commentData => <Comment key={commentData._id} {...{commentData}} handleDeleteComment={() => handleDeleteComment({commentId: commentData._id})} />)}
-      <div ref={commentMakerRef}></div>
-      {commentEditorOpen && (
-            <PostMaker {...commentMakerOptions} />
-        )
-      }
-    </main> : postArticle}
-    {errorMessage && <p className="Post__error">{errorMessage}</p>}
-    {inProgress && <Spinner />}
-  </>);
+  return (
+    <>
+      {showComments ? (
+        <main>
+          {postArticle}
+          {comments &&
+            Object.values(comments).map((commentData) => (
+              <Comment
+                key={commentData._id}
+                {...{ commentData }}
+                handleDeleteComment={() =>
+                  handleDeleteComment({ commentId: commentData._id })
+                }
+              />
+            ))}
+          <div ref={commentMakerRef}></div>
+          {commentEditorOpen && <PostMaker {...commentMakerOptions} />}
+        </main>
+      ) : (
+        postArticle
+      )}
+      {errorMessage && <p className="Post__error">{errorMessage}</p>}
+      {inProgress && <Spinner />}
+    </>
+  );
 }
 
 export default Post;

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import IProfileCard, { IBasicCardInfo, ICardInfo } from "./profileCard.type";
 import convertDateStringToTimeAgo from "../../utils/convertDateStringToTimeAgo";
 import { Link } from "react-router-dom";
@@ -13,11 +13,13 @@ function ProfileCard({
   data,
   userId,
   className,
-  threadData
+  threadData,
 }: IProfileCard) {
   const [name, setName] = useState<string | undefined>("...");
   const [title, setTitle] = useState<string | undefined>("");
-  const [info, setInfo] = useState<string | React.RefAttributes<HTMLAnchorElement>>("...");
+  const [info, setInfo] = useState<
+    string | React.RefAttributes<HTMLAnchorElement>
+  >("...");
   const [avatarUrl, setAvatarUrl] = useState<string | null | undefined>(null);
   const [isMe, setIsMe] = useState(true);
   const [isAConnection, setIsAConnection] = useState(true);
@@ -37,47 +39,81 @@ function ProfileCard({
             if (!userData) {
               throw Error("Unable to get user info");
             }
-            const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
+            const {
+              firstName,
+              lastName,
+              jobTitle,
+              avatar,
+              id,
+              isAConnection,
+            } = userData;
             data = {
-                firstName,
-                lastName,
-                jobTitle,
-                avatar,
-                id,
-                isAConnection: isAConnection || false,
+              firstName,
+              lastName,
+              jobTitle,
+              avatar,
+              id,
+              isAConnection: isAConnection || false,
             };
+          } else {
+            throw Error(
+              "Can't make ProfileCard! no profile data or userId provided"
+            );
           }
-          else {
-            throw Error("Can't make ProfileCard! no profile data or userId provided");
-          }
-        } catch(e) {
+        } catch (e) {
           console.error(e);
         }
       }
       if (data) {
         const { firstName, lastName, jobTitle } = data as IBasicCardInfo;
-        setName(`${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim());
+        setName(
+          `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim()
+        );
         setTitle(jobTitle);
         if (type === "profile") {
           const nOfConnections = (data as ICardInfo).nOfConnections;
-          setInfo(<Link to="network">{Number.isInteger(nOfConnections) ? `${nOfConnections} Connections` : "..."}</Link>
+          setInfo(
+            <Link to="network">
+              {Number.isInteger(nOfConnections)
+                ? `${nOfConnections} Connections`
+                : "..."}
+            </Link>
           );
-        }
-        else if (type === "connection") {
-          const {dateTimeConnected, avatar} = (data as ICardInfo);
-          setInfo(convertDateStringToTimeAgo({ date: dateTimeConnected || "", }));
+        } else if (type === "connection") {
+          const { dateTimeConnected, avatar } = data as ICardInfo;
+          setInfo(
+            convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
+          );
           setAvatarUrl(avatar?.[0]?.url);
-        }
-        else if (type === "thread") {
-          const {avatar} = (data as ICardInfo);
-          const actionTitle = threadData?.updatedAt !== threadData?.createdAt ? "Edited" : "Posted";
-          setInfo(`${actionTitle} ${convertDateStringToTimeAgo({date: threadData?.updatedAt || "",})} • ${threadData?.visibility === 0 ? "anyone" : threadData?.visibility ? "connections" : ""}`);
+        } else if (type === "thread") {
+          const { avatar } = data as ICardInfo;
+          const actionTitle =
+            threadData?.updatedAt !== threadData?.createdAt
+              ? "Edited"
+              : "Posted";
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: threadData?.updatedAt || "",
+            })} • ${
+              threadData?.visibility === 0
+                ? "anyone"
+                : threadData?.visibility
+                ? "connections"
+                : ""
+            }`
+          );
           setAvatarUrl(avatar?.[0]?.url);
-        }
-        else if (type === "comment") {
-          const {avatar} = (data as ICardInfo);
-          const actionTitle = threadData?.updatedAt !== threadData?.createdAt ? "Edited" : "Posted";
-          setInfo(`${actionTitle} ${convertDateStringToTimeAgo({date: threadData?.updatedAt || ""})}`);
+        } else if (type === "comment") {
+          const { avatar } = data as ICardInfo;
+          const actionTitle =
+            threadData?.updatedAt !== threadData?.createdAt
+              ? "Edited"
+              : "Posted";
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: threadData?.updatedAt || "",
+            })}`
+          );
           setAvatarUrl(avatar?.[0]?.url);
         }
         const currentUserInfo = await getCurrentUserInfo();
@@ -86,27 +122,29 @@ function ProfileCard({
       }
     })();
   }, [data]);
-  
+
   return (
     <div
-      className={`Profile-card ${className ? className : ""} Profile-card--${type}`}
+      className={`Profile-card ${
+        className ? className : ""
+      } Profile-card--${type}`}
     >
-        {avatarUrl && (
-          <Link className="Profile-card__avatar" to={`/${id}/profile`}>
-            <Avatar
-              url={avatarUrl || ""}
-              userName={`${title}`.trim() || "user avatar"}
-              size={type === "comment" ? "xsmall" : "small"}
-            />
-          </Link>
-        )}
-        <Link className="Profile-card__name" to={`/${id}/profile`}>
-          <h1>{name || "... ..."}</h1>
+      {avatarUrl && (
+        <Link className="Profile-card__avatar" to={`/${id}/profile`}>
+          <Avatar
+            url={avatarUrl || ""}
+            userName={`${title}`.trim() || "user avatar"}
+            size={type === "comment" ? "xsmall" : "small"}
+          />
         </Link>
-        <Link className="Profile-card__title" to={`/${id}/profile`}>
-          <h2>{title || ""}</h2>
-        </Link>
-        <p className="Profile-card__info">{info || ""}</p>
+      )}
+      <Link className="Profile-card__name" to={`/${id}/profile`}>
+        <h1>{name || "... ..."}</h1>
+      </Link>
+      <Link className="Profile-card__title" to={`/${id}/profile`}>
+        <h2>{title || ""}</h2>
+      </Link>
+      <p className="Profile-card__info">{info || ""}</p>
 
       {(type === "thread" || type === "profile") && !isMe && !isAConnection && (
         <FollowButton

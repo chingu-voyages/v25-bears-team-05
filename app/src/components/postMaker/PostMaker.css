@@ -19,7 +19,7 @@
   grid-template-columns: 1fr 8fr 1fr;
   place-items: center start;
   background-color: var(--primary-green-color);
-  color: var(--color-black)
+  color: var(--color-black);
 }
 .Post-maker__top-bar__cancel {
   margin: 0 16px;

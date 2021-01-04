@@ -46,14 +46,14 @@ function Input(props: IInputProps) {
     errorMessageReturner.current?.(!isFocused ? errorMessage : "");
   }, [errorMessage, isFocused]);
   return (
-    <div className={`wrapper__Input ${attributes.className}`}>
+    <div className={`wrapper__Input ${attributes.className || ""}`}>
       <input
         {...(attributes as IInputAttributes)}
         type={props.type && showPassword ? "text" : props.type}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleOnChange}
-        className={`Input ${errorMessage && !isFocused ? "Input--error" : ""} ${
+        className={`Input ${(errorMessage && !isFocused) ? "Input--error" : ""} ${
           props.value ? "Input--has-content" : ""
         }`}
       />

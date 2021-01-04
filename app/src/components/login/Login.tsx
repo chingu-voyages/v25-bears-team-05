@@ -9,7 +9,7 @@ import googleAuth from "../../services/googleAuth";
 import localLogin from "../../services/localLogin";
 import Spinner from "../spinner";
 
-function Login() {
+function Login({className} : {className?: string}) {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +39,7 @@ function Login() {
   return done ? (
     <Redirect to="/login" />
   ) : (
-    <div className="Login">
+    <div className={`Login ${className || ""}`}>
       {inProgress ? (
         <Spinner
           className="Login__spinner"

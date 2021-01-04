@@ -6,3 +6,9 @@
 .Logo {
   width: 100%;
 }
+
+@media only screen and (min-width: 1200px) {
+  .Logo {
+    width: 200px;
+  }
+}

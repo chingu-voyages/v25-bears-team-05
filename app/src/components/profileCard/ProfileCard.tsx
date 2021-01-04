@@ -1,77 +1,161 @@
-import React from "react";
-import IProfileCard from "./profileCard.type";
+import React, { useEffect, useRef, useState } from "react";
+import IProfileCard, { IBasicCardInfo, ICardInfo } from "./profileCard.type";
 import convertDateStringToTimeAgo from "../../utils/convertDateStringToTimeAgo";
 import { Link } from "react-router-dom";
 import "./ProfileCard.css";
 import Avatar from "../avatar";
+import { getUser } from "../../services/user";
+import FollowButton from "../followButton";
+import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 
 function ProfileCard({
-  profileInfo,
-  connectionInfo,
-  threadInfo,
+  type,
+  data,
+  userId,
   className,
+  threadData,
 }: IProfileCard) {
-  let name = "...";
-  let title = "...";
-  let info: string | React.RefAttributes<HTMLAnchorElement> = "...";
-  let avatarUrl = null;
-  if (profileInfo) {
-    const { firstName, lastName, jobTitle, nOfConnections } = profileInfo;
-    name = `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim();
-    title = jobTitle;
-    info = (
-      <Link to="network">{`${
-        Number.isInteger(nOfConnections) ? nOfConnections : "..."
-      } Connections`}</Link>
-    );
-  } else if (connectionInfo) {
-    const {
-      firstName,
-      lastName,
-      jobTitle,
-      dateTimeConnected,
-      avatar,
-    } = connectionInfo;
-    name = `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim();
-    title = jobTitle;
-    info = convertDateStringToTimeAgo({
-      date: dateTimeConnected,
-    });
-    avatarUrl = avatar?.[0]?.url;
-  } else if (threadInfo) {
-    const {
-      firstName,
-      lastName,
-      jobTitle,
-      dateTimePosted,
-      visibility,
-      avatar,
-    } = threadInfo;
-    name = `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim();
-    title = jobTitle;
-    info = `${convertDateStringToTimeAgo({
-      date: dateTimePosted || "",
-    })} • ${visibility === 0 ? "anyone" : "connections"}`;
-    avatarUrl = avatar?.[0]?.url;
-  }
+  const [name, setName] = useState<string | undefined>("...");
+  const [title, setTitle] = useState<string | undefined>("");
+  const [info, setInfo] = useState<
+    string | React.RefAttributes<HTMLAnchorElement>
+  >("...");
+  const [avatarUrl, setAvatarUrl] = useState<string | null | undefined>(null);
+  const [isMe, setIsMe] = useState(true);
+  const [isAConnection, setIsAConnection] = useState(true);
+  const id = data?.id || userId;
+
+  useEffect(() => {
+    (async () => {
+      if (!data) {
+        try {
+          if (userId) {
+            const userData = await getUser({
+              userId,
+              onError: (msg) => {
+                throw Error(msg);
+              },
+            });
+            if (!userData) {
+              throw Error("Unable to get user info");
+            }
+            const {
+              firstName,
+              lastName,
+              jobTitle,
+              avatar,
+              id,
+              isAConnection,
+            } = userData;
+            data = {
+              firstName,
+              lastName,
+              jobTitle,
+              avatar,
+              id,
+              isAConnection: isAConnection || false,
+            };
+          } else {
+            throw Error(
+              "Can't make ProfileCard! no profile data or userId provided"
+            );
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (data) {
+        const { firstName, lastName, jobTitle } = data as IBasicCardInfo;
+        setName(
+          `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim()
+        );
+        setTitle(jobTitle);
+        if (type === "profile") {
+          const nOfConnections = (data as ICardInfo).nOfConnections;
+          setInfo(
+            <Link to="network">
+              {Number.isInteger(nOfConnections)
+                ? `${nOfConnections} Connections`
+                : "..."}
+            </Link>
+          );
+        } else if (type === "connection") {
+          const { dateTimeConnected, avatar } = data as ICardInfo;
+          setInfo(
+            convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
+          );
+          setAvatarUrl(avatar?.[0]?.url);
+        } else if (type === "thread") {
+          const { avatar } = data as ICardInfo;
+          const actionTitle =
+            threadData?.updatedAt !== threadData?.createdAt
+              ? "Edited"
+              : "Posted";
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: threadData?.updatedAt || "",
+            })} • ${
+              threadData?.visibility === 0
+                ? "anyone"
+                : threadData?.visibility
+                ? "connections"
+                : ""
+            }`
+          );
+          setAvatarUrl(avatar?.[0]?.url);
+        } else if (type === "comment") {
+          const { avatar } = data as ICardInfo;
+          const actionTitle =
+            threadData?.updatedAt !== threadData?.createdAt
+              ? "Edited"
+              : "Posted";
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: threadData?.updatedAt || "",
+            })}`
+          );
+          setAvatarUrl(avatar?.[0]?.url);
+        }
+        const currentUserInfo = await getCurrentUserInfo();
+        setIsMe(id === "me" || currentUserInfo.id === id);
+        setIsAConnection(!!data?.isAConnection);
+      }
+    })();
+  }, [data]);
 
   return (
     <div
-      className={`Profile-card ${className ? className : ""} Profile-card--${
-        profileInfo ? "profile" : connectionInfo ? "connection" : "thread"
-      }`}
+      className={`Profile-card ${
+        className ? className : ""
+      } Profile-card--${type}`}
     >
-      {!profileInfo && (
-        <Avatar
-          className="Profile-card__avatar"
-          url={avatarUrl || ""}
-          userName={`${title}`.trim() || "user avatar"}
-          size="small"
+      {avatarUrl && (
+        <Link className="Profile-card__avatar" to={`/${id}/profile`}>
+          <Avatar
+            url={avatarUrl || ""}
+            userName={`${title}`.trim() || "user avatar"}
+            size={type === "comment" ? "xsmall" : "small"}
+          />
+        </Link>
+      )}
+      <Link className="Profile-card__name" to={`/${id}/profile`}>
+        <h1>{name || "... ..."}</h1>
+      </Link>
+      <Link className="Profile-card__title" to={`/${id}/profile`}>
+        <h2>{title || ""}</h2>
+      </Link>
+      <p className="Profile-card__info">{info || ""}</p>
+
+      {(type === "thread" || type === "profile") && !isMe && !isAConnection && (
+        <FollowButton
+          className="Profile-card__follow"
+          connectionName={name || ""}
+          connectionId={id as string}
+          onFollow={() => {
+            setIsAConnection(true);
+          }}
         />
       )}
-      <h1 className="Profile-card__name">{name || "... ..."}</h1>
-      <h2 className="Profile-card__title">{title || "..."}</h2>
-      <p className="Profile-card__info">{info || "..."}</p>
     </div>
   );
 }

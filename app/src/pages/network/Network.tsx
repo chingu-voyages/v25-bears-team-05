@@ -9,13 +9,12 @@ import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
+import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
   const userId = useRef(match.params.userId.toLowerCase());
-  const storedUserId = useRef(sessionStorage.getItem("currentUserId"));
-  const isMe =
-    userId.current === "me" || storedUserId.current === userId.current;
+  const [isMe, setIsMe] = useState(false);
   const history = useHistory();
   const handleGoBack = () => history.goBack();
   const [connections, setConnections] = useState<IUserConnection[]>([]);
@@ -41,6 +40,14 @@ function Network() {
       isLoadingNextPage.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const currentUserInfo = await getCurrentUserInfo();
+      setIsMe(userId.current === "me" || currentUserInfo.id === userId.current);
+    })();
+  }, []);
+
   useEffect(() => {
     const limitToNResults = 10;
     const onSuccess = (connections: { [keyof: string]: IUserConnection }) => {
@@ -93,7 +100,7 @@ function Network() {
         className="connections-list__link"
         to={`/${connectionData.id}/profile`}
       >
-        <ProfileCard connectionInfo={{ ...connectionData }} />
+        <ProfileCard type="connection" data={{ ...connectionData }} />
       </Link>
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>

@@ -3,9 +3,11 @@ export interface IAttachmentType {
 }
 
 export interface IThreadComment {
+  _id: string;
   postedByUserId: string;
   content: string;
-  attachments?: Array<IAttachmentType>;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export enum ThreadLikeTypeTitle {
@@ -29,7 +31,7 @@ export interface IThreadShare {
     hashTags: Array<string>;
     attachments: Array<string>;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
 }
@@ -56,10 +58,11 @@ export interface IThread {
     hashTags: Array<string>;
     attachments: Array<string>;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
   updatedAt: string;
+  createdAt: string;
 }
 
 export interface INewThreadData {
@@ -91,5 +94,7 @@ export interface IThreadDataProcessed {
   currentUserReactions: {
     [reactionType: string]: string | false;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
+  updatedAt: string;
+  createdAt: string;
 }

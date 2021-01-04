@@ -1,6 +1,9 @@
 import axios from "axios";
-import { IThread, IThreadDataProcessed } from "../thread/thread.type";
-import { getUser } from "../user";
+import {
+  IThread,
+  IThreadComment,
+  IThreadDataProcessed,
+} from "../thread/thread.type";
 import {
   IFeedProcessedResponse,
   IFeedRawResponse,
@@ -8,6 +11,7 @@ import {
   IProcessedThreadFeed,
 } from "./feed.type";
 import { IUserConnection } from "../user/user.type";
+import { getComments } from "../thread";
 const currentUserId = sessionStorage.getItem("currentUserId");
 
 const getFeed = async ({
@@ -30,25 +34,37 @@ const getFeed = async ({
       connectionSuggestions,
       publicThreads,
     }: IFeedRawResponse = res.data;
-    const processedConnectionThreads = connectionThreads ? await Promise.all(
-      connectionThreads.map((threadData: IThread) => processThread(threadData))
-    ) : [];
-    const processedPublicThreads = publicThreads ? await Promise.all(
-      publicThreads.map((threadData: IThread) => processThread(threadData))
-    ) : [];
-    const processedConnectionSuggestions = connectionSuggestions ? connectionSuggestions.map(
-      (suggestionData: IUserConnection) => processSuggestion(suggestionData)
-    ) : [];
+    const processedConnectionThreads = connectionThreads
+      ? await Promise.all(
+          connectionThreads.map((threadData: IThread) =>
+            processThread(threadData)
+          )
+        )
+      : [];
+    const processedPublicThreads = publicThreads
+      ? await Promise.all(
+          publicThreads.map((threadData: IThread) => processThread(threadData))
+        )
+      : [];
+    const processedConnectionSuggestions = connectionSuggestions
+      ? connectionSuggestions.map((suggestionData: IUserConnection) =>
+          processSuggestion(suggestionData)
+        )
+      : [];
     const processedData = {
-      connectionThreads: (processedConnectionThreads.map((data) => ({
-        thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
-      connectionSuggestions: (processedConnectionSuggestions.map((data) => ({
-        suggestion: data,
-      })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }> || [],
-      publicThreads: (processedPublicThreads.map((data) => ({
-        thread: data,
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }> || [],
+      connectionThreads:
+        ((processedConnectionThreads.map((data) => ({
+          thread: data,
+        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
+      connectionSuggestions:
+        ((processedConnectionSuggestions.map((data) => ({
+          suggestion: data,
+        })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }>) ||
+        [],
+      publicThreads:
+        ((processedPublicThreads.map((data) => ({
+          thread: data,
+        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
     };
     onSuccess(processedData);
   } catch (error) {
@@ -79,6 +95,13 @@ function processSuggestion(userData: IUserConnection) {
 async function processThread(
   threadData: IThread
 ): Promise<IProcessedThreadFeed> {
+  const comments = await getComments({ threadId: threadData._id });
+  const sortCommentsByDate = (arr: IThreadComment[]) =>
+    arr.sort(
+      (a, b) =>
+        parseInt(b.updatedAt.replace(/[-\.\:\D]/g, "")) -
+        parseInt(a.updatedAt.replace(/[-\.\:\D]/g, ""))
+    );
   const processedThreadData: IThreadDataProcessed = {
     id: threadData._id,
     content: threadData.content,
@@ -87,7 +110,11 @@ async function processThread(
     visibility: threadData.visibility,
     reactionsCount: {},
     currentUserReactions: {},
-    comments: threadData.comments,
+    comments:
+      comments?.threadComments &&
+      sortCommentsByDate(Object.values(comments.threadComments)),
+    updatedAt: threadData.updatedAt,
+    createdAt: threadData.createdAt,
   };
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
@@ -98,28 +125,8 @@ async function processThread(
         processedThreadData.currentUserReactions[type] = id;
       }
     });
-  const userData = await getUser({
-    userId: threadData.postedByUserId,
-    onError: (msg) => {
-      throw Error(msg);
-    },
-  });
-  if (!userData) {
-    throw Error("Unable to get user info");
-  }
-  const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
   const data = {
     threadData: processedThreadData,
-    profileData: {
-      firstName,
-      lastName,
-      jobTitle,
-      dateTimePosted: threadData.updatedAt,
-      visibility: threadData.visibility,
-      avatar,
-      id,
-      isAConnection: isAConnection || false,
-    },
   };
   return data;
 }

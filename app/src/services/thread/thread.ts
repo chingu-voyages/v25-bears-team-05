@@ -1,4 +1,4 @@
-import { INewThreadData } from "./thread.type";
+import { INewThreadData, IThreadComment } from "./thread.type";
 import axios from "axios";
 import { processThread } from "../feed/feed";
 import { IProcessedThreadFeed } from "../feed/feed.type";
@@ -99,4 +99,92 @@ const removeThreadReaction = async ({
   }
 };
 
-export { addThread, addThreadReaction, removeThreadReaction };
+const addComment = async ({
+  threadId,
+  data,
+  onSuccess,
+  onError,
+}: {
+  threadId: string;
+  data: { content: string };
+  onSuccess: (data: IThreadComment) => void;
+  onError: (message: string) => void;
+}) => {
+  try {
+    const req = await axios({
+      method: "post",
+      url: `/api/threads/${threadId}/comments`,
+      data,
+    });
+    if (req.status === 200) {
+      onSuccess(req.data.newComment);
+    } else {
+      onError(req.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError(
+        "Sorry, we're unable to add your post at this time, please try again later"
+      );
+  }
+};
+
+const getComments = async ({
+  threadId,
+  onSuccess,
+  onError,
+}: {
+  threadId: string;
+  onSuccess?: (data: IThreadComment) => void;
+  onError?: (message: string) => void;
+}) => {
+  try {
+    const res = await axios(`/api/threads/${threadId}/comments`);
+    onSuccess?.(res.data);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError?.("Unable to get comments from server, please try again later");
+  }
+};
+
+const deleteComment = async ({
+  threadId,
+  commentId,
+  onSuccess,
+  onError,
+}: {
+  threadId: string;
+  commentId: string;
+  onSuccess: () => void;
+  onError: (message: string) => void;
+}) => {
+  try {
+    const req = await axios({
+      method: "delete",
+      url: `/api/threads/${threadId}/comments/${commentId}`,
+    });
+    if (req.status === 200) {
+      onSuccess();
+    } else {
+      onError(req.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+    typeof error?.message === "string" &&
+      onError(
+        "Sorry, we're unable to delete your comment at this time, please try again later"
+      );
+  }
+};
+
+export {
+  addThread,
+  addThreadReaction,
+  removeThreadReaction,
+  addComment,
+  getComments,
+  deleteComment,
+};

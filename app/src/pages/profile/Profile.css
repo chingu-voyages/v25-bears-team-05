@@ -11,9 +11,11 @@
 .wrapper__Profile-page__wall-paper {
   overflow: hidden;
 }
-.Profile-page__wall-paper {
+.Profile-page__wall-paper img {
   width: 150%;
   margin-left: -25%;
+}
+.Profile-page__wall-paper {
   background: linear-gradient(
     to right,
     var(--color-green-4),
@@ -28,18 +30,20 @@
   height: 80px;
 }
 .Profile-page__info {
+  width: 100%;
   position: relative;
   top: -60px;
-  margin: 12px 8%;
+  padding: 12px 8%;
   font-family: "Roboto", sans-serif;
   display: grid;
   place-items: start start;
-  grid-template-columns: 9fr 1fr;
+  grid-template-columns: 9fr auto;
   column-gap: 4%;
   row-gap: 12%;
   grid-template-areas:
     "inputs edit"
     "inputs save";
+  box-sizing: border-box;
 }
 .Profile-page__connections-count {
   font-size: 11px;

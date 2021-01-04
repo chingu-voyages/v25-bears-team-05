@@ -19,9 +19,11 @@
   grid-template-columns: 1fr 8fr 1fr;
   place-items: center start;
   background-color: var(--primary-green-color);
+  color: var(--color-black);
 }
 .Post-maker__top-bar__cancel {
   margin: 0 16px;
+  width: 26px;
 }
 .Post-maker__top-bar__title {
   margin: 0;
@@ -31,6 +33,10 @@
 .Post-maker__top-bar__submit {
   align-self: stretch;
   padding: 0 16px;
+  color: var(--color-black);
+}
+.Post-maker__top-bar__submit:disabled {
+  color: var(--grey-background-color);
 }
 
 .Post-maker__content {

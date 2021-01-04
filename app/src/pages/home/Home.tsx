@@ -19,48 +19,10 @@ import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
 
 function Home() {
+  const history = useHistory();
   const [feed, setFeed] = useState<any[]>([]);
-  const [isPostMakerOpen, setIsPostMakerOpen] = useState(false);
-  const [makePostError, setMakePostError] = useState("");
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const history = useHistory();
-
-  const resetPostMaker = () => {
-    setIsPostMakerOpen(false);
-    setMakePostError("");
-    history.location.hash.match("#newpost") && history.push("/home");
-  };
-  const postMakerOptions: IPostMakerProps = {
-    title: "Share",
-    placeholder: "Share your thoughts. Add photos or hashtags.",
-    onSubmit: ({ content, threadVisibility }) => {
-      setInProgress(true);
-      const onSuccess = (data: IProcessedThreadFeed) => {
-        setInProgress(false);
-        setFeed((feed) => [{ thread: data }, ...feed]);
-        resetPostMaker();
-      };
-      addThread({
-        data: {
-          htmlContent: content,
-          threadType: 0,
-          visibility: threadVisibility,
-          hashTags: [],
-        },
-        onSuccess,
-        onError: (msg) => {
-          setMakePostError(msg);
-        },
-      });
-    },
-    handleCancel: () => {
-      resetPostMaker();
-    },
-    errorMessage: makePostError,
-    className: "Home__post-maker",
-    fullView: true,
-  };
 
   useEffect(() => {
     const onSuccess = ({
@@ -97,6 +59,43 @@ function Home() {
     });
   }, []);
 
+  const [makePostError, setMakePostError] = useState("");
+  const resetPostMaker = () => {
+    setIsPostMakerOpen(false);
+    setMakePostError("");
+    history.location.hash.match("#newpost") && history.push("/home");
+  };
+  const postMakerOptions: IPostMakerProps = {
+    title: "Share",
+    placeholder: "Share your thoughts. Add photos or hashtags.",
+    onSubmit: ({ content, threadVisibility }) => {
+      setInProgress(true);
+      const onSuccess = (data: IProcessedThreadFeed) => {
+        setInProgress(false);
+        setFeed((feed) => [{ thread: data }, ...feed]);
+        resetPostMaker();
+      };
+      addThread({
+        data: {
+          htmlContent: content,
+          threadType: 0,
+          visibility: threadVisibility,
+          hashTags: [],
+        },
+        onSuccess,
+        onError: (msg) => {
+          setMakePostError(msg);
+        },
+      });
+    },
+    handleCancel: () => {
+      resetPostMaker();
+    },
+    errorMessage: makePostError,
+    className: "Home__post-maker",
+    fullView: true,
+  };
+  const [isPostMakerOpen, setIsPostMakerOpen] = useState(false);
   useEffect(() => {
     if (history.location.hash.match("#newpost")) {
       setIsPostMakerOpen(true);
@@ -105,21 +104,23 @@ function Home() {
     }
   }, [history.location.hash]);
 
-  const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => (
-    <li className="Home-page__feed__list__item">
-      {thread && <Post {...thread} />}
-      {suggestion && <ProfileCard threadInfo={suggestion} />}
-    </li>
-  );
+  const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
+    return (
+      <li className="Home-page__feed__list__item">
+        {thread && <Post {...thread} />}
+        {suggestion && <ProfileCard type="thread" data={suggestion} />}
+      </li>
+    );
+  };
 
   return (
     <div className="Home-page">
       <TopBar />
-      <div>
+      <div className="Home-page__post-maker-start">
         {!isPostMakerOpen ? (
           <Button
             onClick={() => setIsPostMakerOpen(true)}
-            className="Post-maker__start"
+            className="Home-page__post-maker-start__button"
           >
             <img src={editIcon} alt="" />
             <h1>Share your thoughts or photos</h1>

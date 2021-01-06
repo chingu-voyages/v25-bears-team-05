@@ -57,16 +57,23 @@
   .Network-page {
     display: grid;
     place-items: start center;
+    grid-template-areas: 
+    "topBar"
+    "."
+    "main";
+    grid-template-rows: 80px 48px auto;
     background: var(--grey-background-color);
   }
   .Network-page__top-bar--mobile {
     display: none;
   }
   .Network-page__top-bar--desktop {
+    grid-area: topBar;
     display: grid;
     justify-self: stretch;
   }
   .Network-page__main {
+    grid-area: main;
     display: grid;
     place-items: center stretch;
     overflow: hidden;

@@ -10,7 +10,7 @@ import {
   IProcessedSuggestionFeed,
   IProcessedThreadFeed,
 } from "./feed.type";
-import { IUserConnection } from "../user/user.type";
+import { IUserProcessed } from "../user/user.type";
 import { getComments } from "../thread";
 const currentUserId = sessionStorage.getItem("currentUserId");
 
@@ -47,7 +47,7 @@ const getFeed = async ({
         )
       : [];
     const processedConnectionSuggestions = connectionSuggestions
-      ? connectionSuggestions.map((suggestionData: IUserConnection) =>
+      ? connectionSuggestions.map((suggestionData: IUserProcessed) =>
           processSuggestion(suggestionData)
         )
       : [];
@@ -74,7 +74,7 @@ const getFeed = async ({
   }
 };
 
-function processSuggestion(userData: IUserConnection) {
+function processSuggestion(userData: IUserProcessed) {
   const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
   const data = {
     profileData: {

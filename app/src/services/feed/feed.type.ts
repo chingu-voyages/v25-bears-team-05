@@ -4,7 +4,7 @@ import {
   IThreadDataProcessed,
   IThread,
 } from "../thread/thread.type";
-import { IUserConnection } from "../user/user.type";
+import { IUserProcessed } from "../user/user.type";
 
 export interface IProcessedThreadFeed {
   threadData?: IThreadDataProcessed;
@@ -19,7 +19,7 @@ export interface IProcessedSuggestionFeed {
 
 export interface IFeedRawResponse {
   connectionThreads: Array<IThread>;
-  connectionSuggestions: Array<IUserConnection>;
+  connectionSuggestions: Array<IUserProcessed>;
   publicThreads: Array<IThread>;
 }
 

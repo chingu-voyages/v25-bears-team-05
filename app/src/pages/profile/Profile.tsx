@@ -6,58 +6,43 @@ import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
 import { updateUser, getUser } from "../../services/user";
-import {
-  IUserPatchRequest,
-  IUserProcessed,
-} from "../../services/user/user.type";
+import { IUserProcessed } from "../../services/user/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
+import { connect } from "react-redux";
+import { updateCurrentUserInfo } from "../../redux/actions/user";
 
-function Profile() {
+function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
   const firstLoad = useRef(true);
   const match: any = useRouteMatch("/:userId");
   const [userId, setUserId] = useState(match.params.userId.toLowerCase());
-  const [nOfConnections, setNOfConnections]: [
-    number | null,
-    React.Dispatch<React.SetStateAction<any>>
-  ] = useState(null);
-  const [avatar, setAvatar] = useState("");
   const [getDataErrorMessage, setGetDataErrorMessage] = useState("");
   const [editorErrorMessage, setEditorErrorMessage] = useState("");
-  const [userInfo, setUserInfo] = useState({
-    firstName: "",
-    lastName: "",
-    jobTitle: "",
-    isAConnection: true,
-  });
 
-  const getUserDataForInputs = () => {
-    return {
-      firstName: userInfo.firstName,
-      lastName: userInfo.lastName,
-      jobTitle: userInfo.jobTitle,
-    };
-  };
-  const [inputs, setInputs] = useState(getUserDataForInputs());
+  const [inputs, setInputs] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const handleToggleEditMode = () => {
     const editingMode = !isEditing;
     if (editingMode) {
-      setInputs(getUserDataForInputs());
+      const inputValues = {
+        firstName: user?.[userId]?.firstName,
+        lastName: user?.[userId]?.lastName,
+        jobTitle: user?.[userId]?.jobTitle,
+      };
+      setInputs(inputValues);
     }
     setIsEditing(editingMode);
   };
 
   const handleUpdateInfo = () => {
-    const onSuccess = (newData: IUserPatchRequest) => {
-      setUserInfo((oldData) => ({ ...oldData, ...newData }));
+    const onSuccess = () => {
       handleToggleEditMode();
     };
     const inputsHaveChanged = Object.entries(inputs).some(
-      ([key, value]) => value !== ((userInfo as unknown) as any)[key]
+      ([key, value]) => value !== ((user?.[userId] as unknown) as any)[key]
     );
     if (inputsHaveChanged) {
       updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
@@ -71,28 +56,8 @@ function Profile() {
     if (firstLoad.current || urlPathUserId !== userId) {
       firstLoad.current = false;
       setUserId(urlPathUserId);
-      const onSuccess = (newData: IUserProcessed) => {
-        const {
-          nOfConnections,
-          firstName,
-          lastName,
-          jobTitle,
-          avatar,
-          isAConnection,
-        } = newData;
-        setUserInfo((oldData) => ({
-          ...oldData,
-          firstName,
-          lastName,
-          jobTitle: jobTitle,
-          isAConnection: !!isAConnection,
-        }));
-        setNOfConnections(nOfConnections);
-        setAvatar(avatar?.[0]?.url || "");
-      };
       getUser({
         userId: urlPathUserId,
-        onSuccess,
         onError: setGetDataErrorMessage,
       });
     }
@@ -112,13 +77,18 @@ function Profile() {
               method: "patch",
               urlPropertyName: "avatar",
             }}
-            onUpload={(url) => setAvatar(url)}
+            onUpload={(url) =>
+              updateCurrentUserInfo({
+                avatar: [{ url }, ...user?.[userId]?.avatar],
+              })
+            }
           >
             <Avatar
-              url={avatar}
+              url={user?.[userId]?.avatar?.[0]?.url || ""}
               userName={
-                `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
-                "user avatar"
+                `${user?.[userId]?.firstName || ""} ${
+                  user?.[userId]?.lastName || ""
+                }`.trim() || "user avatar"
               }
             />
           </PhotoUploader>
@@ -150,7 +120,7 @@ function Profile() {
           ) : (
             <ProfileCard
               type="profile"
-              data={{ ...userInfo, id: userId, nOfConnections }}
+              data={{ ...(user?.[userId] || {}), id: userId }}
               className="Profile-page__info__text"
             />
           )}
@@ -166,4 +136,9 @@ function Profile() {
   );
 }
 
-export default Profile;
+const mapStateToProps = (state: any) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps, { updateCurrentUserInfo })(Profile);

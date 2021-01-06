@@ -15,8 +15,8 @@ export interface IUserInfo {
 }
 
 export interface IUserRawResponse extends IUserInfo {
-  connections: { [keyof: string]: IUserConnection };
-  connectionOf: { [keyof: string]: IUserConnection };
+  connections: { [keyof: string]: IUserProcessed };
+  connectionOf: { [keyof: string]: IUserProcessed };
   threads: {
     started?: { [keyof: string]: IThread };
     commented?: { [keyof: string]: IThreadComment };
@@ -29,12 +29,15 @@ export interface IUserPatchRequest {
   firstName?: string;
   lastName?: string;
   jobTitle?: string;
-  avatar?: string | undefined;
+  avatar?: string | Array<Avatar> | undefined;
+  [keyof: string]: any;
 }
 
 export interface IUserProcessed extends IUserInfo {
   nOfConnections?: number | null;
   isAConnection?: boolean;
+  dateTimeConnected?: string;
+  isTeamMate?: boolean;
 }
 
 export interface IUserProfile {
@@ -45,10 +48,10 @@ export interface IUserProfile {
   nOfConnections: number | null;
   isAConnection: boolean;
 }
-export interface IUserConnection extends IUserProcessed {
-  dateTimeConnected: string;
-  isTeamMate: boolean;
-}
+// export interface IUserConnection extends IUserProcessed {
+//   dateTimeConnected: string;
+//   isTeamMate: boolean;
+// }
 export interface IUserThread extends IUserProcessed {
   dateTimePosted: string;
   visibility: "anyone" | "connections";

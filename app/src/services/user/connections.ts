@@ -1,4 +1,4 @@
-import { IUserConnection } from "./user.type";
+import { IUserProcessed } from "./user.type";
 import axios from "axios";
 
 const getConnections = async ({
@@ -11,7 +11,7 @@ const getConnections = async ({
   userId: string;
   offset: number;
   limit: number;
-  onSuccess: (data: { [keyof: string]: IUserConnection }) => void;
+  onSuccess: (data: { [keyof: string]: IUserProcessed }) => void;
   onError: (message: string) => void;
 }) => {
   const queryParams = new URLSearchParams();

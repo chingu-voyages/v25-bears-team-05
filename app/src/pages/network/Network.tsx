@@ -7,7 +7,7 @@ import { getConnections, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
-import { IUserConnection } from "../../services/user/user.type";
+import { IUserProcessed } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 
@@ -17,7 +17,7 @@ function Network() {
   const [isMe, setIsMe] = useState(false);
   const history = useHistory();
   const handleGoBack = () => history.goBack();
-  const [connections, setConnections] = useState<IUserConnection[]>([]);
+  const [connections, setConnections] = useState<IUserProcessed[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [page, setPage] = useState(0);
   const [isEndPage, setIsEndPage] = useState(false);
@@ -50,7 +50,7 @@ function Network() {
 
   useEffect(() => {
     const limitToNResults = 10;
-    const onSuccess = (connections: { [keyof: string]: IUserConnection }) => {
+    const onSuccess = (connections: { [keyof: string]: IUserProcessed }) => {
       const connectionsArray = Object.entries(
         connections
       ).map(([id, data]) => ({ ...data, id }));
@@ -76,7 +76,7 @@ function Network() {
   const RemoveOption = ({
     connectionData,
   }: {
-    connectionData: IUserConnection;
+    connectionData: IUserProcessed;
   }) => (
     <OptionsMenu
       buttons={{
@@ -93,7 +93,7 @@ function Network() {
   const ConnectionItem = ({
     connectionData,
   }: {
-    connectionData: IUserConnection;
+    connectionData: IUserProcessed;
   }) => (
     <li key={connectionData.id}>
       <Link
@@ -116,7 +116,7 @@ function Network() {
       <main>
         {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">
-          {connections.map((connectionData: IUserConnection) => (
+          {connections.map((connectionData: IUserProcessed) => (
             <ConnectionItem key={connectionData.id} {...{ connectionData }} />
           ))}
         </ul>

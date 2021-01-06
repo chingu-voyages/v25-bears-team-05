@@ -4,7 +4,9 @@ import {
   IUserRawResponse,
 } from "./user.type";
 import axios from "axios";
-import { getCurrentUserInfo, setCurrentUserInfo } from "./currentUserInfo";
+import { getCurrentUserInfo } from "./currentUserInfo";
+import store from "../../redux/store";
+import { UPDATE_CURRENT_USER_INFO, UPDATE_USER } from "../../redux/actionTypes";
 
 const getUser = async ({
   userId,
@@ -19,42 +21,61 @@ const getUser = async ({
     const res = await axios(`/api/users/${userId}`);
     let currentUserId;
     if (userId === "me") {
-      const { id, avatar, firstName, lastName, jobTitle } = res.data;
-      setCurrentUserInfo(
-        JSON.stringify({ id, avatar, firstName, lastName, jobTitle })
-      );
-      currentUserId = id;
+      currentUserId = res.data.id;
     } else {
       const currentUserInfo = await getCurrentUserInfo();
       currentUserId = currentUserInfo?.id;
     }
-    const {
-      firstName,
-      lastName,
-      jobTitle,
-      avatar,
-      id,
-    } = res.data as IUserRawResponse;
-    const connectionIds = Object.keys(res.data.connections);
-    const connectionOfIds = Object.keys(res.data.connectionOf);
-    const processedUserData: IUserProcessed = {
-      firstName,
-      lastName,
-      jobTitle,
-      avatar,
-      nOfConnections: connectionIds.length,
-      isAConnection: !!(
-        currentUserId && connectionOfIds.includes(currentUserId)
-      ),
-      id,
-    };
-    onSuccess?.(processedUserData);
-    return processedUserData;
+    const cachedUserData = await processUserData(res.data, currentUserId);
+    const dispatchType =
+      cachedUserData.id === currentUserId
+        ? UPDATE_CURRENT_USER_INFO
+        : UPDATE_USER;
+    store.dispatch({
+      type: dispatchType,
+      payload: { userData: cachedUserData },
+    });
+    const apiResponse = await res.data.apiPromise;
+    let apiUserData;
+    if (apiResponse?.data?.id) {
+      // Handle second response from service worker
+      apiUserData = await processUserData(apiResponse.data, currentUserId);
+      store.dispatch({
+        type: dispatchType,
+        payload: { userData: apiUserData },
+      });
+    }
+    return apiUserData || cachedUserData;
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
       onError("Unable to get info from server, please try again later");
   }
+};
+
+const processUserData = async (
+  rawData: IUserRawResponse,
+  currentUserId: string
+) => {
+  const {
+    firstName,
+    lastName,
+    jobTitle,
+    avatar,
+    id,
+  } = rawData as IUserRawResponse;
+  const connectionIds = Object.keys(rawData.connections);
+  const connectionOfIds = Object.keys(rawData.connectionOf);
+  const processedUserData: IUserProcessed = {
+    firstName,
+    lastName,
+    jobTitle,
+    avatar,
+    nOfConnections: connectionIds.length,
+    isAConnection: !!(currentUserId && connectionOfIds.includes(currentUserId)),
+    id,
+  };
+  return processedUserData;
 };
 
 const updateUser = async ({
@@ -63,7 +84,7 @@ const updateUser = async ({
   onError,
 }: {
   data: IUserPatchRequest;
-  onSuccess: (data: IUserPatchRequest) => void;
+  onSuccess: () => void;
   onError: (message: string) => void;
 }) => {
   try {
@@ -73,7 +94,12 @@ const updateUser = async ({
       data,
     });
     if (req.status === 200) {
-      onSuccess(data);
+      const currentUserInfo = await getCurrentUserInfo();
+      store.dispatch({
+        type: UPDATE_CURRENT_USER_INFO,
+        payload: { userData: { ...currentUserInfo, ...data } },
+      });
+      onSuccess();
     } else {
       onError(req.statusText);
     }

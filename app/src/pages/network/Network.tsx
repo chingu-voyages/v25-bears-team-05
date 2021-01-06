@@ -10,6 +10,7 @@ import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import TopBar from "../../components/topBar";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -107,13 +108,14 @@ function Network() {
   );
   return (
     <div className="Network-page">
-      <header className="Network-page__top-bar">
+      <header className="Network-page__top-bar--mobile">
         <Button role="link" onClick={handleGoBack}>
           <img className="Network-page__back-icon" src={backIcon} alt="back" />
         </Button>
         <h1 className="Network-page__title">Connections</h1>
       </header>
-      <main>
+      <TopBar className="Network-page__top-bar--desktop" />
+      <main className="Network-page__main">
         {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">
           {connections.map((connectionData: IUserConnection) => (

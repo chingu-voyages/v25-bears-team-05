@@ -1,6 +1,30 @@
 .Home-page {
   padding-bottom: 60px;
   box-sizing: border-box;
+  display: grid;
+  place-items: start stretch;
+  grid-template-areas: 
+  "topBar"
+  "postMakerStart"
+  "feed";
+}
+.Home-page__top-bar {
+  grid-area: topBar;
+  justify-self: stretch;
+}
+.Home-page__profile {
+  display: none !important;
+  grid-area: profile;
+}
+.Home-page__recent {
+  display: none;
+  grid-area: recent;
+}
+.Home-page__post-maker-start {
+  grid-area: postMakerStart;
+}
+.Home-page__feed {
+  grid-area: feed;
 }
 
 .Home-page__spinner {
@@ -19,6 +43,8 @@
 .Home-page__feed__list__item {
   margin: 16px 0;
   list-style: none;
+  display: grid;
+  justify-items: center;
 }
 .Home-page__error {
   color: var(--error-color);
@@ -30,10 +56,45 @@
 .Home-page__post-maker-start__button {
   width: 100%;
   display: grid;
-  place-items: center center;
+  place-items: center start;
   grid-template-columns: 30px auto;
   background: var(--color-black);
+  justify-content: start;
+  padding-left: 24px;
 }
 .Home-page__post-maker-start h1 {
   font-size: 18px;
+}
+
+@media only screen and (min-width: 800px) {
+  .Home-page__post-maker-start__button {
+    border-radius: 16px;
+  }
+  .Home-page__post-maker-start, .Home-page__feed {
+    justify-self: center;
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .Home-page {
+    grid-template-areas: 
+    "topBar topBar topBar topBar topBar"
+    ". profile . postMakerStart ."
+    ". profile . feed ."
+    ". recent . feed .";
+    place-items: start center;
+    grid-template-columns: 10% 260px 24px 1fr 8%;
+  }
+  .Home-page__profile {
+    display: grid !important;
+    margin-top: 16px;
+  }
+  .Home-page__post-maker-start {
+    justify-self: stretch;
+    margin: 16px 0 0 0;
+  }
+  .Home-page__feed {
+    justify-self: stretch;
+  }
 }

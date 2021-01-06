@@ -1,0 +1,30 @@
+.Search {
+    position: relative;
+    display: grid;
+    place-items: center stretch;
+    grid-template-columns: 100%;
+}
+.Search__input {
+    background: var(--green-background-color);
+    border: none;
+    height: 40px;
+    color: var(--primary-text-color);
+    padding: 0 6%;
+    font-size: 18px;
+}
+.Search__input:focus {
+    outline: 1px solid var(--primary-text-color);
+}
+.Search__label {
+    display: grid;
+    place-items: center center;
+    grid-template-columns: 20px 1fr;
+    gap: 8px;
+    font-size: 18px;
+    position: absolute;
+    top: 10px;
+    left: 8px;
+}
+.Search__input:focus ~ .Search__label, .Search__input:not([value=""]) ~ .Search__label {
+    display: none;
+}

@@ -16,7 +16,7 @@ function Logo({
   const svg = condensed ? LogoCondensedSVG : dark ? LogoDarkSGV : LogoSVG;
   return (
     <div className="wrapper__Logo">
-      <img className={`Logo ${className}`} src={svg} alt="SyncedUp" />
+      <img className={`Logo ${condensed ? "Logo--condensed" : ""} ${className || ""}`} src={svg} alt="SyncedUp" />
     </div>
   );
 }

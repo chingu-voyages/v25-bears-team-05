@@ -76,3 +76,30 @@
   grid-area: follow;
   justify-self: end;
 }
+.Profile-card--home-page {
+  width: 242px;
+  height: 295px;
+  padding: 18px;
+  box-sizing: border-box;
+  grid-template-columns: auto auto;
+  grid-template-rows: 120px 32px 48px auto;
+  place-items: center center;
+  grid-template-areas:
+    "avatar avatar"
+    "name name"
+    "title title"
+    "info info";
+  background: var(--color-black);
+  border-radius: 18px;
+}
+.Profile-card--home-page .Profile-card__info {
+  width: 100%;
+}
+.Profile-card--home-page .Profile-card__info a {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+.Profile-card--home-page .Profile-card__info__connections-number {
+  color: var(--primary-green-color);
+}

@@ -4,7 +4,7 @@
   display: grid;
   grid-template-areas:
     "relationalInfo relationalInfo relationalInfo"
-    "profileCard profileCard followButton"
+    "profileCard profileCard profileCard"
     "postContent postContent postContent"
     "reactions . nOfComments"
     "actions actions actions";
@@ -21,18 +21,16 @@
 .Post__profile-card {
   width: 100%;
   grid-area: profileCard;
-  margin-left: 8%;
+  padding-left: 16px;
+  margin-top: 12px;
+  padding-right: 24px;
+  box-sizing: border-box;
   color: inherit;
   text-decoration: none;
 }
-.Post__follow {
-  grid-area: followButton;
-  margin: 8px;
-  place-self: end end;
-}
 .Post__content {
   grid-area: postContent;
-  margin: 16px 8%;
+  margin: 16px;
 }
 .Post__content * {
   font-family: "Didact Gothic", sans-serif;
@@ -51,7 +49,6 @@
   display: flex;
   padding: 0;
   height: 24px;
-  margin-bottom: 8px;
   justify-content: space-evenly;
   align-content: center;
 }
@@ -60,10 +57,14 @@
   grid-template-columns: 1fr 1fr;
   place-items: center center;
 }
+.Post__bullet {
+  display: none;
+  grid-area: bullet;
+}
 .Post__n-of-comments {
   grid-area: nOfComments;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
 }
 .Post__actions {
   grid-area: actions;
@@ -74,12 +75,42 @@
   width: 100%;
   height: 48px;
   border-top: solid 1px var(--primary-text-color);
+  margin-top: 8px;
 }
-.Post__actions .Options-menu__list button,
-.Post__actions .Options-menu__list img {
-  width: 32px;
-  height: 32px;
+.Post__actions .Options-menu__list button {
+  width: 40px;
+}
+.Post__actions .Options-menu__button img {
+  margin-top: 2px;
+  height: 40px;
+  width: 40px;
 }
 .Post__error {
   color: var(--error-color);
+}
+@media only screen and (min-width: 800px) {
+  .Post {
+    border-radius: 16px;
+    padding: 8px 36px 4px 36px;
+    grid-template-areas:
+      "relationalInfo relationalInfo relationalInfo relationalInfo"
+      "profileCard profileCard profileCard profileCard"
+      "postContent postContent postContent postContent"
+      "reactions bullet nOfComments ."
+      "actions actions actions actions";
+    grid-template-columns: auto 12px auto 1fr;
+    place-items: center stretch;
+  }
+  .Post__actions {
+    grid-template-columns: repeat(3, auto) 1fr;
+    place-items: center start;
+    gap: 24px;
+  }
+  .Post__n-of-comments {
+    justify-self: start;
+  }
+  .Post__bullet {
+    display: block;
+    width: 12px;
+  }
 }

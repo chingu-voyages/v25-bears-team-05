@@ -4,6 +4,6 @@ export interface Avatar {
 
 export interface AvatarProps extends Avatar {
   userName: string;
-  size?: "xsmall" | "small" | "medium" | "large";
+  size?: "xxsmall" | "xsmall" | "small" | "medium" | "large";
   className?: string;
 }

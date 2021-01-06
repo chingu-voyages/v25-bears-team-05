@@ -115,7 +115,8 @@ function Home() {
 
   return (
     <div className="Home-page">
-      <TopBar />
+      <TopBar className="Home-page__top-bar" />
+      <ProfileCard type="home-page" userId="me" className="Home-page__profile" />
       <div className="Home-page__post-maker-start">
         {!isPostMakerOpen ? (
           <Button

@@ -9,17 +9,32 @@
   width: 100%;
   z-index: 1500;
 }
-.Nav img {
+@media only screen and (min-width: 800px) {
+  .Nav {
+    display: none;
+  }
+}
+.Nav__avatar-menu button div {
+  box-sizing: border-box;
   width: 30px;
 }
-.Nav a {
+.Nav a, .Nav__avatar-menu, .Nav__avatar-menu button {
   display: grid;
   place-items: center center;
   color: var(--secondary-text-color);
   text-decoration: none;
 }
+.Nav__avatar-menu {
+  display: none;
+}
+@media only screen and (min-width: 800px) {
+  .Nav__avatar-menu {
+    display: grid;
+  }
+}
 .Nav svg {
   fill: var(--secondary-text-color);
+  height: 20px;
 }
 .Nav a.active,
 .Nav a.active svg {

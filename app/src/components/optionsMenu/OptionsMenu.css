@@ -1,3 +1,7 @@
+.Options-menu {
+  
+}
+
 .Options-menu__toggle {
   z-index: 50;
 }
@@ -48,6 +52,7 @@
 .Options-menu.above-center .Options-menu__list {
   position: absolute;
   bottom: 10%;
+  left: 0;
   margin: auto;
 }
 

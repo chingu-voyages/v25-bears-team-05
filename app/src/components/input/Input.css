@@ -75,7 +75,9 @@
     margin-bottom: 6px;
   }
   .wrapper__Input.breakout-on-large-view .Input:focus ~ .Input__label--floating,
-  .wrapper__Input.breakout-on-large-view .Input--has-content ~ .Input__label--floating {
+  .wrapper__Input.breakout-on-large-view
+    .Input--has-content
+    ~ .Input__label--floating {
     transform: none;
   }
   .wrapper__Input.breakout-on-large-view .Input__show-password-toggle {

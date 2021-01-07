@@ -3,10 +3,10 @@
   box-sizing: border-box;
   display: grid;
   place-items: start stretch;
-  grid-template-areas: 
-  "topBar"
-  "postMakerStart"
-  "feed";
+  grid-template-areas:
+    "topBar"
+    "postMakerStart"
+    "feed";
 }
 .Home-page__top-bar {
   grid-area: topBar;
@@ -70,7 +70,8 @@
   .Home-page__post-maker-start__button {
     border-radius: 16px;
   }
-  .Home-page__post-maker-start, .Home-page__feed {
+  .Home-page__post-maker-start,
+  .Home-page__feed {
     justify-self: center;
     width: 80%;
   }
@@ -78,12 +79,12 @@
 
 @media only screen and (min-width: 1200px) {
   .Home-page {
-    grid-template-areas: 
-    "topBar topBar topBar topBar topBar"
-    ". . . . ."
-    ". profile . postMakerStart ."
-    ". profile . feed ."
-    ". recent . feed .";
+    grid-template-areas:
+      "topBar topBar topBar topBar topBar"
+      ". . . . ."
+      ". profile . postMakerStart ."
+      ". profile . feed ."
+      ". recent . feed .";
     place-items: start center;
     grid-template-columns: 10% 260px 24px 1fr 10%;
     grid-template-rows: auto 48px repeat(3, auto);

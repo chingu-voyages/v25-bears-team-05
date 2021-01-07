@@ -53,7 +53,7 @@ function Input(props: IInputProps) {
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleOnChange}
-        className={`Input ${(errorMessage && !isFocused) ? "Input--error" : ""} ${
+        className={`Input ${errorMessage && !isFocused ? "Input--error" : ""} ${
           props.value ? "Input--has-content" : ""
         }`}
       />

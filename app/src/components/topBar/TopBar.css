@@ -48,14 +48,16 @@
     gap: 12px;
     place-items: center center;
   }
-  .Top-bar__nav a, .Top-bar__nav .Nav__avatar-menu button {
+  .Top-bar__nav a,
+  .Top-bar__nav .Nav__avatar-menu button {
     row-gap: 6px;
     place-items: center center;
   }
   .Top-bar__nav a.Nav__post {
     display: none;
   }
-  .Top-bar__nav svg, .Top-bar__nav .Nav__avatar-menu.active button div {
+  .Top-bar__nav svg,
+  .Top-bar__nav .Nav__avatar-menu.active button div {
     height: 30px;
   }
   .Top-bar__nav a.active,

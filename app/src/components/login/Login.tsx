@@ -9,7 +9,7 @@ import googleAuth from "../../services/googleAuth";
 import localLogin from "../../services/localLogin";
 import Spinner from "../spinner";
 
-function Login({className} : {className?: string}) {
+function Login({ className }: { className?: string }) {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [password, setPassword] = useState("");

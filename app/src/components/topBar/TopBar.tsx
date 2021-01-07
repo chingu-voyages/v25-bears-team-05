@@ -8,7 +8,7 @@ import OptionsMenu from "../optionsMenu";
 import Search from "../search";
 import "./TopBar.css";
 
-function TopBar({className}: {className?: string}) {
+function TopBar({ className }: { className?: string }) {
   const [userInfo, setUserInfo] = useState<{
     url: string;
     firstName: string;

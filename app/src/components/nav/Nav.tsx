@@ -5,18 +5,20 @@ import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
-function Nav({className}: {className?: string}) {
+function Nav({ className }: { className?: string }) {
   const history = useHistory();
   const pathname = history.location.pathname;
-  const [page, setPage] = useState(pathname.match("network")
-    ? "network"
-    : history.location.hash.match("#newpost")
-    ? "post"
-    : pathname.match("home")
-    ? "home"
-    : pathname.match("me/profile")
-    ? "profile"
-    : "");
+  const [page, setPage] = useState(
+    pathname.match("network")
+      ? "network"
+      : history.location.hash.match("#newpost")
+      ? "post"
+      : pathname.match("home")
+      ? "home"
+      : pathname.match("me/profile")
+      ? "profile"
+      : ""
+  );
 
   const [userInfo, setUserInfo] = useState<{
     url: string;
@@ -35,11 +37,7 @@ function Nav({className}: {className?: string}) {
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>
-        <svg
-     
-          viewBox="0 0 21 18"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -48,12 +46,11 @@ function Nav({className}: {className?: string}) {
         </svg>
         Home
       </Link>
-      <Link to="/home#newpost" className={`Nav__post ${page === "post" ? "active" : ""}`}>
-        <svg
-     
-          viewBox="0 0 25 25"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      <Link
+        to="/home#newpost"
+        className={`Nav__post ${page === "post" ? "active" : ""}`}
+      >
+        <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -63,11 +60,7 @@ function Nav({className}: {className?: string}) {
         Post
       </Link>
       <Link to="/me/network" className={page === "network" ? "active" : ""}>
-        <svg
-
-          viewBox="0 0 21 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 21 20" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"

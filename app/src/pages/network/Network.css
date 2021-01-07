@@ -57,10 +57,10 @@
   .Network-page {
     display: grid;
     place-items: start center;
-    grid-template-areas: 
-    "topBar"
-    "."
-    "main";
+    grid-template-areas:
+      "topBar"
+      "."
+      "main";
     grid-template-rows: 80px 48px auto;
     background: var(--grey-background-color);
   }

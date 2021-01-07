@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { deleteComment } from "../../services/thread";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { IThreadComment } from "../../services/thread/thread.type";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { IUsersStore } from "../../services/user/user.type";
 import ContentClipper from "../contentClipper";
 import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";
@@ -9,19 +10,22 @@ import "./Comment.css";
 const md = require("markdown-it")();
 
 function Comment({
+  users,
   commentData,
   handleDeleteComment,
 }: {
+  users: IUsersStore;
   commentData: IThreadComment;
   handleDeleteComment: () => void;
 }) {
-  const [isMe, setIsMe] = useState(false);
+  const currentUserId = users.me.id;
+  const isMe = currentUserId === commentData.postedByUserId;
+
   useEffect(() => {
-    (async () => {
-      const currentUserInfo = await getCurrentUserInfo();
-      setIsMe(currentUserInfo.id === commentData.postedByUserId);
-    })();
-  }, []);
+    if (!currentUserId) {
+      getCurrentUserInfo();
+    }
+  }, [currentUserId]);
 
   return commentData ? (
     <div className="Comment">
@@ -52,4 +56,9 @@ function Comment({
   ) : null;
 }
 
-export default Comment;
+const mapStateToProps = (state: any) => {
+  const { users } = state;
+  return { users };
+};
+
+export default connect(mapStateToProps)(Comment);

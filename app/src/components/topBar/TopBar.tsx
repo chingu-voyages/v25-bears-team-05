@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { IUsersStore } from "../../services/user/user.type";
 import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
 import "./TopBar.css";
 
-function TopBar() {
-  const [userInfo, setUserInfo] = useState<{
-    url: string;
-    firstName: string;
-    lastName: string;
-    id: string;
-  }>();
+function TopBar({ users }: { users: IUsersStore }) {
   useEffect(() => {
-    getCurrentUserInfo().then((userInfo) => {
-      setUserInfo(userInfo);
-    });
-  }, []);
+    if (!users?.me?.id) {
+      getCurrentUserInfo();
+    }
+  }, [users?.me?.id]);
   const history = useHistory();
   return (
     <nav className="Top-bar">
       <OptionsMenu
         buttons={{
-          "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
+          "View Profile": {
+            type: "link",
+            linkTo: `/${users?.me?.id || "me"}/profile`,
+          },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },
           Logout: {
             action: () => {
@@ -32,16 +31,15 @@ function TopBar() {
           },
         }}
       >
-        <Avatar
-          size="xsmall"
-          url={userInfo?.url || ""}
-          userName={
-            userInfo ? `${userInfo.firstName} ${userInfo.lastName}` : ""
-          }
-        />
+        <Avatar size="xsmall" userId="me" />
       </OptionsMenu>
     </nav>
   );
 }
 
-export default TopBar;
+const mapStateToProps = (state: any) => {
+  const { users } = state;
+  return { users };
+};
+
+export default connect(mapStateToProps)(TopBar);

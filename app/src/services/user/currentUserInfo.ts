@@ -3,8 +3,8 @@ import store from "../../redux/store";
 
 const getCurrentUserInfo = async () => {
   const state = store.getState();
-  let currentUserInfo = state?.user.me;
-  if (!currentUserInfo.id) {
+  let currentUserInfo = state?.users.me;
+  if (!currentUserInfo?.id) {
     const userData = await getUser({
       userId: "me",
       onError: (msg) => {

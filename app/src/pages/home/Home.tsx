@@ -108,7 +108,7 @@ function Home() {
     return (
       <li className="Home-page__feed__list__item">
         {thread && <Post {...thread} />}
-        {suggestion && <ProfileCard type="thread" data={suggestion} />}
+        {suggestion && <ProfileCard type="thread" userId={suggestion.id} />}
       </li>
     );
   };

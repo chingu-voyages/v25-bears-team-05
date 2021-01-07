@@ -1,4 +1,5 @@
 import { ThreadVisibility } from "../../services/thread/thread.type";
+import { IUsersStore } from "../../services/user/user.type";
 import { Avatar } from "../avatar/Avatar.type";
 
 export interface IBasicCardInfo {
@@ -19,8 +20,8 @@ export interface ICardInfo extends IBasicCardInfo {
 
 export default interface IProfileCard {
   type: "profile" | "connection" | "thread" | "comment";
-  data?: ICardInfo;
-  userId?: string;
+  users?: IUsersStore;
+  userId: string;
   className?: string;
   threadData?: any;
 }

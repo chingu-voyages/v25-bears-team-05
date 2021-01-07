@@ -7,14 +7,14 @@ import { getConnections, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
-import { IUserProcessed } from "../../services/user/user.type";
+import { IUserProcessed, IUsersStore } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { connect } from "react-redux";
 
-function Network() {
+function Network({ users }: { users: IUsersStore }) {
   const match: any = useRouteMatch("/:userId");
-  const userId = useRef(match.params.userId.toLowerCase());
-  const [isMe, setIsMe] = useState(false);
+  const userId = match.params.userId.toLowerCase();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
   const [connections, setConnections] = useState<IUserProcessed[]>([]);
@@ -41,12 +41,14 @@ function Network() {
     }
   }, []);
 
+  const currentUserId = users?.me?.id;
+  const isMe = currentUserId === userId;
+
   useEffect(() => {
-    (async () => {
-      const currentUserInfo = await getCurrentUserInfo();
-      setIsMe(userId.current === "me" || currentUserInfo.id === userId.current);
-    })();
-  }, []);
+    if (!currentUserId) {
+      getCurrentUserInfo();
+    }
+  }, [currentUserId]);
 
   useEffect(() => {
     const limitToNResults = 10;
@@ -100,7 +102,7 @@ function Network() {
         className="connections-list__link"
         to={`/${connectionData.id}/profile`}
       >
-        <ProfileCard type="connection" data={{ ...connectionData }} />
+        <ProfileCard type="connection" userId={connectionData.id} />
       </Link>
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
@@ -127,4 +129,9 @@ function Network() {
   );
 }
 
-export default Network;
+const mapStateToProps = (state: any) => {
+  const { users } = state;
+  return { users };
+};
+
+export default connect(mapStateToProps)(Network);

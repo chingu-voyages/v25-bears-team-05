@@ -15,9 +15,12 @@ const getUser = async ({
 }: {
   userId: string;
   onSuccess?: (data: IUserProcessed) => void;
-  onError: (message: string) => void;
+  onError?: (message: string) => void;
 }) => {
   try {
+    if (!userId) {
+      throw "No userId given!";
+    }
     const res = await axios(`/api/users/${userId}`);
     let currentUserId;
     if (userId === "me") {
@@ -49,7 +52,7 @@ const getUser = async ({
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-      onError("Unable to get info from server, please try again later");
+      onError?.("Unable to get info from server, please try again later");
   }
 };
 

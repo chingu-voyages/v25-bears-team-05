@@ -5,7 +5,7 @@ import wallpaper from "../../images/profilewallpapergraphic.svg";
 import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
-import { updateUser, getUser } from "../../services/user";
+import { updateUser } from "../../services/user";
 import { IUserProcessed } from "../../services/user/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
@@ -13,13 +13,13 @@ import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 import { connect } from "react-redux";
-import { updateCurrentUserInfo } from "../../redux/actions/user";
+import { updateCurrentUserInfo } from "../../redux/actions/users";
 
-function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
+function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
   const firstLoad = useRef(true);
   const match: any = useRouteMatch("/:userId");
-  const [userId, setUserId] = useState(match.params.userId.toLowerCase());
-  const [getDataErrorMessage, setGetDataErrorMessage] = useState("");
+  const urlIdParam = match.params.userId.toLowerCase();
+  const [userId, setUserId] = useState(urlIdParam);
   const [editorErrorMessage, setEditorErrorMessage] = useState("");
 
   const [inputs, setInputs] = useState({});
@@ -28,9 +28,9 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
     const editingMode = !isEditing;
     if (editingMode) {
       const inputValues = {
-        firstName: user?.[userId]?.firstName,
-        lastName: user?.[userId]?.lastName,
-        jobTitle: user?.[userId]?.jobTitle,
+        firstName: users?.[userId]?.firstName,
+        lastName: users?.[userId]?.lastName,
+        jobTitle: users?.[userId]?.jobTitle,
       };
       setInputs(inputValues);
     }
@@ -42,7 +42,7 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
       handleToggleEditMode();
     };
     const inputsHaveChanged = Object.entries(inputs).some(
-      ([key, value]) => value !== ((user?.[userId] as unknown) as any)[key]
+      ([key, value]) => value !== ((users?.[userId] as unknown) as any)[key]
     );
     if (inputsHaveChanged) {
       updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
@@ -52,16 +52,12 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
   };
 
   useEffect(() => {
-    const urlPathUserId = match.params.userId.toLowerCase();
-    if (firstLoad.current || urlPathUserId !== userId) {
+    const newUrlIdParam = match.params.userId.toLowerCase();
+    if (firstLoad.current || newUrlIdParam !== urlIdParam) {
       firstLoad.current = false;
-      setUserId(urlPathUserId);
-      getUser({
-        userId: urlPathUserId,
-        onError: setGetDataErrorMessage,
-      });
+      setUserId(newUrlIdParam);
     }
-  }, [match.params.userId]);
+  }, [match.params.userId, urlIdParam]);
 
   return (
     <div className="Profile-page">
@@ -79,18 +75,11 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
             }}
             onUpload={(url) =>
               updateCurrentUserInfo({
-                avatar: [{ url }, ...user?.[userId]?.avatar],
+                avatar: [{ url }, ...users?.[userId]?.avatar],
               })
             }
           >
-            <Avatar
-              url={user?.[userId]?.avatar?.[0]?.url || ""}
-              userName={
-                `${user?.[userId]?.firstName || ""} ${
-                  user?.[userId]?.lastName || ""
-                }`.trim() || "user avatar"
-              }
-            />
+            <Avatar userId={userId} />
           </PhotoUploader>
         </figure>
         <div className="Profile-page__info">
@@ -120,14 +109,9 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
           ) : (
             <ProfileCard
               type="profile"
-              data={{ ...(user?.[userId] || {}), id: userId }}
+              userId={userId}
               className="Profile-page__info__text"
             />
-          )}
-          {getDataErrorMessage && (
-            <p className="Profile-page__get-data-error">
-              {getDataErrorMessage}
-            </p>
           )}
         </div>
       </main>
@@ -137,8 +121,8 @@ function Profile({ user }: { user: { [keyof: string]: IUserProcessed } }) {
 }
 
 const mapStateToProps = (state: any) => {
-  const { user } = state;
-  return { user };
+  const { users } = state;
+  return { users };
 };
 
 export default connect(mapStateToProps, { updateCurrentUserInfo })(Profile);

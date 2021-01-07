@@ -56,3 +56,7 @@ export interface IUserThread extends IUserProcessed {
   dateTimePosted: string;
   visibility: "anyone" | "connections";
 }
+
+export interface IUsersStore {
+  [keyof: string]: IUserProcessed;
+}

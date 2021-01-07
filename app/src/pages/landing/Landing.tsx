@@ -19,8 +19,8 @@ function Landing() {
         <h1 className="Landing-page__tagline">
           Welcome to your developer community
         </h1>
-        <Login />
-        <figure className="warpper__Landing-page__feature-graphic">
+        <Login className="Landing-page__login" />
+        <figure className="wrapper__Landing-page__feature-graphic">
           <img
             className="Landing-page__feature-graphic"
             src={featureGraphicSVG}

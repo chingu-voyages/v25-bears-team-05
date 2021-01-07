@@ -115,6 +115,17 @@ function ProfileCard({
             })}`
           );
           setAvatarUrl(avatar?.[0]?.url);
+        } else if (type === "home-page") {
+          const { avatar, nOfConnections } = data as ICardInfo;
+          setAvatarUrl(avatar?.[0]?.url);
+          setInfo(
+            <Link to="network">
+              <span>Connections</span>{" "}
+              <span className="Profile-card__info__connections-number">
+                {nOfConnections || 0}
+              </span>
+            </Link>
+          );
         }
         const currentUserInfo = await getCurrentUserInfo();
         setIsMe(id === "me" || currentUserInfo.id === id);
@@ -134,7 +145,13 @@ function ProfileCard({
           <Avatar
             url={avatarUrl || ""}
             userName={`${title}`.trim() || "user avatar"}
-            size={type === "comment" ? "xsmall" : "small"}
+            size={
+              type === "comment"
+                ? "xsmall"
+                : type === "home-page"
+                ? "medium"
+                : "small"
+            }
           />
         </Link>
       )}

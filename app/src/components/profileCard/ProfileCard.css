@@ -9,9 +9,9 @@
   row-gap: 0;
   column-gap: 12px;
   grid-template-areas:
-    "name . ."
+    "name . follow"
     "title . follow"
-    "info . .";
+    "info . follow";
   padding: 5px 0;
   place-items: center start;
 }
@@ -21,9 +21,9 @@
   grid-template-columns: 60px auto auto auto;
   grid-template-areas:
     "avatar . . ."
-    "avatar name . ."
+    "avatar name . follow"
     "avatar title . follow"
-    "avatar info . ."
+    "avatar info . follow"
     "avatar . . .";
 }
 .Profile-card--comment {

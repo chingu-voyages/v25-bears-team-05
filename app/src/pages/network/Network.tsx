@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect } from "react";
 import "./Network.css";
 import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { getConnections, removeConnection } from "../../services/user";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { getUser, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
-import Pagenator from "../../components/pagenator";
 import OptionsMenu from "../../components/optionsMenu";
-import { IUserProcessed, IUsersStore } from "../../services/user/user.type";
+import { IUserConnection, IUsersStore } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import { connect } from "react-redux";
@@ -18,74 +17,36 @@ function Network({ users }: { users: IUsersStore }) {
   const userId = match.params.userId.toLowerCase();
   const history = useHistory();
   const handleGoBack = () => history.goBack();
-  const [connections, setConnections] = useState<IUserProcessed[]>([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [page, setPage] = useState(0);
-  const [isEndPage, setIsEndPage] = useState(false);
-  const isLoadingNextPage = useRef(true);
+  const connections = Object.values(users[userId]?.connections || {});
   const handleRemoveConnection = (connectionId: string) => {
-    const onSuccess = () => {
-      setConnections((connections) =>
-        connections.filter(({ id }) => id !== connectionId)
-      );
-    };
-    removeConnection({
-      connectionId,
-      onSuccess,
-      onError: (msg) => setErrorMessage(msg),
-    });
+    removeConnection({connectionId});
   };
-  const nextPage = useCallback(() => {
-    if (!isLoadingNextPage.current) {
-      setPage((page) => page + 1);
-      isLoadingNextPage.current = true;
-    }
-  }, []);
 
   const currentUserId = users?.me?.id;
-  const isMe = currentUserId === userId;
+  const isMe = currentUserId === userId || userId.match("me");
 
   useEffect(() => {
     if (!currentUserId) {
       getCurrentUserInfo();
     }
-  }, [currentUserId]);
+  }, []);
 
   useEffect(() => {
-    const limitToNResults = 10;
-    const onSuccess = (connections: { [keyof: string]: IUserProcessed }) => {
-      const connectionsArray = Object.entries(
-        connections
-      ).map(([id, data]) => ({ ...data, id }));
-      if (connectionsArray.length < limitToNResults) {
-        setIsEndPage(true);
-      }
-      page === 0
-        ? setConnections(connectionsArray)
-        : setConnections((currentConnections) => [
-            ...currentConnections,
-            ...connectionsArray,
-          ]);
-      isLoadingNextPage.current = false;
-    };
-    getConnections({
-      userId: userId.current,
-      limit: limitToNResults,
-      offset: limitToNResults * page,
-      onSuccess,
-      onError: setErrorMessage,
-    });
-  }, [page]);
+    if (userId && !users?.[userId]) {
+      getUser({userId});
+    }
+  }, [userId, users?.[userId]]);
+
   const RemoveOption = ({
     connectionData,
   }: {
-    connectionData: IUserProcessed;
+    connectionData: IUserConnection;
   }) => (
     <OptionsMenu
       buttons={{
         "Remove connection": {
           action: () => {
-            handleRemoveConnection(connectionData.id);
+            handleRemoveConnection(connectionData.userId);
           },
           confirm: true,
         },
@@ -96,15 +57,10 @@ function Network({ users }: { users: IUsersStore }) {
   const ConnectionItem = ({
     connectionData,
   }: {
-    connectionData: IUserProcessed;
+    connectionData: IUserConnection;
   }) => (
-    <li key={connectionData.id}>
-      <Link
-        className="connections-list__link"
-        to={`/${connectionData.id}/profile`}
-      >
-        <ProfileCard type="connection" userId={connectionData.id} />
-      </Link>
+    <li key={connectionData.userId}>
+      <ProfileCard type="connection" userId={connectionData.userId} />
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
   );
@@ -118,13 +74,11 @@ function Network({ users }: { users: IUsersStore }) {
       </header>
       <TopBar className="Network-page__top-bar--desktop" />
       <main className="Network-page__main">
-        {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">
-          {connections.map((connectionData: IUserProcessed) => (
-            <ConnectionItem key={connectionData.id} {...{ connectionData }} />
+          {connections.map((connectionData) => (
+            <ConnectionItem key={connectionData.userId} {...{ connectionData }} />
           ))}
         </ul>
-        <Pagenator {...{ page, nextPage, active: !isEndPage }} />
       </main>
       <Nav />
     </div>

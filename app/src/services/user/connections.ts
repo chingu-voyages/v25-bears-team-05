@@ -1,33 +1,6 @@
-import { IUserProcessed } from "./user.type";
 import axios from "axios";
-
-const getConnections = async ({
-  userId,
-  offset,
-  limit,
-  onSuccess,
-  onError,
-}: {
-  userId: string;
-  offset: number;
-  limit: number;
-  onSuccess: (data: { [keyof: string]: IUserProcessed }) => void;
-  onError: (message: string) => void;
-}) => {
-  const queryParams = new URLSearchParams();
-  queryParams.append("offset", offset.toString());
-  queryParams.append("limit", limit.toString());
-  try {
-    const res = await axios(`/api/users/${userId}/connections?${queryParams}`);
-    onSuccess(res.data);
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError(
-        "Unable to get your connections from server, please try again later"
-      );
-  }
-};
+import store from "../../redux/store";
+import { ADD_CONNECTION, REMOVE_CONNECTION } from "../../redux/actionTypes";
 
 const removeConnection = async ({
   connectionId,
@@ -35,23 +8,27 @@ const removeConnection = async ({
   onError,
 }: {
   connectionId: string;
-  onSuccess: () => void;
-  onError: (message: string) => void;
+  onSuccess?: () => void;
+  onError?: (message: string) => void;
 }) => {
   try {
-    const req = await axios({
+    const res = await axios({
       method: "delete",
       url: `/api/users/connections/${connectionId}`,
     });
-    if (req.status === 200) {
-      onSuccess();
+    if (res.status === 200) {
+      store.dispatch({
+        type: REMOVE_CONNECTION,
+        payload: { connectionId },
+      });
+      onSuccess?.();
     } else {
-      onError(req.statusText);
+      onError?.(res.statusText);
     }
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-      onError("Connection not removed, please try again later");
+    onError?.("Connection not removed, please try again later");
   }
 };
 
@@ -60,28 +37,32 @@ const addConnection = async ({
   isTeamMate,
   onSuccess,
   onError,
-}: {
+  }: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess: () => void;
-  onError: (message: string) => void;
+  onSuccess?: () => void;
+  onError?: (message: string) => void;
 }) => {
   try {
-    const req = await axios({
+    const res = await axios({
       method: "put",
       url: `/api/users/connections/${connectionId}`,
       data: { isTeamMate },
     });
-    if (req.status === 200) {
-      onSuccess();
+    if (res.status === 200) {
+      store.dispatch({
+        type: ADD_CONNECTION,
+        payload: { connectionId },
+      });
+      onSuccess?.();
     } else {
-      onError(req.statusText);
+      onError?.(res.statusText);
     }
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-      onError("Connection not added, please try again later");
+    onError?.("Connection not added, please try again later");
   }
 };
 
-export { getConnections, removeConnection, addConnection };
+export { removeConnection, addConnection };

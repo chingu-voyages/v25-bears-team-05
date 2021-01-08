@@ -16,7 +16,6 @@ function FollowButton({
   onFollow: () => void;
   className?: string;
 }) {
-  const [errorMessage, setErrorMessage] = useState("");
   const [isInProgress, setIsInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
@@ -29,12 +28,10 @@ function FollowButton({
       connectionId,
       isTeamMate,
       onSuccess,
-      onError: (msg: string) => setErrorMessage(msg),
     });
   };
   const handleClose = () => {
     isDone && onFollow();
-    setErrorMessage("");
     setIsDone(false);
     setIsInProgress(false);
   };
@@ -57,14 +54,6 @@ function FollowButton({
       >
         <span className="Follow-button__text">+ Follow</span>
       </OptionsMenu>
-      {errorMessage && (
-        <dialog className="Follow-button__error" open>
-          <p className="Follow-button__error__message">{errorMessage}</p>
-          <Button onClick={handleClose} className="square">
-            Close
-          </Button>
-        </dialog>
-      )}
       {isInProgress && (
         <dialog className="Follow-button__progress" open>
           <Spinner className="Follow-button__progress__spinner" />

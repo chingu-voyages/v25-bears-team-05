@@ -48,7 +48,9 @@ const getUser = async ({
         payload: { userData: apiUserData },
       });
     }
-    return apiUserData || cachedUserData;
+    const finalData = apiUserData || cachedUserData;
+    onSuccess?.(finalData);
+    return finalData;
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
@@ -66,9 +68,11 @@ const processUserData = async (
     jobTitle,
     avatar,
     id,
+    connections,
+    connectionOf
   } = rawData as IUserRawResponse;
-  const connectionIds = Object.keys(rawData.connections);
-  const connectionOfIds = Object.keys(rawData.connectionOf);
+  const connectionIds = Object.keys(connections);
+  const connectionOfIds = Object.keys(connectionOf);
   const processedUserData: IUserProcessed = {
     firstName,
     lastName,
@@ -77,6 +81,8 @@ const processUserData = async (
     nOfConnections: connectionIds.length,
     isAConnection: !!(currentUserId && connectionOfIds.includes(currentUserId)),
     id,
+    connections,
+    connectionOf
   };
   return processedUserData;
 };
@@ -87,29 +93,29 @@ const updateUser = async ({
   onError,
 }: {
   data: IUserPatchRequest;
-  onSuccess: () => void;
-  onError: (message: string) => void;
+  onSuccess?: () => void;
+  onError?: (message: string) => void;
 }) => {
   try {
-    const req = await axios({
+    const res = await axios({
       method: "patch",
       url: `/api/users/me`,
       data,
     });
-    if (req.status === 200) {
+    if (res.status === 200) {
       const currentUserInfo = await getCurrentUserInfo();
       store.dispatch({
         type: UPDATE_CURRENT_USER_INFO,
         payload: { userData: { ...currentUserInfo, ...data } },
       });
-      onSuccess();
+      onSuccess?.();
     } else {
-      onError(req.statusText);
+      onError?.(res.statusText);
     }
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-      onError(
+      onError?.(
         "Sorry, we're unable to update your info at this time, please try again later"
       );
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import "./Profile.css";
 import { useRouteMatch } from "react-router-dom";
 import wallpaper from "../../images/profilewallpapergraphic.svg";
@@ -18,7 +18,7 @@ import { updateCurrentUserInfo } from "../../redux/actions/users";
 function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
   const match: any = useRouteMatch("/:userId");
   const urlIdParam = match.params.userId.toLowerCase();
-  const [userId, setUserId] = useState(urlIdParam);
+  const userId = urlIdParam;
   const [editorErrorMessage, setEditorErrorMessage] = useState("");
 
   const [inputs, setInputs] = useState({});
@@ -49,11 +49,6 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
       handleToggleEditMode();
     }
   };
-
-  useEffect(() => {
-    const newUrlIdParam = match.params.userId.toLowerCase();
-    setUserId(newUrlIdParam);
-  }, [match.params.userId, urlIdParam]);
 
   return (
     <div className="Profile-page">

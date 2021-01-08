@@ -1,4 +1,4 @@
-import { UPDATE_CURRENT_USER_INFO, UPDATE_USER } from "../actionTypes";
+import { ADD_CONNECTION, REMOVE_CONNECTION, UPDATE_CURRENT_USER_INFO, UPDATE_USER } from "../actionTypes";
 
 const initialState = {
   me: {
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export default function Users(state: any = initialState, action: any) {
-  const userData = action?.payload?.userData;
+  const userData = action?.payload?.userData || {};
   const updateUser = (userId: string) => {
     const newUserData =
       typeof state[userId] === "object"
@@ -16,7 +16,7 @@ export default function Users(state: any = initialState, action: any) {
     return {
       ...state,
       [newUserData.id]: newUserData,
-      me: userId === "me" || state.me.id === userId ? newUserData : state.me,
+      me: (userId === "me" || state.me.id === userId) ? newUserData : state.me,
     };
   };
   switch (action.type) {
@@ -28,6 +28,29 @@ export default function Users(state: any = initialState, action: any) {
     }
     case UPDATE_USER: {
       return userData?.id && updateUser(userData.id);
+    }
+    case REMOVE_CONNECTION: {
+      const userId = state.me.id;
+      const newConnectionsData = state.me.connections;
+      delete newConnectionsData[action?.payload?.connectionId];
+      const newUserData = {...state.me, connections: newConnectionsData};
+      return {
+        ...state,
+        [userId]: newUserData,
+        me: newUserData,
+      };
+    }
+    case ADD_CONNECTION: {
+      const userId = state.me.id;
+      const connectionId = action?.payload?.connectionId;
+      const newConnection = connectionId && {userId: connectionId}
+      const newConnectionsData = {...state.me.connections, newConnection};
+      const newUserData = {...state.me, connections: newConnectionsData};
+      return {
+        ...state,
+        [userId]: newUserData,
+        me: newUserData,
+      };
     }
     default:
       return state;

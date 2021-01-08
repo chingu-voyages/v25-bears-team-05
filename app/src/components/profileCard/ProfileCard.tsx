@@ -37,7 +37,7 @@ function ProfileCard({
   }, [currentUserId]);
 
   useEffect(() => {
-    userId && getUser({ userId });
+    userId && !users?.[userId] && getUser({ userId });
   }, [userId]);
 
   useEffect(() => {
@@ -77,6 +77,7 @@ function ProfileCard({
             })}`
           );
         }
+        setIsAConnection(userData?.isAConnection);
       }
     })();
   }, [userData, currentUserId, threadData, type, userId]);

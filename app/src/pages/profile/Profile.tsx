@@ -16,7 +16,6 @@ import { connect } from "react-redux";
 import { updateCurrentUserInfo } from "../../redux/actions/users";
 
 function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
-  const firstLoad = useRef(true);
   const match: any = useRouteMatch("/:userId");
   const urlIdParam = match.params.userId.toLowerCase();
   const [userId, setUserId] = useState(urlIdParam);
@@ -53,10 +52,7 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
 
   useEffect(() => {
     const newUrlIdParam = match.params.userId.toLowerCase();
-    if (firstLoad.current || newUrlIdParam !== urlIdParam) {
-      firstLoad.current = false;
-      setUserId(newUrlIdParam);
-    }
+    setUserId(newUrlIdParam);
   }, [match.params.userId, urlIdParam]);
 
   return (

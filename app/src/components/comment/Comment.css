@@ -2,11 +2,12 @@
   background: var(--color-black);
   margin-top: 2px;
   padding: 6px 32px;
+  width: 90%;
+  border-radius: 8px;
 }
 
 .Comment__header {
   display: flex;
-
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;

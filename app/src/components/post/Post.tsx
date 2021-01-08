@@ -158,6 +158,7 @@ function Post({
             )
         )}
       </ul>
+      <div className="Post__bullet">•</div>
       <Button
         onClick={() => setShowComments((show) => !show)}
         className="Post__n-of-comments"
@@ -236,7 +237,7 @@ function Post({
   return (
     <>
       {showComments ? (
-        <main>
+        <>
           {postArticle}
           {comments &&
             Object.values(comments).map((commentData) => (
@@ -250,7 +251,7 @@ function Post({
             ))}
           <div ref={commentMakerRef}></div>
           {commentEditorOpen && <PostMaker {...commentMakerOptions} />}
-        </main>
+        </>
       ) : (
         postArticle
       )}

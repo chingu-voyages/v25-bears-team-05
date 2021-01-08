@@ -36,3 +36,9 @@
   box-shadow: none;
   border: 1px solid var(--color-grey-2);
 }
+.Avatar.xxsmall {
+  width: 30px;
+  height: 30px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}

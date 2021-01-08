@@ -4,10 +4,19 @@ import { useHistory } from "react-router-dom";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import { IUsersStore } from "../../services/user/user.type";
 import Avatar from "../avatar";
+import Logo from "../logo";
+import Nav from "../nav";
 import OptionsMenu from "../optionsMenu";
+import Search from "../search";
 import "./TopBar.css";
 
-function TopBar({ users }: { users: IUsersStore }) {
+function TopBar({
+  users,
+  className,
+}: {
+  users: IUsersStore;
+  className?: string;
+}) {
   useEffect(() => {
     if (!users?.me?.id) {
       getCurrentUserInfo();
@@ -15,8 +24,10 @@ function TopBar({ users }: { users: IUsersStore }) {
   }, [users?.me?.id]);
   const history = useHistory();
   return (
-    <nav className="Top-bar">
+    <nav className={`Top-bar ${className || ""}`}>
+      <Logo className="Top-bar__logo" condensed />
       <OptionsMenu
+        className="Top-bar__avatar-menu"
         buttons={{
           "View Profile": {
             type: "link",
@@ -33,6 +44,8 @@ function TopBar({ users }: { users: IUsersStore }) {
       >
         <Avatar size="xsmall" userId="me" />
       </OptionsMenu>
+      <Search className="Top-bar__search" />
+      <Nav className="Top-bar__nav" />
     </nav>
   );
 }

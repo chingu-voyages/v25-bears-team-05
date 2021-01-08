@@ -91,7 +91,13 @@ function ProfileCard({
         <Link className="Profile-card__avatar" to={`/${userId}/profile`}>
           <Avatar
             userId={userId}
-            size={type === "comment" ? "xsmall" : "small"}
+            size={
+              type === "comment"
+                ? "xsmall"
+                : type === "home-page"
+                ? "medium"
+                : "small"
+            }
           />
         </Link>
       )}

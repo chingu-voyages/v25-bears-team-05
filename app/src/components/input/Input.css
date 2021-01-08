@@ -42,6 +42,7 @@
   position: absolute;
   top: 22px;
   right: 12px;
+  color: var(--secondary-text-color);
 }
 .Input__show-password-toggle:focus {
   outline: none;
@@ -49,4 +50,39 @@
 .Input--error ~ .Input__show-password-toggle,
 .Input--error ~ .Input__label--floating {
   color: var(--error-color);
+}
+@media only screen and (min-width: 800px) {
+  .wrapper__Input.breakout-on-large-view {
+    border: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrapper__Input.breakout-on-large-view .Input__label--floating {
+    order: 1;
+    color: var(--primary-text-color);
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: none;
+    font-size: 18px;
+    margin: 6px 0;
+  }
+  .wrapper__Input.breakout-on-large-view .Input {
+    order: 2;
+    border: 1px solid var(--primary-text-color);
+    padding-top: 0;
+    height: 50px;
+    margin-bottom: 6px;
+  }
+  .wrapper__Input.breakout-on-large-view .Input:focus ~ .Input__label--floating,
+  .wrapper__Input.breakout-on-large-view
+    .Input--has-content
+    ~ .Input__label--floating {
+    transform: none;
+  }
+  .wrapper__Input.breakout-on-large-view .Input__show-password-toggle {
+    position: absolute;
+    top: 48px;
+    right: 12px;
+  }
 }

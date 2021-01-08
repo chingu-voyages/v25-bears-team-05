@@ -1,26 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import Avatar from "../avatar";
+import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
-function Nav() {
+function Nav({ className }: { className?: string }) {
   const history = useHistory();
   const pathname = history.location.pathname;
-  const page = pathname.match("network")
-    ? "network"
-    : history.location.hash.match("#newpost")
-    ? "post"
-    : pathname.match("home")
-    ? "home"
-    : "";
+  const [page, setPage] = useState(
+    pathname.match("network")
+      ? "network"
+      : history.location.hash.match("#newpost")
+      ? "post"
+      : pathname.match("home")
+      ? "home"
+      : pathname.match("me/profile")
+      ? "profile"
+      : ""
+  );
+
+  const [userInfo, setUserInfo] = useState<{
+    url: string;
+    firstName: string;
+    lastName: string;
+    id: string;
+  }>();
+  useEffect(() => {
+    getCurrentUserInfo().then((userInfo) => {
+      setUserInfo(userInfo);
+      if (pathname.match(`${userInfo.id}/profile`)) {
+        setPage("profile");
+      }
+    });
+  }, []);
   return (
-    <nav className="Nav">
+    <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>
-        <svg
-          width="21"
-          height="18"
-          viewBox="0 0 21 18"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -29,13 +46,11 @@ function Nav() {
         </svg>
         Home
       </Link>
-      <Link to="/home#newpost" className={page === "post" ? "active" : ""}>
-        <svg
-          width="25"
-          height="25"
-          viewBox="0 0 25 25"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      <Link
+        to="/home#newpost"
+        className={`Nav__post ${page === "post" ? "active" : ""}`}
+      >
+        <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -45,12 +60,7 @@ function Nav() {
         Post
       </Link>
       <Link to="/me/network" className={page === "network" ? "active" : ""}>
-        <svg
-          width="21"
-          height="20"
-          viewBox="0 0 21 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 21 20" xmlns="http://www.w3.org/2000/svg">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -59,6 +69,24 @@ function Nav() {
         </svg>
         My Network
       </Link>
+      <OptionsMenu
+        className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}
+        buttons={{
+          "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
+          "Edit Profile": { type: "link", linkTo: "/me/profile" },
+          Logout: {
+            action: () => {
+              history.push("/logout");
+            },
+            confirm: true,
+          },
+        }}
+      >
+        <>
+          <Avatar size="xxsmall" userId={userInfo?.id} />
+          Me
+        </>
+      </OptionsMenu>
     </nav>
   );
 }

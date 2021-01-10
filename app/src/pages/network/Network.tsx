@@ -64,6 +64,7 @@ function Network({ users }: { users: IUsersStore }) {
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
   );
+
   return (
     <div className="Network-page">
       <header className="Network-page__top-bar--mobile">

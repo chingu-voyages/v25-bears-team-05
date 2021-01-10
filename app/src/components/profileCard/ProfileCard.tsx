@@ -42,42 +42,55 @@ function ProfileCard({
 
   useEffect(() => {
     (async () => {
-      if (userData && threadData) {
+      if (userData) {
+        setIsAConnection(userData?.isAConnection);
         const {
           nOfConnections,
           dateTimeConnected,
         } = userData as IUserProcessed;
-        const { createdAt, updatedAt, visibility } = threadData;
         if (type === "profile") {
           setInfo(
             <Link to="network">
               {Number.isInteger(nOfConnections)
-                ? `${nOfConnections} Connections`
+                ? `${nOfConnections} Connection${(nOfConnections as number) > 1 ? "s" : ""}`
                 : "..."}
             </Link>
           );
-        } else if (type === "connection") {
+        }
+        else if (type === "home-page") {
+          setInfo(
+            <Link to="me/network">
+              <span>Connection{(nOfConnections as number) > 1 ? "s" : ""}</span>{" "}
+              <span className="Profile-card__info__connections-number">
+                {nOfConnections || 0}
+              </span>
+            </Link>
+          );
+        }
+        else if (type === "connection") {
           setInfo(
             convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
           );
-        } else if (type === "thread") {
+        } 
+        if (threadData) {
+          const { createdAt, updatedAt, visibility } = threadData;
           const actionTitle = updatedAt !== createdAt ? "Edited" : "Posted";
-          setInfo(
-            `${actionTitle} ${convertDateStringToTimeAgo({
-              date: updatedAt || "",
-            })} • ${
-              visibility === 0 ? "anyone" : visibility ? "connections" : ""
-            }`
-          );
-        } else if (type === "comment") {
-          const actionTitle = updatedAt !== createdAt ? "Edited" : "Posted";
-          setInfo(
-            `${actionTitle} ${convertDateStringToTimeAgo({
-              date: updatedAt || "",
-            })}`
-          );
+          if (type === "thread") {
+            setInfo(
+              `${actionTitle} ${convertDateStringToTimeAgo({
+                date: updatedAt || "",
+              })} • ${
+                visibility === 0 ? "anyone" : visibility ? "connections" : ""
+              }`
+            );
+          } else if (type === "comment") {
+            setInfo(
+              `${actionTitle} ${convertDateStringToTimeAgo({
+                date: updatedAt || "",
+              })}`
+            );
+          }
         }
-        setIsAConnection(userData?.isAConnection);
       }
     })();
   }, [userData, currentUserId, threadData, type, userId]);

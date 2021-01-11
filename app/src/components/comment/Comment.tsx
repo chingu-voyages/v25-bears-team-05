@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { getUsers } from "../../redux/selectors";
 import { IThreadComment } from "../../services/thread/thread.type";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import { IUsersStore } from "../../services/user/user.type";
@@ -57,7 +58,7 @@ function Comment({
 }
 
 const mapStateToProps = (state: any) => {
-  const { users } = state;
+  const users = getUsers(state);
   return { users };
 };
 

@@ -69,7 +69,7 @@ const processUserData = async (
     avatar,
     id,
     connections,
-    connectionOf
+    connectionOf,
   } = rawData as IUserRawResponse;
   const connectionIds = Object.keys(connections);
   const connectionOfIds = Object.keys(connectionOf);
@@ -82,7 +82,8 @@ const processUserData = async (
     isAConnection: !!(currentUserId && connectionOfIds.includes(currentUserId)),
     id,
     connections,
-    connectionOf
+    connectionOf,
+    isMe: currentUserId === id,
   };
   return processedUserData;
 };
@@ -93,7 +94,7 @@ const updateUser = async ({
   onError,
 }: {
   data: IUserPatchRequest;
-  onSuccess?: () => void;
+  onSuccess?: (data: IUserPatchRequest) => void;
   onError?: (message: string) => void;
 }) => {
   try {
@@ -103,12 +104,7 @@ const updateUser = async ({
       data,
     });
     if (res.status === 200) {
-      const currentUserInfo = await getCurrentUserInfo();
-      store.dispatch({
-        type: UPDATE_CURRENT_USER_INFO,
-        payload: { userData: { ...currentUserInfo, ...data } },
-      });
-      onSuccess?.();
+      onSuccess?.(data);
     } else {
       onError?.(res.statusText);
     }

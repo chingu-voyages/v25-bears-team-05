@@ -36,6 +36,6 @@ export interface IThreadProps {
 }
 
 export interface IFeedItemsProps {
-  suggestion?: ICardInfo;
+  suggestion?: IUserProcessed;
   thread?: IThreadProps;
 }

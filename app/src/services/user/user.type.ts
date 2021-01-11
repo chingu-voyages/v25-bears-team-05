@@ -50,6 +50,7 @@ export interface IUserProcessed extends IUserInfo {
   isTeamMate?: boolean;
   connections?: { [keyof: string]: IUserConnection };
   connectionOf?: { [keyof: string]: IUserConnection };
+  isMe?: boolean;
 }
 
 export interface IUserProfile {

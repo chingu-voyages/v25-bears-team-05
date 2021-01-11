@@ -8,7 +8,7 @@ const removeConnection = async ({
   onError,
 }: {
   connectionId: string;
-  onSuccess?: () => void;
+  onSuccess?: (message: string) => void;
   onError?: (message: string) => void;
 }) => {
   try {
@@ -21,14 +21,14 @@ const removeConnection = async ({
         type: REMOVE_CONNECTION,
         payload: { connectionId },
       });
-      onSuccess?.();
+      onSuccess?.("Connection removed");
     } else {
       onError?.(res.statusText);
     }
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-    onError?.("Connection not removed, please try again later");
+      onError?.("Connection not removed, please try again later");
   }
 };
 
@@ -37,10 +37,10 @@ const addConnection = async ({
   isTeamMate,
   onSuccess,
   onError,
-  }: {
+}: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess?: () => void;
+  onSuccess?: (message: string) => void;
   onError?: (message: string) => void;
 }) => {
   try {
@@ -54,14 +54,14 @@ const addConnection = async ({
         type: ADD_CONNECTION,
         payload: { connectionId },
       });
-      onSuccess?.();
+      onSuccess?.("Connection added");
     } else {
       onError?.(res.statusText);
     }
   } catch (error) {
     console.error(error);
     typeof error?.message === "string" &&
-    onError?.("Connection not added, please try again later");
+      onError?.("Connection not added, please try again later");
   }
 };
 

@@ -4,41 +4,21 @@ import convertDateStringToTimeAgo from "../../utils/convertDateStringToTimeAgo";
 import { Link } from "react-router-dom";
 import "./ProfileCard.css";
 import Avatar from "../avatar";
-import { getUser } from "../../services/user";
 import FollowButton from "../followButton";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
-import { connect } from "react-redux";
 import { IUserProcessed } from "../../services/user/user.type";
 
-function ProfileCard({
-  type,
-  users,
-  userId,
-  className,
-  threadData,
-}: IProfileCard) {
+function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
   const [info, setInfo] = useState<
     string | React.RefAttributes<HTMLAnchorElement>
   >("...");
 
-  const currentUserId = users?.me?.id;
-  const userData = users?.[userId];
   const name = `${userData?.firstName ? userData.firstName : ""} ${
     userData?.lastName ? userData.lastName : ""
   }`.trim();
   const title = userData?.jobTitle || "";
-  const isMe = userId === "me" || currentUserId === userId;
+  const isMe = userData.isMe;
+  const userId = userData.id;
   const [isAConnection, setIsAConnection] = useState(userData?.isAConnection);
-
-  useEffect(() => {
-    if (!currentUserId) {
-      getCurrentUserInfo();
-    }
-  }, [currentUserId]);
-
-  useEffect(() => {
-    userId && !users?.[userId] && getUser({ userId });
-  }, [userId]);
 
   useEffect(() => {
     (async () => {
@@ -52,12 +32,13 @@ function ProfileCard({
           setInfo(
             <Link to="network">
               {Number.isInteger(nOfConnections)
-                ? `${nOfConnections} Connection${(nOfConnections as number) > 1 ? "s" : ""}`
+                ? `${nOfConnections} Connection${
+                    (nOfConnections as number) > 1 ? "s" : ""
+                  }`
                 : "..."}
             </Link>
           );
-        }
-        else if (type === "home-page") {
+        } else if (type === "home-page") {
           setInfo(
             <Link to="me/network">
               <span>Connection{(nOfConnections as number) > 1 ? "s" : ""}</span>{" "}
@@ -66,12 +47,11 @@ function ProfileCard({
               </span>
             </Link>
           );
-        }
-        else if (type === "connection") {
+        } else if (type === "connection") {
           setInfo(
             convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
           );
-        } 
+        }
         if (threadData) {
           const { createdAt, updatedAt, visibility } = threadData;
           const actionTitle = updatedAt !== createdAt ? "Edited" : "Posted";
@@ -93,7 +73,7 @@ function ProfileCard({
         }
       }
     })();
-  }, [userData, currentUserId, threadData, type, userId]);
+  }, [userData, threadData, type]);
 
   return (
     <div
@@ -104,7 +84,7 @@ function ProfileCard({
       {type !== "profile" && (
         <Link className="Profile-card__avatar" to={`/${userId}/profile`}>
           <Avatar
-            userId={userId}
+            userData={userData}
             size={
               type === "comment"
                 ? "xsmall"
@@ -137,9 +117,4 @@ function ProfileCard({
   );
 }
 
-const mapStateToProps = (state: any) => {
-  const { users } = state;
-  return { users };
-};
-
-export default connect(mapStateToProps)(ProfileCard);
+export default ProfileCard;

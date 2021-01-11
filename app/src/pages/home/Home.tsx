@@ -17,8 +17,11 @@ import {
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { getCurrentUser } from "../../redux/selectors";
+import { IUserProcessed } from "../../services/user/user.type";
 
-function Home() {
+function Home({ currentUserData }: { currentUserData: IUserProcessed }) {
   const history = useHistory();
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
@@ -108,7 +111,7 @@ function Home() {
     return (
       <li className="Home-page__feed__list__item">
         {thread && <Post {...thread} />}
-        {suggestion && <ProfileCard type="thread" userId={suggestion.id} />}
+        {suggestion && <ProfileCard type="thread" userData={suggestion} />}
       </li>
     );
   };
@@ -118,7 +121,7 @@ function Home() {
       <TopBar className="Home-page__top-bar" />
       <ProfileCard
         type="home-page"
-        userId="me"
+        userData={currentUserData}
         className="Home-page__profile"
       />
       <div className="Home-page__post-maker-start">
@@ -154,4 +157,9 @@ function Home() {
   );
 }
 
-export default Home;
+const mapStateToProps = (state: any) => {
+  const currentUserData = getCurrentUser(state);
+  return { currentUserData };
+};
+
+export default connect(mapStateToProps)(Home);

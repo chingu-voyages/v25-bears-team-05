@@ -1,4 +1,14 @@
-import { ADD_CONNECTION, REMOVE_CONNECTION, UPDATE_CURRENT_USER_INFO, UPDATE_USER } from "../actionTypes";
+import {
+  addConnection,
+  removeConnection,
+} from "../../services/user/connections";
+import {
+  ADD_CONNECTION,
+  REMOVE_CONNECTION,
+  UPDATE_CURRENT_USER_INFO,
+  UPDATE_USER,
+} from "../actionTypes";
+import handleServiceRequest from "../handleServiceRequest";
 
 const initialState = {
   me: {
@@ -8,7 +18,7 @@ const initialState = {
 
 export default function Users(state: any = initialState, action: any) {
   const userData = action?.payload?.userData || {};
-  const updateUser = (userId: string) => {
+  const getUpdatedUserState = (userId: string) => {
     const newUserData =
       typeof state[userId] === "object"
         ? { ...state[userId], ...userData }
@@ -16,36 +26,53 @@ export default function Users(state: any = initialState, action: any) {
     return {
       ...state,
       [newUserData.id]: newUserData,
-      me: (userId === "me" || state.me.id === userId) ? newUserData : state.me,
+      me: userId === "me" || state.me.id === userId ? newUserData : state.me,
     };
   };
   switch (action.type) {
     case UPDATE_CURRENT_USER_INFO: {
-      const updatedUserData = updateUser("me");
+      const updatedUserData = getUpdatedUserState("me");
       return {
         ...updatedUserData,
       };
     }
     case UPDATE_USER: {
-      return userData?.id && updateUser(userData.id);
+      return userData?.id && getUpdatedUserState(userData.id);
     }
     case REMOVE_CONNECTION: {
-      const userId = state.me.id;
       const newConnectionsData = state.me.connections;
-      delete newConnectionsData[action?.payload?.connectionId];
-      const newUserData = {...state.me, connections: newConnectionsData};
+      const connectionId = action?.payload?.connectionId;
+      delete newConnectionsData[connectionId];
+      const newUserData = { ...state.me, connections: newConnectionsData };
+      handleServiceRequest({
+        requestFunction: removeConnection,
+        requestProps: {
+          connectionId,
+        },
+      });
       return {
         ...state,
-        [userId]: newUserData,
+        [state.me.id]: newUserData,
         me: newUserData,
       };
     }
     case ADD_CONNECTION: {
       const userId = state.me.id;
       const connectionId = action?.payload?.connectionId;
-      const newConnection = connectionId && {userId: connectionId}
-      const newConnectionsData = {...state.me.connections, newConnection};
-      const newUserData = {...state.me, connections: newConnectionsData};
+      const isTeamMate = action?.payload?.isTeamMate;
+      const newConnection = connectionId && {
+        userId: connectionId,
+        isTeamMate,
+      };
+      const newConnectionsData = { ...state.me.connections, newConnection };
+      const newUserData = { ...state.me, connections: newConnectionsData };
+      handleServiceRequest({
+        requestFunction: addConnection,
+        requestProps: {
+          connectionId,
+          isTeamMate,
+        },
+      });
       return {
         ...state,
         [userId]: newUserData,

@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import { addConnection } from "../../services/user";
+import { connect } from "react-redux";
+import { Action } from "redux";
+import { addConnection } from "../../redux/actions/users";
 import Button from "../button";
 import OptionsMenu from "../optionsMenu";
 import Spinner from "../spinner";
 import "./FollowButton.css";
 
 function FollowButton({
+  addConnection,
   connectionName,
   connectionId,
   onFollow,
   className,
 }: {
+  addConnection: ({
+    connectionId,
+    isTeamMate,
+  }: {
+    connectionId: string;
+    isTeamMate: boolean;
+  }) => Action;
   connectionName: string;
   connectionId: string;
   onFollow: () => void;
@@ -19,16 +29,7 @@ function FollowButton({
   const [isInProgress, setIsInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
-    const onSuccess = () => {
-      setIsDone(true);
-      setIsInProgress(false);
-    };
-    setIsInProgress(true);
-    addConnection({
-      connectionId,
-      isTeamMate,
-      onSuccess,
-    });
+    addConnection({ connectionId, isTeamMate });
   };
   const handleClose = () => {
     isDone && onFollow();
@@ -71,4 +72,4 @@ function FollowButton({
   );
 }
 
-export default FollowButton;
+export default connect(null, { addConnection })(FollowButton);

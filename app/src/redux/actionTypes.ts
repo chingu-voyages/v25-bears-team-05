@@ -6,7 +6,7 @@ export const ADD_CONNECTION = "ADD_CONNECTION";
 // dialog
 export const ADD_ERROR_MESSAGE = "ADD_ERROR_MESSAGE";
 export const ADD_SUCCESS_MESSAGE = "ADD_SUCCESS_MESSAGE";
-export const ADD_INFO_MESSAGE = "ADD_INFO_MESSAGE"
+export const ADD_INFO_MESSAGE = "ADD_INFO_MESSAGE";
 export const SET_LOADING = "SET_LOADING";
 export const CLEAR_DIALOG = "CLEAR_DIALOG";
 // thread

@@ -19,7 +19,7 @@ function Network({ users }: { users: IUsersStore }) {
   const handleGoBack = () => history.goBack();
   const connections = Object.values(users[userId]?.connections || {});
   const handleRemoveConnection = (connectionId: string) => {
-    removeConnection({connectionId});
+    removeConnection({ connectionId });
   };
 
   const currentUserId = users?.me?.id;
@@ -33,7 +33,7 @@ function Network({ users }: { users: IUsersStore }) {
 
   useEffect(() => {
     if (userId && !users?.[userId]) {
-      getUser({userId});
+      getUser({ userId });
     }
   }, [userId, users?.[userId]]);
 
@@ -77,7 +77,10 @@ function Network({ users }: { users: IUsersStore }) {
       <main className="Network-page__main">
         <ul className="Network-page__connections-list">
           {connections.map((connectionData) => (
-            <ConnectionItem key={connectionData.userId} {...{ connectionData }} />
+            <ConnectionItem
+              key={connectionData.userId}
+              {...{ connectionData }}
+            />
           ))}
         </ul>
       </main>

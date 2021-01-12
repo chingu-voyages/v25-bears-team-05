@@ -1,14 +1,9 @@
 import {
-  addConnection,
-  removeConnection,
-} from "../../services/user/connections";
-import {
   ADD_CONNECTION,
   REMOVE_CONNECTION,
   UPDATE_CURRENT_USER_INFO,
   UPDATE_USER,
 } from "../actionTypes";
-import handleServiceRequest from "../handleServiceRequest";
 
 const initialState = {
   me: {
@@ -40,16 +35,10 @@ export default function Users(state: any = initialState, action: any) {
       return userData?.id && getUpdatedUserState(userData.id);
     }
     case REMOVE_CONNECTION: {
-      const newConnectionsData = state.me.connections;
+      const newConnectionsData = { ...state.me.connections };
       const connectionId = action?.payload?.connectionId;
       delete newConnectionsData[connectionId];
       const newUserData = { ...state.me, connections: newConnectionsData };
-      handleServiceRequest({
-        requestFunction: removeConnection,
-        requestProps: {
-          connectionId,
-        },
-      });
       return {
         ...state,
         [state.me.id]: newUserData,
@@ -66,13 +55,6 @@ export default function Users(state: any = initialState, action: any) {
       };
       const newConnectionsData = { ...state.me.connections, newConnection };
       const newUserData = { ...state.me, connections: newConnectionsData };
-      handleServiceRequest({
-        requestFunction: addConnection,
-        requestProps: {
-          connectionId,
-          isTeamMate,
-        },
-      });
       return {
         ...state,
         [userId]: newUserData,

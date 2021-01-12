@@ -7,27 +7,28 @@ import store from "./store";
 
 interface IHandleServiceRequestProps {
   requestFunction: any;
-  requestProps: { [keyof: string]: any };
+  requestProps?: { [keyof: string]: any };
 }
 
-const handleServiceRequest = ({
+const handleServiceRequest = async ({
   requestFunction,
   requestProps,
 }: IHandleServiceRequestProps) => {
-  const onSuccess = (message: string) => {
+  const onSuccess = (message?: string) => {
     store.dispatch(setLoading(false));
-    store.dispatch(addSuccessMessage(message));
+    message && store.dispatch(addSuccessMessage(message));
   };
-  const onError = (message: string) => {
+  const onError = (message?: string) => {
     store.dispatch(setLoading(false));
-    store.dispatch(addErrorMessage(message));
+    message && store.dispatch(addErrorMessage(message));
   };
   store.dispatch(setLoading(true));
-  requestFunction({
+  const res = await requestFunction({
     ...requestProps,
     onSuccess,
     onError,
   });
+  return res;
 };
 
 export default handleServiceRequest;

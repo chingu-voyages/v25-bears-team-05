@@ -1,67 +1,33 @@
 import axios from "axios";
-import store from "../../redux/store";
-import { ADD_CONNECTION, REMOVE_CONNECTION } from "../../redux/actionTypes";
 
-const removeConnection = async ({
-  connectionId,
-  onSuccess,
-  onError,
-}: {
-  connectionId: string;
-  onSuccess?: (message: string) => void;
-  onError?: (message: string) => void;
-}) => {
-  try {
-    const res = await axios({
-      method: "delete",
-      url: `/api/users/connections/${connectionId}`,
-    });
-    if (res.status === 200) {
-      store.dispatch({
-        type: REMOVE_CONNECTION,
-        payload: { connectionId },
-      });
-      onSuccess?.("Connection removed");
-    } else {
-      onError?.(res.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError?.("Connection not removed, please try again later");
+const removeConnection = async ({ connectionId }: { connectionId: string }) => {
+  const res = await axios({
+    method: "delete",
+    url: `/api/users/connections/${connectionId}`,
+  });
+  if (res.status === 200) {
+    return "Connection removed";
+  } else {
+    throw "Connection not removed, please try again later";
   }
 };
 
 const addConnection = async ({
   connectionId,
   isTeamMate,
-  onSuccess,
-  onError,
 }: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess?: (message: string) => void;
-  onError?: (message: string) => void;
 }) => {
-  try {
-    const res = await axios({
-      method: "put",
-      url: `/api/users/connections/${connectionId}`,
-      data: { isTeamMate },
-    });
-    if (res.status === 200) {
-      store.dispatch({
-        type: ADD_CONNECTION,
-        payload: { connectionId },
-      });
-      onSuccess?.("Connection added");
-    } else {
-      onError?.(res.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError?.("Connection not added, please try again later");
+  const res = await axios({
+    method: "put",
+    url: `/api/users/connections/${connectionId}`,
+    data: { isTeamMate },
+  });
+  if (res.status === 200) {
+    return "Connection added";
+  } else {
+    throw "Connection not added, please try again later";
   }
 };
 

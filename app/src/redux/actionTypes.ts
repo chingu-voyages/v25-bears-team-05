@@ -11,6 +11,7 @@ export const SET_LOADING = "SET_LOADING";
 export const CLEAR_DIALOG = "CLEAR_DIALOG";
 // thread
 export const ADD_THREAD = "ADD_THREAD";
+export const EDIT_THREAD = "EDIT_THREAD";
 export const REMOVE_THREAD = "REMOVE_THREAD";
 export const ADD_REACTION = "ADD_THREAD_REACTION";
 export const REMOVE_REACTION = "REMOVE_THREAD_REACTION";

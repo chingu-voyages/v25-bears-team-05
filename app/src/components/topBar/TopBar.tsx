@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
-import { IUsersStore } from "../../services/user/user.type";
+import { IUserProcessed } from "../../services/user/user.type";
 import Avatar from "../avatar";
 import Logo from "../logo";
 import Nav from "../nav";
@@ -11,17 +9,12 @@ import Search from "../search";
 import "./TopBar.css";
 
 function TopBar({
-  users,
+  currentUserData,
   className,
 }: {
-  users: IUsersStore;
+  currentUserData: IUserProcessed;
   className?: string;
 }) {
-  useEffect(() => {
-    if (!users?.me?.id) {
-      getCurrentUserInfo();
-    }
-  }, [users?.me?.id]);
   const history = useHistory();
   return (
     <nav className={`Top-bar ${className || ""}`}>
@@ -31,7 +24,7 @@ function TopBar({
         buttons={{
           "View Profile": {
             type: "link",
-            linkTo: `/${users?.me?.id || "me"}/profile`,
+            linkTo: `/${currentUserData?.id || "me"}/profile`,
           },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },
           Logout: {
@@ -42,7 +35,7 @@ function TopBar({
           },
         }}
       >
-        <Avatar size="xsmall" userId="me" />
+        <Avatar size="xsmall" userData={currentUserData} />
       </OptionsMenu>
       <Search className="Top-bar__search" />
       <Nav className="Top-bar__nav" />
@@ -50,9 +43,4 @@ function TopBar({
   );
 }
 
-const mapStateToProps = (state: any) => {
-  const { users } = state;
-  return { users };
-};
-
-export default connect(mapStateToProps)(TopBar);
+export default TopBar;

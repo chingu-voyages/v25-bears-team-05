@@ -4,7 +4,7 @@ import {
   IUserRawResponse,
 } from "./user.type";
 import axios from "axios";
-import { getCurrentUserInfo } from "./currentUserInfo";
+import { getCurrentUserInfo } from "./getCurrentUserData";
 
 const processUserData = (rawData: IUserRawResponse, currentUserId: string) => {
   const {

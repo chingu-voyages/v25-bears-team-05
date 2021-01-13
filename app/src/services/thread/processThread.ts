@@ -1,4 +1,4 @@
-import { getCurrentUserInfo } from "../user/currentUserInfo";
+import { getCurrentUserInfo } from "../user/getCurrentUserData";
 import { getComments } from "./thread";
 import { IThread, IThreadDataProcessed, IThreadComment } from "./thread.type";
 

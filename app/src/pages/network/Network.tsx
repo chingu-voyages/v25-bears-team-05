@@ -8,7 +8,7 @@ import ProfileCard from "../../components/profileCard";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection, IUsersStore } from "../../services/user/user.type";
 import Nav from "../../components/nav";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { getCurrentUserInfo } from "../../services/user/getCurrentUserData";
 import { connect } from "react-redux";
 import TopBar from "../../components/topBar";
 

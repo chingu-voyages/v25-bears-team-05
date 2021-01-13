@@ -1,34 +1,65 @@
-import { INewThreadData } from "./thread.type";
+import { INewThreadData, IThreadPatch } from "./thread.type";
 import axios from "axios";
 import pleaseTryLaterError from "../../utils/pleaseTryLaterError";
 import processThread from "./processThread";
 
-const addThread = async ({ data }: { data: INewThreadData }) => {
-  const req = await axios({
+const addThread = async ({ threadData }: { threadData: INewThreadData }) => {
+  const res = await axios({
     method: "post",
     url: `/api/threads`,
-    data,
+    data: threadData,
   });
-  if (req.data) {
-    const processedThreadData = await processThread(req.data);
+  if (res.data) {
+    const processedThreadData = await processThread(res.data);
     return processedThreadData;
   } else {
     throw pleaseTryLaterError("add your post");
   }
 };
 
-const deleteThread = async ({ threadId }: { threadId: string }) => {
-  const req = await axios({
-    method: "delete",
-    url: `/api/threads/${threadId}`
+const editThread = async ({
+  threadDataPatch,
+  threadId,
+}: {
+  threadDataPatch: IThreadPatch;
+  threadId: string;
+}) => {
+  const res = await axios({
+    method: "patch",
+    url: `/api/threads/${threadId}`,
+    data: threadDataPatch,
   });
-  if (req.status === 200) {
-    return true;
+  if (res.data) {
+    const processedThreadData = await processThread(res.data);
+    return processedThreadData;
+  } else {
+    throw pleaseTryLaterError("edit your post");
   }
-  else {
+};
+
+const getThread = async ({ threadId }: { threadId: string }) => {
+  const res = await axios({
+    method: "get",
+    url: `/api/threads/${threadId}`,
+  });
+  if (res.data) {
+    return res.data;
+  } else {
+    return false;
+  }
+};
+
+const deleteThread = async ({ threadId }: { threadId: string }) => {
+  const res = await axios({
+    method: "delete",
+    url: `/api/threads/${threadId}`,
+  });
+  if (res.status === 200) {
+    return true;
+  } else {
     throw pleaseTryLaterError("delete your thread");
   }
-}
+};
 
 const addThreadReaction = async ({
   threadId,
@@ -37,13 +68,13 @@ const addThreadReaction = async ({
   threadId: string;
   title: string;
 }) => {
-  const req = await axios({
+  const res = await axios({
     method: "post",
     url: `/api/threads/${threadId}/likes`,
     data: { title },
   });
-  if (req.data?.threadLikeDocument) {
-    return req.data.threadLikeDocument;
+  if (res.data?.threadLikeDocument) {
+    return res.data.threadLikeDocument;
   } else {
     throw pleaseTryLaterError("add your reaction");
   }
@@ -56,12 +87,12 @@ const removeThreadReaction = async ({
   threadId: string;
   reactionId: string;
 }) => {
-  const req = await axios({
+  const res = await axios({
     method: "delete",
     url: `/api/threads/${threadId}/likes`,
     data: { threadLikeId: reactionId },
   });
-  if (req.status === 200) {
+  if (res.status === 200) {
     return true;
   } else {
     throw pleaseTryLaterError("remove your reaction");
@@ -75,13 +106,13 @@ const addComment = async ({
   threadId: string;
   data: { content: string };
 }) => {
-  const req = await axios({
+  const res = await axios({
     method: "post",
     url: `/api/threads/${threadId}/comments`,
     data,
   });
-  if (req.status === 200) {
-    return req.data.newComment;
+  if (res.status === 200) {
+    return res.data.newComment;
   } else {
     throw pleaseTryLaterError("add your comment");
   }
@@ -103,23 +134,25 @@ const deleteComment = async ({
   threadId: string;
   commentId: string;
 }) => {
-  const req = await axios({
+  const res = await axios({
     method: "delete",
     url: `/api/threads/${threadId}/comments/${commentId}`,
   });
-  if (req.status === 200) {
-    return {successMessage: "Comment deleted"};
+  if (res.status === 200) {
+    return { successMessage: "Comment deleted" };
   } else {
     throw pleaseTryLaterError("delete your comment");
   }
 };
 
 export {
+  addComment,
   addThread,
   addThreadReaction,
-  removeThreadReaction,
-  addComment,
-  getComments,
   deleteComment,
   deleteThread,
+  editThread,
+  getComments,
+  getThread,
+  removeThreadReaction,
 };

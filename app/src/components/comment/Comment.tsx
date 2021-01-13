@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getUsers } from "../../redux/selectors";
 import { IThreadComment } from "../../services/thread/thread.type";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { getCurrentUserInfo } from "../../services/user/getCurrentUserData";
 import { IUsersStore } from "../../services/user/user.type";
 import ContentClipper from "../contentClipper";
 import OptionsMenu from "../optionsMenu";

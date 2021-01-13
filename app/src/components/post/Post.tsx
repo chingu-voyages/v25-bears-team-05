@@ -18,15 +18,10 @@ import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
-import {
-  addThreadReaction,
-  removeThreadReaction,
-  addComment,
-  deleteComment,
-} from "../../services/thread";
 import Comment from "../comment";
 import PostMaker from "../postMaker";
 import Spinner from "../spinner";
+import { addComment, removeComment } from "../../redux/actions/threads";
 const md = require("markdown-it")();
 
 function Post({
@@ -37,7 +32,6 @@ function Post({
   threadData: IThreadDataProcessed;
   referral?: IThreadReferral;
   className?: string;
-  showComments?: boolean;
 }) {
   const [inProgress, setInProgress] = useState(false);
   const [comments, setComments] = useState(threadData.comments);
@@ -198,12 +192,8 @@ function Post({
       };
       addComment({
         threadId: threadData.id,
-        data: {
+        commentData: {
           content,
-        },
-        onSuccess,
-        onError: (msg: string) => {
-          setMakeCommentError(msg);
         },
       });
     },
@@ -217,20 +207,9 @@ function Post({
 
   const [errorMessage, setErrorMessage] = useState("");
   const handleDeleteComment = ({ commentId }: { commentId: string }) => {
-    setInProgress(true);
-    deleteComment({
+    removeComment({
       threadId: threadData.id,
       commentId,
-      onSuccess: () => {
-        setComments((comments) =>
-          comments.filter((comment) => comment._id !== commentId)
-        );
-        setInProgress(false);
-      },
-      onError: (msg) => {
-        setErrorMessage(msg);
-        setInProgress(false);
-      },
     });
   };
 

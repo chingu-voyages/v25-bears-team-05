@@ -1,19 +1,21 @@
 import {
+  addComment,
   addThread,
   addThreadReaction,
-  removeThreadReaction,
-  addComment,
-  getComments,
   deleteComment,
   deleteThread,
+  getComments,
+  getThread,
+  removeThreadReaction,
 } from "./thread";
 
 export {
+  addComment,
   addThread,
   addThreadReaction,
-  removeThreadReaction,
-  addComment,
-  getComments,
   deleteComment,
   deleteThread,
+  getComments,
+  getThread,
+  removeThreadReaction,
 };

@@ -1,21 +1,52 @@
-import { getUser } from "./user";
+import { fetchUserData } from "../../redux/actions/users";
 import store from "../../redux/store";
 
-const getCurrentUserInfo = async () => {
-  const state = store.getState();
+const getCurrentUserData = async () => {
+  let state = store.getState();
   let currentUserInfo = state?.users.me;
   if (!currentUserInfo?.id) {
-    const userData = await getUser({
+    const userData = await fetchUserData({
       userId: "me",
-      onError: (msg) => {
-        console.error(msg);
-      },
     });
-    if (userData?.id) {
-      currentUserInfo = userData;
-    }
+    await userData;
+    state = store.getState();
+    currentUserInfo = state?.users.me;
   }
   return currentUserInfo;
 };
 
-export { getCurrentUserInfo };
+const isAConnection = (id: string) => {
+  const state = store.getState();
+  const currentUserInfo = state?.users.me;
+  if (!currentUserInfo.id) {
+    return undefined;
+  }
+  return currentUserInfo.connections.some(
+    ({ userId }: { userId: string }) => userId === id
+  );
+};
+
+const isAConnectionOf = (id: string) => {
+  const state = store.getState();
+  const currentUserInfo = state?.users.me;
+  if (!currentUserInfo.id) {
+    return undefined;
+  }
+  return currentUserInfo.connectionsOf.some(
+    ({ userId }: { userId: string }) => userId === id
+  );
+};
+
+const isCurrentUser = (id: string) => {
+  if (id === "me") {
+    return true;
+  }
+  const state = store.getState();
+  const currentUserInfo = state?.users.me;
+  if (!currentUserInfo.id) {
+    return undefined;
+  }
+  return currentUserInfo.id === id;
+};
+
+export { getCurrentUserData, isAConnection, isAConnectionOf, isCurrentUser };

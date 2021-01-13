@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { getCurrentUserInfo } from "../../services/user/getCurrentUserData";
 import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";

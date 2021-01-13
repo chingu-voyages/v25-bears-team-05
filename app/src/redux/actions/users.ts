@@ -14,7 +14,7 @@ import {
 } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
 
-export const updateCurrentUser = (userData: IUserPatchRequest) => {
+export const editCurrentUser = (userData: IUserPatchRequest) => {
   return async (dispatch: Dispatch) => {
     const res = await handleServiceRequest({
       requestFunction: updateUserService,

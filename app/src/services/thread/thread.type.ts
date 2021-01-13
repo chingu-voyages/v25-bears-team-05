@@ -98,3 +98,11 @@ export interface IThreadDataProcessed {
   updatedAt: string;
   createdAt: string;
 }
+
+export interface IThreadPatch {
+  threadId?: string;
+  htmlContent?: string;
+  threadType?: ThreadType;
+  visibility?: ThreadVisibility;
+  hashTags?: Array<string>;
+}

@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export default function Users(state: any = initialState, action: any) {
-  const userData = action?.payload?.userData || {};
+  const userData = action.payload?.userData || {};
   const getUpdatedUserState = (userId: string) => {
     const newUserData =
       typeof state[userId] === "object"
@@ -36,7 +36,7 @@ export default function Users(state: any = initialState, action: any) {
     }
     case REMOVE_CONNECTION: {
       const newConnectionsData = { ...state.me.connections };
-      const connectionId = action?.payload?.connectionId;
+      const { connectionId } = action.payload;
       delete newConnectionsData[connectionId];
       const newUserData = { ...state.me, connections: newConnectionsData };
       return {
@@ -47,9 +47,8 @@ export default function Users(state: any = initialState, action: any) {
     }
     case ADD_CONNECTION: {
       const userId = state.me.id;
-      const connectionId = action?.payload?.connectionId;
-      const isTeamMate = action?.payload?.isTeamMate;
-      const newConnection = connectionId && {
+      const { connectionId, isTeamMate } = action.payload;
+      const newConnection = {
         userId: connectionId,
         isTeamMate,
       };

@@ -5,6 +5,7 @@ import {
   addComment,
   getComments,
   deleteComment,
+  deleteThread,
 } from "./thread";
 
 export {
@@ -14,4 +15,5 @@ export {
   addComment,
   getComments,
   deleteComment,
+  deleteThread,
 };

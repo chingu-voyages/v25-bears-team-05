@@ -14,21 +14,17 @@ const handleServiceRequest = async ({
   requestFunction,
   requestProps,
 }: IHandleServiceRequestProps) => {
-  const onSuccess = (message?: string) => {
-    store.dispatch(setLoading(false));
-    message && store.dispatch(addSuccessMessage(message));
-  };
-  const onError = (message?: string) => {
-    store.dispatch(setLoading(false));
-    message && store.dispatch(addErrorMessage(message));
-  };
   store.dispatch(setLoading(true));
-  const res = await requestFunction({
-    ...requestProps,
-    onSuccess,
-    onError,
-  });
-  return res;
+  try {
+    const res = await requestFunction(requestProps);   
+    res.successMessage && store.dispatch(addSuccessMessage(res.successMessage));
+    return res;
+  } catch (error) {
+    error && store.dispatch(addErrorMessage(error));
+    return false;
+  } finally {
+    store.dispatch(setLoading(false));
+  }
 };
 
 export default handleServiceRequest;

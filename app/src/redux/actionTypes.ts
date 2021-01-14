@@ -17,3 +17,6 @@ export const ADD_REACTION = "ADD_THREAD_REACTION";
 export const REMOVE_REACTION = "REMOVE_THREAD_REACTION";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const REMOVE_COMMENT = "REMOVE_COMMENT";
+// feed
+export const UPDATE_FEED = "UPDATE_FEED";
+export const SET_FEED_QUERY = "SET_FEED_QUERY";

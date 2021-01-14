@@ -11,7 +11,7 @@ const initialState = {
   },
 };
 
-export default function Users(state: any = initialState, action: any) {
+export default function users(state: any = initialState, action: any) {
   const userData = action.payload?.userData || {};
   const getUpdatedUserState = (userId: string) => {
     const newUserData =

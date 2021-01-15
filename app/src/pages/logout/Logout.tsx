@@ -1,19 +1,22 @@
 import React, { useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import Spinner from "../../components/spinner";
+import { setIsLoggedIn } from "../../redux/actions/session";
 import logout from "../../services/logout";
 
-function Logout({ onLogout }: { onLogout: () => void }) {
+function Logout({ setIsLoggedIn }) {
   useEffect(() => {
-    onLogout();
-    logout();
+    async () => {
+      await logout();
+      setIsLoggedIn(false);
+      // redirect to root
+    };
   }, []);
   return (
     <div>
-      <Spinner message="logging out" />
-      <Redirect to="/" />
+      <Spinner message="Signing out" />
     </div>
   );
 }
 
-export default Logout;
+export default connect(null, { setIsLoggedIn })(Logout);

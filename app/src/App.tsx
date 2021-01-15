@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
@@ -6,32 +6,21 @@ import Landing from "./pages/landing";
 import Network from "./pages/network";
 import Profile from "./pages/profile";
 import Signup from "./pages/signup";
-import checkIfAuthed from "./services/checkIfAuthed";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
-import Loading from "./pages/loading";
+import { connect } from "react-redux";
 
-function App() {
-  const [authChecked, setAuthChecked] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    checkIfAuthed({
-      setDone: (authed: boolean) => {
-        setIsLoggedIn(authed);
-        setAuthChecked(true);
-      },
-    });
-  }, []);
-  return !authChecked ? (
-    <Loading message="Checking auth" />
+function App({ isLoggedIn }) {
+  return isLoggedIn === undefined ? (
+    <Login />
   ) : (
     <Router>
       <Switch>
         <Route path="/logout">
-          <Logout onLogout={() => setIsLoggedIn(false)} />
+          <Logout />
         </Route>
         <Route path="/login">
-          <Login setIsLoggedIn={setIsLoggedIn} />
+          <Login />
         </Route>
         <ProtectedRoute
           path="/:userId/network"
@@ -68,4 +57,10 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+  const { session } = state;
+  const isLoggedIn = session.isLoggedin;
+  return { isLoggedIn };
+};
+
+export default connect(mapStateToProps)(App);

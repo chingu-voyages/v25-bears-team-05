@@ -1,19 +1,25 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import Spinner from "../../components/spinner";
+import { setIsLoggedIn } from "../../redux/actions/session";
 import checkIfAuthed from "../../services/checkIfAuthed";
 
-function Login({
-  setIsLoggedIn,
-}: {
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  checkIfAuthed({ setDone: setIsLoggedIn });
+function Login({ setIsLoggedIn }) {
+  useEffect(() => {
+    (async () => {
+      const isAuthed = await checkIfAuthed();
+      setIsLoggedIn(isAuthed);
+      // if undefined show error
+      // if false redirect to logout
+      // if true redirect to root
+    })();
+  }, []);
+
   return (
     <div>
-      <h1>logging in</h1>
-      <Redirect to="/" />
+      <Spinner message="Checking authenication" />
     </div>
   );
 }
 
-export default Login;
+export default connect(null, { setIsLoggedIn })(Login);

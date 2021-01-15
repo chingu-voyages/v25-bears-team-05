@@ -1,7 +1,9 @@
 import { SET_IS_LOGGED_IN } from "../actionTypes";
 
-const initialState = {
-  isLoggedIn: false,
+const initialState: {
+  isLoggedIn: boolean | undefined;
+} = {
+  isLoggedIn: undefined,
 };
 
 export default function session(state: any = initialState, action: any) {

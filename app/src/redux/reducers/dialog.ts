@@ -1,3 +1,4 @@
+import { IActionProps } from "../actions/actions.type";
 import {
   ADD_ERROR_MESSAGE,
   ADD_SUCCESS_MESSAGE,
@@ -5,6 +6,7 @@ import {
   SET_LOADING,
   CLEAR_DIALOG,
 } from "../actionTypes";
+import { IStoreState } from "../store.type";
 
 type TMessage = "error" | "success" | "info";
 const initialState: {
@@ -15,7 +17,10 @@ const initialState: {
   log: [],
 };
 
-export default function dialog(state: any = initialState, action: any) {
+export default function dialog(
+  state: IStoreState["dialog"] = initialState,
+  action: IActionProps
+) {
   const handleAddMessage = (type: TMessage) => {
     const newLog = [{ type, message: action.payload.message }, ...state.log];
     return {

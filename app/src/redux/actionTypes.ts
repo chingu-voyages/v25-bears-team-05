@@ -10,7 +10,7 @@ export const ADD_INFO_MESSAGE = "ADD_INFO_MESSAGE";
 export const SET_LOADING = "SET_LOADING";
 export const CLEAR_DIALOG = "CLEAR_DIALOG";
 // thread
-export const ADD_THREAD = "ADD_THREAD";
+export const PUT_THREAD = "PUT_THREAD";
 export const EDIT_THREAD = "EDIT_THREAD";
 export const REMOVE_THREAD = "REMOVE_THREAD";
 export const ADD_REACTION = "ADD_THREAD_REACTION";

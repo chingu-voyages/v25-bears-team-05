@@ -1,7 +1,9 @@
-// users
-export const getUsers = (store: any) => store.users;
+import { IStoreState } from "./store.type";
 
-export const getCurrentUser = (store: any) => store.users.me;
+// users
+export const getUsers = (store: IStoreState) => store.users;
+
+export const getCurrentUser = (store: IStoreState) => store.users.me;
 
 // session
 // isLoggedIn

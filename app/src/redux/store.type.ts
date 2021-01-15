@@ -1,62 +1,38 @@
-export interface IStoreFeedReferral {
-  type: string;
-  reason: string;
-}
-export interface IStoreUserConnection {
-  userId: string;
-  dateTimeConnected?: string;
-  isTeamMate?: boolean;
-}
-export interface IStoreUserData {
-  firstName: string;
-  lastName: string;
-  jobTitle: string;
-  avatarUrls: Array<String>;
-  id: string;
-  nOfConnections?: number | null;
-  isAConnection?: boolean;
-  connections?: { [userId: string]: IStoreUserConnection };
-  connectionOf?: { [userId: string]: IStoreUserConnection };
-  isMe?: boolean;
-}
-export interface IStoreThreadData {
+import { IFeedReferral } from "../services/feed/feed.type";
+import { IThreadFork, ThreadVisibility } from "../services/thread/thread.type";
+import { IUser } from "../services/user/user.type";
+
+export interface IStoreStateThreadData {
   _id: string;
   postedByUserId: string;
-  visibility: "anyone" | "connections";
+  visibility: ThreadVisibility;
   content: {
     html: string;
   };
-  comments: {
-    [commentId: string]: {
-      _id: string;
-      content: {
-        html: string;
-      };
-      updatedAt: string;
-      createdAt: string;
-      postedByUserId: string;
+  comments: Array<{
+    _id: string;
+    content: {
+      html: string;
     };
+    updatedAt: string;
+    createdAt: string;
+    postedByUserId: string;
+  }>;
+  reactionsCount: {
+    [title: string]: number;
   };
-  likes: {
-    [likeId: string]: {
-      _id: string;
-      title: string;
-      updatedAt: string;
-      createdAt: string;
-      postedByUserId: string;
-    };
+  currentUserReactions: {
+    [title: string]: string | false;
   };
   forks: {
-    [threadId: string]: {
-      postedByUserId: string;
-    };
+    [threadId: string]: IThreadFork;
   };
   isAFork: boolean;
   updatedAt: string;
   createdAt: string;
 }
 
-export interface IStore {
+export interface IStoreState {
   dialog: {
     loading: boolean;
     log: Array<{ type: "error" | "success" | "info"; message: string }>;
@@ -66,14 +42,12 @@ export interface IStore {
       [dateTime: string]: {
         threads?: {
           [threadId: string]: {
-            threadData: {};
-            refferal: IStoreFeedReferral;
+            refferal: IFeedReferral;
           };
         };
         users?: {
           [userId: string]: {
-            userData: IStoreUserData;
-            refferal: IStoreFeedReferral;
+            refferal: IFeedReferral;
           };
         };
       };
@@ -88,9 +62,9 @@ export interface IStore {
     isLoggedIn: boolean | undefined;
   };
   threads: {
-    [threadId: string]: IStoreThreadData;
+    [threadId: string]: IStoreStateThreadData;
   };
   users: {
-    [userId: string]: IStoreUserData;
+    [userId: string]: IUser;
   };
 }

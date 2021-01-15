@@ -10,17 +10,19 @@ import {
 } from "../../services/thread";
 import {
   INewThreadData,
+  IRawResponseThread,
   IThreadPatch,
 } from "../../services/thread/thread.type";
 import {
   ADD_COMMENT,
   ADD_REACTION,
-  ADD_THREAD,
+  PUT_THREAD,
   REMOVE_COMMENT,
   REMOVE_REACTION,
   REMOVE_THREAD,
 } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
+import processThread from "../../services/thread/processThread";
 
 export const addThread = (threadData: INewThreadData) => {
   return async (dispatch: Dispatch) => {
@@ -28,13 +30,7 @@ export const addThread = (threadData: INewThreadData) => {
       requestFunction: addThreadService,
       requestProps: { threadData },
     });
-    resData &&
-      dispatch({
-        type: ADD_THREAD,
-        payload: {
-          threadData: resData,
-        },
-      });
+    resData && dispatch(updateThread(resData));
   };
 };
 
@@ -44,22 +40,19 @@ export const editThread = (threadDataPatch: IThreadPatch) => {
       requestFunction: editThreadService,
       requestProps: { threadDataPatch },
     });
-    resData &&
-      dispatch({
-        type: ADD_THREAD,
-        payload: {
-          threadData: resData,
-        },
-      });
+    resData && dispatch(updateThread(resData));
   };
 };
 
-export const updateThread = (threadData: INewThreadData) => ({
-  type: ADD_THREAD,
-  payload: {
-    threadData,
-  },
-});
+export const updateThread = (threadData: IRawResponseThread) => {
+  const processedThread = processThread(threadData);
+  return {
+    type: PUT_THREAD,
+    payload: {
+      threadData: processedThread,
+    },
+  };
+};
 
 export const fetchThread = (threadId: string) => {
   return async (dispatch: Dispatch) => {

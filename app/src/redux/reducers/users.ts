@@ -1,17 +1,18 @@
+import { IActionProps } from "../actions/actions.type";
 import {
   ADD_CONNECTION,
   REMOVE_CONNECTION,
   UPDATE_CURRENT_USER_INFO,
   UPDATE_USER,
 } from "../actionTypes";
+import { IStoreState } from "../store.type";
 
-const initialState = {
-  me: {
-    id: "",
-  },
-};
+const initialState = {};
 
-export default function users(state: any = initialState, action: any) {
+export default function users(
+  state: IStoreState["users"] = initialState,
+  action: IActionProps
+) {
   const userData = action.payload?.userData || {};
   const getUpdatedUserState = (userId: string) => {
     const newUserData =

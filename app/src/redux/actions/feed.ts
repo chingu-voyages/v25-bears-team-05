@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { getFeed } from "../../services/feed/feed";
+import { IRawResponseFeed } from "../../services/feed/feed.type";
 import {
   SET_FEED_QUERY,
   SET_LAST_BUCKET_REACHED,
@@ -7,26 +8,35 @@ import {
 } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
 import store from "../store";
+import { IStoreState } from "../store.type";
 import { updateThread } from "./threads";
+import { updateUser } from "./users";
 
-export const updateFeed = (buckets) => {
+export const updateFeed = (buckets: IRawResponseFeed) => {
   // Split out thread and user data from buckets and add to or update in thread and user stores
-  const newBuckets = { ...buckets };
+  const newBuckets: any = { ...buckets };
   Object.entries(buckets).forEach(([bucketKey, bucketValue]) => {
     const { threads, users } = bucketValue;
-    Object.entries(threads).forEach(([threadKey, threadValue]) => {
-      updateThread(threadValue.threadData);
-      delete newBuckets[bucketKey][threadKey].threadData;
-    });
-    Object.entries(users).forEach(([userKey, userValue]) => {
-      updateThread(userValue.threadData);
-      delete newBuckets[bucketKey][userKey].threadData;
-    });
+    threads &&
+      Object.entries(threads).forEach(([threadKey, threadValue]) => {
+        updateThread(threadValue.threadData);
+        const { threadData, ...threadValueWithoutThreadData } = threadValue;
+        if (newBuckets?.[bucketKey]?.threads?.[threadKey]?.threadData) {
+          newBuckets[bucketKey].threads[
+            threadKey
+          ] = threadValueWithoutThreadData;
+        }
+      });
+    users &&
+      Object.entries(users).forEach(([userKey, userValue]) => {
+        updateUser(userValue.userData);
+        delete newBuckets[bucketKey][userKey].threadData;
+      });
   });
   return {
     type: UPDATE_FEED,
     payload: {
-      buckets: newBuckets,
+      buckets: newBuckets as IStoreState["feed"]["buckets"],
     },
   };
 };

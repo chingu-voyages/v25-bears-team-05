@@ -1,21 +1,26 @@
+import { IActionProps } from "../actions/actions.type";
 import {
-  ADD_THREAD,
+  PUT_THREAD,
   REMOVE_THREAD,
   ADD_REACTION,
   REMOVE_REACTION,
   ADD_COMMENT,
   REMOVE_COMMENT,
 } from "../actionTypes";
+import { IStoreState } from "../store.type";
 
 const initialState = {};
 
-export default function threads(state: any = initialState, action: any) {
+export default function threads(
+  state: IStoreState["threads"] = initialState,
+  action: IActionProps
+) {
   switch (action.type) {
-    case ADD_THREAD: {
+    case PUT_THREAD: {
       const { threadData } = action.payload;
       return {
         ...state,
-        [threadData.id]: threadData,
+        [threadData._id]: threadData,
       };
     }
     case REMOVE_THREAD: {
@@ -25,7 +30,7 @@ export default function threads(state: any = initialState, action: any) {
       return newState;
     }
     case ADD_REACTION: {
-      const {threadId, title, reactionId} = action.payload;
+      const { threadId, title, reactionId } = action.payload;
       const newThreadData = { ...state[threadId] };
       if (newThreadData.reactionsCount[title]) {
         newThreadData.reactionsCount[title]++;
@@ -35,7 +40,7 @@ export default function threads(state: any = initialState, action: any) {
       newThreadData.currentUserReactions[title] = reactionId;
       return {
         ...state,
-        [newThreadData.id]: newThreadData,
+        [newThreadData._id]: newThreadData,
       };
     }
     case REMOVE_REACTION: {
@@ -49,7 +54,7 @@ export default function threads(state: any = initialState, action: any) {
       newThreadData.currentUserReactions[title] = false;
       return {
         ...state,
-        [newThreadData.id]: newThreadData,
+        [newThreadData._id]: newThreadData,
       };
     }
     case ADD_COMMENT: {
@@ -62,7 +67,7 @@ export default function threads(state: any = initialState, action: any) {
       }
       return {
         ...state,
-        [newThreadData.id]: newThreadData,
+        [newThreadData._id]: newThreadData,
       };
     }
     case REMOVE_COMMENT: {
@@ -70,11 +75,11 @@ export default function threads(state: any = initialState, action: any) {
       const newThreadData = { ...state[threadId] };
       if (newThreadData.comments) {
         newThreadData.comments = newThreadData.comments.filter(
-          (id: string) => id !== commentId
+          (_id) => _id !== commentId
         );
         return {
           ...state,
-          [newThreadData.id]: newThreadData,
+          [newThreadData._id]: newThreadData,
         };
       }
       return state;

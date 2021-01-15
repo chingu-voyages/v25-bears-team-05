@@ -1,41 +1,26 @@
-import { ICardInfo } from "../../components/profileCard/profileCard.type";
-import {
-  IThreadReferral,
-  IThreadDataProcessed,
-  IThread,
-} from "../thread/thread.type";
-import { IUserProcessed } from "../user/user.type";
+import { IRawResponseThread } from "../thread/thread.type";
+import { IUser } from "../user/user.type";
 
-export interface IProcessedThreadFeed {
-  threadData?: IThreadDataProcessed;
-  referral?: IThreadReferral;
-  className?: string;
+export interface IFeedReferral {
+  type: string;
+  reason: string;
 }
 
-export interface IProcessedSuggestionFeed {
-  profileData: ICardInfo;
-  referral?: IThreadReferral;
+export interface IRawResponseBucket {
+  threads?: {
+    [threadId: string]: {
+      threadData: IRawResponseThread;
+      refferal: IFeedReferral;
+    };
+  };
+  users?: {
+    [userId: string]: {
+      userData: IUser;
+      refferal: IFeedReferral;
+    };
+  };
 }
 
-export interface IFeedRawResponse {
-  connectionThreads: Array<IThread>;
-  connectionSuggestions: Array<IUserProcessed>;
-  publicThreads: Array<IThread>;
-}
-
-export interface IFeedProcessedResponse {
-  connectionThreads: Array<{ thread: IProcessedThreadFeed }>;
-  connectionSuggestions: Array<{ suggestion: IProcessedSuggestionFeed }>;
-  publicThreads: Array<{ thread: IProcessedThreadFeed }>;
-}
-
-export interface IThreadProps {
-  threadData: IThreadDataProcessed;
-  referral?: IThreadReferral;
-  className?: string;
-}
-
-export interface IFeedItemsProps {
-  suggestion?: IUserProcessed;
-  thread?: IThreadProps;
+export interface IRawResponseFeed {
+  [dateTime: string]: IRawResponseBucket;
 }

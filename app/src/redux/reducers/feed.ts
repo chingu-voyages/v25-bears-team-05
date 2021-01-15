@@ -1,8 +1,10 @@
+import { IActionProps } from "../actions/actions.type";
 import {
   SET_FEED_QUERY,
   SET_LAST_BUCKET_REACHED,
   UPDATE_FEED,
 } from "../actionTypes";
+import { IStoreState } from "../store.type";
 
 const initialState = {
   buckets: {},
@@ -13,7 +15,10 @@ const initialState = {
   },
 };
 
-export default function feed(state: any = initialState, action: any) {
+export default function feed(
+  state: IStoreState["feed"] = initialState,
+  action: IActionProps
+) {
   switch (action.type) {
     case UPDATE_FEED: {
       return {

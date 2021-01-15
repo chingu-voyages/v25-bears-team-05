@@ -1,12 +1,14 @@
-import { getCurrentUserInfo } from "../user/getCurrentUserData";
+import store from "../../redux/store";
+import { IStoreStateThreadData } from "../../redux/store.type";
 import { getComments } from "./thread";
-import { IThread, IThreadDataProcessed, IThreadComment } from "./thread.type";
+import { IThreadComment, IRawResponseThread } from "./thread.type";
 
 export default async function processThread(
-  threadData: IThread
-): Promise<IThreadDataProcessed> {
+  threadData: IRawResponseThread
+): Promise<IStoreStateThreadData> {
   const comments = await getComments({ threadId: threadData._id });
-  const currentUserInfo = await getCurrentUserInfo();
+  const { users } = store.getState();
+  const currentUserInfo = users.me;
   const currentUserId = currentUserInfo?.id;
   const sortCommentsByDate = (arr: IThreadComment[]) =>
     arr.sort(
@@ -14,11 +16,10 @@ export default async function processThread(
         parseInt(b.updatedAt.replace(/[-.:\D]/g, "")) -
         parseInt(a.updatedAt.replace(/[-.:\D]/g, ""))
     );
-  const processedThreadData: IThreadDataProcessed = {
-    id: threadData._id,
+  const processedThreadData: IStoreStateThreadData = {
+    _id: threadData._id,
     content: threadData.content,
     postedByUserId: threadData.postedByUserId,
-    threadType: threadData.threadType,
     visibility: threadData.visibility,
     reactionsCount: {},
     currentUserReactions: {},
@@ -27,9 +28,11 @@ export default async function processThread(
       sortCommentsByDate(Object.values(comments.threadComments)),
     updatedAt: threadData.updatedAt,
     createdAt: threadData.createdAt,
+    forks: threadData.forks,
+    isAFork: threadData.isAFork,
   };
-  threadData.likes &&
-    Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
+  threadData.reactions &&
+    Object.entries(threadData.reactions)?.forEach(([id, reaction]) => {
       const type = reaction.title;
       processedThreadData.reactionsCount[type] =
         (processedThreadData.reactionsCount[type] || 0) + 1;

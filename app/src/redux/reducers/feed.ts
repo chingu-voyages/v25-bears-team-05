@@ -2,7 +2,6 @@ import {
   SET_FEED_QUERY,
   SET_LAST_BUCKET_REACHED,
   UPDATE_FEED,
-  UPDATE_FETCH_LASTEST_TIMESTAMP,
 } from "../actionTypes";
 
 const initialState = {

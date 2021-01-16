@@ -6,7 +6,7 @@ import { IThreadComment, IRawResponseThread } from "./thread.type";
 export default async function processThread(
   threadData: IRawResponseThread
 ): Promise<IStoreStateThreadData> {
-  const comments = await getComments({ threadId: threadData._id });
+  const comments = await getComments({ threadId: threadData.id });
   const { users } = store.getState();
   const currentUserInfo = users.me;
   const currentUserId = currentUserInfo?.id;
@@ -17,7 +17,7 @@ export default async function processThread(
         parseInt(a.updatedAt.replace(/[-.:\D]/g, ""))
     );
   const processedThreadData: IStoreStateThreadData = {
-    _id: threadData._id,
+    id: threadData.id,
     content: threadData.content,
     postedByUserId: threadData.postedByUserId,
     visibility: threadData.visibility,

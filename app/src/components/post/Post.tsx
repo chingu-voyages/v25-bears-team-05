@@ -221,10 +221,10 @@ function Post({
           {comments &&
             Object.values(comments).map((commentData) => (
               <Comment
-                key={commentData._id}
+                key={commentData.id}
                 {...{ commentData }}
                 handleDeleteComment={() =>
-                  handleDeleteComment({ commentId: commentData._id })
+                  handleDeleteComment({ commentId: commentData.id })
                 }
               />
             ))}

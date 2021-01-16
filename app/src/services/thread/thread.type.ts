@@ -1,5 +1,5 @@
 export interface IThreadComment {
-  _id: string;
+  id: string;
   postedByUserId: string;
   content: string;
   updatedAt: string;
@@ -35,7 +35,7 @@ export enum ThreadVisibility {
 }
 
 export interface IRawResponseThread {
-  _id: string;
+  id: string;
   postedByUserId: string;
   threadType: ThreadType;
   visibility: ThreadVisibility;

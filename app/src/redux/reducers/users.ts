@@ -22,7 +22,7 @@ export default function users(
     return {
       ...state,
       [newUserData.id]: newUserData,
-      me: userId === "me" || state.me.id === userId ? newUserData : state.me,
+      me: state[userId].isMe ? newUserData : state.me,
     };
   };
   switch (action.type) {

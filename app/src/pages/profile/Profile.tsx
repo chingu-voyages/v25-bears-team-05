@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { useRouteMatch } from "react-router-dom";
 import wallpaper from "../../images/profilewallpapergraphic.svg";
 import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
-import { updateUser } from "../../services/user";
-import { IUserProcessed } from "../../services/user/user.type";
+import { IUser, IUserPatch } from "../../services/user/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 import { connect } from "react-redux";
-import { updateCurrentUserInfo } from "../../redux/actions/users";
+import { editCurrentUser, fetchUserData } from "../../redux/actions/users";
 
-function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
+function Profile({
+  users,
+  editCurrentUser,
+}: {
+  users: { [keyof: string]: IUser };
+  editCurrentUser: (userData: IUserPatch) => void;
+}) {
   const match: any = useRouteMatch("/:userId");
   const urlIdParam = match.params.userId.toLowerCase();
-  const userId = urlIdParam;
-  const [editorErrorMessage, setEditorErrorMessage] = useState("");
+  const userId: string = urlIdParam;
+  const userData = users?.[userId];
+  const currentUserData = users.me;
 
   const [inputs, setInputs] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -27,9 +33,9 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
     const editingMode = !isEditing;
     if (editingMode) {
       const inputValues = {
-        firstName: users?.[userId]?.firstName,
-        lastName: users?.[userId]?.lastName,
-        jobTitle: users?.[userId]?.jobTitle,
+        firstName: userData?.firstName,
+        lastName: userData?.lastName,
+        jobTitle: userData?.jobTitle,
       };
       setInputs(inputValues);
     }
@@ -37,22 +43,31 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
   };
 
   const handleUpdateInfo = () => {
-    const onSuccess = () => {
-      handleToggleEditMode();
-    };
     const inputsHaveChanged = Object.entries(inputs).some(
-      ([key, value]) => value !== ((users?.[userId] as unknown) as any)[key]
+      ([key, value]) => value !== ((userData as unknown) as any)[key]
     );
     if (inputsHaveChanged) {
-      updateUser({ data: inputs, onSuccess, onError: setEditorErrorMessage });
+      editCurrentUser({ ...inputs });
     } else {
       handleToggleEditMode();
     }
   };
 
+  useEffect(() => {
+    if (!userData) {
+      fetchUserData(userId);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (!currentUserData) {
+      fetchUserData("me");
+    }
+  }, [currentUserData]);
+
   return (
     <div className="Profile-page">
-      <TopBar />
+      <TopBar currentUserData={users.me} />
       <main className="Profile-page__profile">
         <div className="wrapper__Profile-page__wall-paper">
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
@@ -65,12 +80,12 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
               urlPropertyName: "avatar",
             }}
             onUpload={(url) =>
-              updateCurrentUserInfo({
-                avatar: [{ url }, ...users?.[userId]?.avatar],
+              editCurrentUser({
+                avatarUrls: [url, ...userData.avatarUrls],
               })
             }
           >
-            <Avatar userId={userId} />
+            <Avatar userData={userData} />
           </PhotoUploader>
         </figure>
         <div className="Profile-page__info">
@@ -94,13 +109,13 @@ function Profile({ users }: { users: { [keyof: string]: IUserProcessed } }) {
           )}
           {isEditing ? (
             <ProfileEditor
-              {...{ inputs, setInputs, errorMessage: editorErrorMessage }}
+              {...{ inputs, setInputs }}
               className="Profile-page__editor"
             />
           ) : (
             <ProfileCard
               type="profile"
-              userId={userId}
+              userData={userData}
               className="Profile-page__info__text"
             />
           )}
@@ -116,4 +131,4 @@ const mapStateToProps = (state: any) => {
   return { users };
 };
 
-export default connect(mapStateToProps, { updateCurrentUserInfo })(Profile);
+export default connect(mapStateToProps, { editCurrentUser })(Profile);

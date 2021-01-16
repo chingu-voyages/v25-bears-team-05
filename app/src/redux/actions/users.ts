@@ -5,7 +5,7 @@ import {
   removeConnection as removeConnectionService,
   updateUser as updateUserService,
 } from "../../services/user";
-import { IUserPatchRequest } from "../../services/user/user.type";
+import { IUserPatch } from "../../services/user/user.type";
 import {
   ADD_CONNECTION,
   REMOVE_CONNECTION,
@@ -14,7 +14,7 @@ import {
 } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
 
-export const editCurrentUser = (userData: IUserPatchRequest) => {
+export const editCurrentUser = (userData: IUserPatch) => {
   return async (dispatch: Dispatch) => {
     const res = await handleServiceRequest({
       requestFunction: updateUserService,
@@ -30,14 +30,14 @@ export const editCurrentUser = (userData: IUserPatchRequest) => {
   };
 };
 
-export const updateUser = (userData: IUserPatchRequest) => ({
+export const updateUser = (userData: IUserPatch) => ({
   type: UPDATE_USER,
   payload: {
     userData,
   },
 });
 
-export const fetchUserData = (userId: IUserPatchRequest) => {
+export const fetchUserData = (userId: string) => {
   return async (dispatch: Dispatch) => {
     const resData = await handleServiceRequest({
       requestFunction: getUser,

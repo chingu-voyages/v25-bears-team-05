@@ -98,7 +98,7 @@ export const addReaction = ({
         payload: {
           threadId,
           title,
-          reactionId: resData._id,
+          reactionId: resData.id,
         },
       });
   };

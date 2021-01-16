@@ -1,9 +1,0 @@
-.Loading-page {
-  display: grid;
-  height: 100vh;
-  place-items: center center;
-}
-.Loading-page__spinner {
-  width: 300px;
-  max-width: 80vh;
-}

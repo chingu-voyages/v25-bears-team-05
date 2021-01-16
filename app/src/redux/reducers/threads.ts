@@ -20,7 +20,7 @@ export default function threads(
       const { threadData } = action.payload;
       return {
         ...state,
-        [threadData._id]: threadData,
+        [threadData.id]: threadData,
       };
     }
     case REMOVE_THREAD: {
@@ -40,7 +40,7 @@ export default function threads(
       newThreadData.currentUserReactions[title] = reactionId;
       return {
         ...state,
-        [newThreadData._id]: newThreadData,
+        [newThreadData.id]: newThreadData,
       };
     }
     case REMOVE_REACTION: {
@@ -54,7 +54,7 @@ export default function threads(
       newThreadData.currentUserReactions[title] = false;
       return {
         ...state,
-        [newThreadData._id]: newThreadData,
+        [newThreadData.id]: newThreadData,
       };
     }
     case ADD_COMMENT: {
@@ -67,7 +67,7 @@ export default function threads(
       }
       return {
         ...state,
-        [newThreadData._id]: newThreadData,
+        [newThreadData.id]: newThreadData,
       };
     }
     case REMOVE_COMMENT: {
@@ -75,11 +75,11 @@ export default function threads(
       const newThreadData = { ...state[threadId] };
       if (newThreadData.comments) {
         newThreadData.comments = newThreadData.comments.filter(
-          (_id) => _id !== commentId
+          (id) => id !== commentId
         );
         return {
           ...state,
-          [newThreadData._id]: newThreadData,
+          [newThreadData.id]: newThreadData,
         };
       }
       return state;

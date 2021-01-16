@@ -13,6 +13,7 @@ const initialState = {
     offset: 0,
     limit: 20,
   },
+  lastBucketReached: false,
 };
 
 export default function feed(
@@ -30,6 +31,12 @@ export default function feed(
       return {
         ...state,
         query: { ...state.query, ...action.payload.query },
+      };
+    }
+    case SET_LAST_BUCKET_REACHED: {
+      return {
+        ...state,
+        lastBucketReached: true,
       };
     }
     default:

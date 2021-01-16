@@ -9,8 +9,9 @@ import Signup from "./pages/signup";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
 import { connect } from "react-redux";
+import { IStoreState } from "./redux/store.type";
 
-function App({ isLoggedIn }) {
+function App({ isLoggedIn }: IStoreState["session"]) {
   return isLoggedIn === undefined ? (
     <Login />
   ) : (

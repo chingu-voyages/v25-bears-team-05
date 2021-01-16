@@ -3,14 +3,14 @@ import { IThreadFork, ThreadVisibility } from "../services/thread/thread.type";
 import { IUser } from "../services/user/user.type";
 
 export interface IStoreStateThreadData {
-  _id: string;
+  id: string;
   postedByUserId: string;
   visibility: ThreadVisibility;
   content: {
     html: string;
   };
   comments: Array<{
-    _id: string;
+    id: string;
     content: {
       html: string;
     };

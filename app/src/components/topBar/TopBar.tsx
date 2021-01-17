@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { IUserProcessed } from "../../services/user/user.type";
+import { IUser } from "../../services/user/user.type";
 import Avatar from "../avatar";
 import Logo from "../logo";
 import Nav from "../nav";
@@ -12,7 +12,7 @@ function TopBar({
   currentUserData,
   className,
 }: {
-  currentUserData: IUserProcessed;
+  currentUserData: IUser;
   className?: string;
 }) {
   const history = useHistory();
@@ -38,7 +38,7 @@ function TopBar({
         <Avatar size="xsmall" userData={currentUserData} />
       </OptionsMenu>
       <Search className="Top-bar__search" />
-      <Nav className="Top-bar__nav" />
+      <Nav className="Top-bar__nav" userData={currentUserData} />
     </nav>
   );
 }

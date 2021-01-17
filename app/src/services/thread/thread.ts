@@ -1,7 +1,6 @@
 import { INewThreadData, IThreadPatch } from "./thread.type";
 import axios from "axios";
 import pleaseTryLaterError from "../../utils/pleaseTryLaterError";
-import processThread from "./processThread";
 
 const addThread = async ({ threadData }: { threadData: INewThreadData }) => {
   const res = await axios({
@@ -10,8 +9,7 @@ const addThread = async ({ threadData }: { threadData: INewThreadData }) => {
     data: threadData,
   });
   if (res.data) {
-    const processedThreadData = await processThread(res.data);
-    return processedThreadData;
+    return res.data;
   } else {
     throw pleaseTryLaterError("add your post");
   }
@@ -30,8 +28,7 @@ const editThread = async ({
     data: threadDataPatch,
   });
   if (res.data) {
-    const processedThreadData = await processThread(res.data);
-    return processedThreadData;
+    return res.data;
   } else {
     throw pleaseTryLaterError("edit your post");
   }

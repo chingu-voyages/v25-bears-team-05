@@ -32,6 +32,19 @@ export interface IStoreStateThreadData {
   createdAt: string;
 }
 
+export interface IStoreStateFeedBucket {
+  threads?: {
+    [threadId: string]: {
+      refferal: IFeedReferral;
+    };
+  };
+  users?: {
+    [userId: string]: {
+      refferal: IFeedReferral;
+    };
+  };
+}
+
 export interface IStoreState {
   dialog: {
     loading: boolean;
@@ -39,18 +52,7 @@ export interface IStoreState {
   };
   feed: {
     buckets: {
-      [dateTime: string]: {
-        threads?: {
-          [threadId: string]: {
-            refferal: IFeedReferral;
-          };
-        };
-        users?: {
-          [userId: string]: {
-            refferal: IFeedReferral;
-          };
-        };
-      };
+      [dateTime: string]: IStoreStateFeedBucket;
     };
     query: {
       filter: string;

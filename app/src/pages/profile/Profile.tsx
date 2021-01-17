@@ -81,7 +81,7 @@ function Profile({
             }}
             onUpload={(url) =>
               editCurrentUser({
-                avatarUrls: [url, ...userData.avatarUrls],
+                avatarUrls: [{ url }, ...userData.avatarUrls],
               })
             }
           >

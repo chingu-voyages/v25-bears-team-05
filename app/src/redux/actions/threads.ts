@@ -22,7 +22,6 @@ import {
   REMOVE_THREAD,
 } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
-import processThread from "../../services/thread/processThread";
 
 export const addThread = (threadData: INewThreadData) => {
   return async (dispatch: Dispatch) => {
@@ -45,11 +44,10 @@ export const editThread = (threadDataPatch: IThreadPatch) => {
 };
 
 export const updateThread = (threadData: IRawResponseThread) => {
-  const processedThread = processThread(threadData);
   return {
     type: PUT_THREAD,
     payload: {
-      threadData: processedThread,
+      threadData,
     },
   };
 };

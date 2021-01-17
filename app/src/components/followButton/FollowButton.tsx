@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Action } from "redux";
 import { addConnection } from "../../redux/actions/users";
 import Button from "../button";
 import OptionsMenu from "../optionsMenu";
@@ -8,19 +7,11 @@ import Spinner from "../spinner";
 import "./FollowButton.css";
 
 function FollowButton({
-  addConnection,
   connectionName,
   connectionId,
   onFollow,
   className,
 }: {
-  addConnection: ({
-    connectionId,
-    isTeamMate,
-  }: {
-    connectionId: string;
-    isTeamMate: boolean;
-  }) => Action;
   connectionName: string;
   connectionId: string;
   onFollow: () => void;

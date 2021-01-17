@@ -1,11 +1,11 @@
-import { IUserProcessed } from "../../services/user/user.type";
+import { IUser } from "../../services/user/user.type";
 
 export interface Avatar {
   url?: string;
 }
 
 export interface AvatarProps {
-  userData?: IUserProcessed;
+  userData?: IUser;
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large";
   className?: string;
 }

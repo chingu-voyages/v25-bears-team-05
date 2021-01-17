@@ -1,16 +1,24 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Spinner from "../../components/spinner";
 import { setIsLoggedIn } from "../../redux/actions/session";
 import logout from "../../services/logout";
 
-function Logout({ setIsLoggedIn }) {
+function Logout() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const setIsAuthed = useCallback(
+    (isAuthed) => dispatch(setIsLoggedIn(isAuthed)),
+    [dispatch]
+  );
   useEffect(() => {
-    async () => {
+    (async () => {
       await logout();
-      setIsLoggedIn(false);
-      // redirect to root
-    };
+      console.log("set is authed to false");
+      setIsAuthed(false);
+      history.push("/");
+    })();
   }, []);
   return (
     <div>
@@ -19,4 +27,4 @@ function Logout({ setIsLoggedIn }) {
   );
 }
 
-export default connect(null, { setIsLoggedIn })(Logout);
+export default Logout;

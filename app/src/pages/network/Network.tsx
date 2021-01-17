@@ -6,12 +6,13 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { getUser, removeConnection } from "../../services/user";
 import ProfileCard from "../../components/profileCard";
 import OptionsMenu from "../../components/optionsMenu";
-import { IUserConnection, IUsersStore } from "../../services/user/user.type";
+import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { connect } from "react-redux";
 import TopBar from "../../components/topBar";
+import { IStoreState } from "../../redux/store.type";
 
-function Network({ users }: { users: IUsersStore }) {
+function Network({ users }: { users: IStoreState["users"] }) {
   const match: any = useRouteMatch("/:userId");
   const userId = match.params.userId.toLowerCase();
   const history = useHistory();
@@ -24,17 +25,17 @@ function Network({ users }: { users: IUsersStore }) {
   const currentUserId = users?.me?.id;
   const isCurrentUser = currentUserId === userId || userId.match("me");
 
-  useEffect(() => {
-    if (!currentUserId) {
-      getCurrentUserInfo();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!currentUserId) {
+  //     getCurrentUserInfo();
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (userId && !users?.[userId]) {
-      getUser({ userId });
-    }
-  }, [userId, users?.[userId]]);
+  // useEffect(() => {
+  //   if (userId && !users?.[userId]) {
+  //     getUser({ userId });
+  //   }
+  // }, [userId, users?.[userId]]);
 
   const RemoveOption = ({
     connectionData,
@@ -50,7 +51,9 @@ function Network({ users }: { users: IUsersStore }) {
           confirm: true,
         },
       }}
-      refTitle={`${connectionData.firstName} ${connectionData.lastName}`}
+      refTitle={`${users[connectionData.userId].firstName} ${
+        users[connectionData.userId].lastName
+      }`}
     />
   );
   const ConnectionItem = ({
@@ -59,7 +62,11 @@ function Network({ users }: { users: IUsersStore }) {
     connectionData: IUserConnection;
   }) => (
     <li key={connectionData.userId}>
-      <ProfileCard type="connection" userId={connectionData.userId} />
+      <ProfileCard
+        type="connection"
+        userData={users[connectionData.userId]}
+        connectionData={connectionData}
+      />
       {isCurrentUser && <RemoveOption {...{ connectionData }} />}
     </li>
   );
@@ -72,7 +79,10 @@ function Network({ users }: { users: IUsersStore }) {
         </Button>
         <h1 className="Network-page__title">Connections</h1>
       </header>
-      <TopBar className="Network-page__top-bar--desktop" />
+      <TopBar
+        className="Network-page__top-bar--desktop"
+        currentUserData={users.me}
+      />
       <main className="Network-page__main">
         <ul className="Network-page__connections-list">
           {connections.map((connectionData) => (

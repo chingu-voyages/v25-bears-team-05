@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { getCurrentUserInfo } from "../../services/user/getCurrentUserData";
+import { IUser } from "../../services/user/user.type";
 import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
-function Nav({ className }: { className?: string }) {
+function Nav({
+  className,
+  userData,
+}: {
+  className?: string;
+  userData?: IUser;
+}) {
   const history = useHistory();
   const pathname = history.location.pathname;
   const [page, setPage] = useState(
@@ -15,25 +21,11 @@ function Nav({ className }: { className?: string }) {
       ? "post"
       : pathname.match("home")
       ? "home"
-      : pathname.match("me/profile")
+      : pathname.match("profile")
       ? "profile"
       : ""
   );
 
-  const [userInfo, setUserInfo] = useState<{
-    url: string;
-    firstName: string;
-    lastName: string;
-    id: string;
-  }>();
-  useEffect(() => {
-    getCurrentUserInfo().then((userInfo) => {
-      setUserInfo(userInfo);
-      if (pathname.match(`${userInfo.id}/profile`)) {
-        setPage("profile");
-      }
-    });
-  }, []);
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>
@@ -72,7 +64,7 @@ function Nav({ className }: { className?: string }) {
       <OptionsMenu
         className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}
         buttons={{
-          "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
+          "View Profile": { type: "link", linkTo: `/${userData?.id}/profile` },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },
           Logout: {
             action: () => {
@@ -83,7 +75,7 @@ function Nav({ className }: { className?: string }) {
         }}
       >
         <>
-          <Avatar size="xxsmall" userId={userInfo?.id} />
+          <Avatar size="xxsmall" userData={userData} />
           Me
         </>
       </OptionsMenu>

@@ -5,9 +5,15 @@ import { Link } from "react-router-dom";
 import "./ProfileCard.css";
 import Avatar from "../avatar";
 import FollowButton from "../followButton";
-import { IUserProcessed } from "../../services/user/user.type";
 
-function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
+function ProfileCard({
+  type,
+  userData,
+  className,
+  threadData,
+  commentData,
+  connectionData,
+}: IProfileCard) {
   const [info, setInfo] = useState<
     string | React.RefAttributes<HTMLAnchorElement>
   >("...");
@@ -24,10 +30,7 @@ function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
     (async () => {
       if (userData) {
         setIsAConnection(userData?.isAConnection);
-        const {
-          nOfConnections,
-          dateTimeConnected,
-        } = userData as IUserProcessed;
+        const { nOfConnections } = userData;
         if (type === "profile") {
           setInfo(
             <Link to="network">
@@ -48,28 +51,28 @@ function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
             </Link>
           );
         } else if (type === "connection") {
+          const dateTimeConnected = connectionData?.dateTimeConnected;
           setInfo(
             convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
           );
-        }
-        if (threadData) {
+        } else if (type === "thread" && threadData) {
           const { createdAt, updatedAt, visibility } = threadData;
           const actionTitle = updatedAt !== createdAt ? "Edited" : "Posted";
-          if (type === "thread") {
-            setInfo(
-              `${actionTitle} ${convertDateStringToTimeAgo({
-                date: updatedAt || "",
-              })} • ${
-                visibility === 0 ? "anyone" : visibility ? "connections" : ""
-              }`
-            );
-          } else if (type === "comment") {
-            setInfo(
-              `${actionTitle} ${convertDateStringToTimeAgo({
-                date: updatedAt || "",
-              })}`
-            );
-          }
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: updatedAt || "",
+            })} • ${
+              visibility === 0 ? "anyone" : visibility ? "connections" : ""
+            }`
+          );
+        } else if (type === "comment" && commentData) {
+          const { createdAt, updatedAt } = commentData;
+          const actionTitle = updatedAt !== createdAt ? "Edited" : "Posted";
+          setInfo(
+            `${actionTitle} ${convertDateStringToTimeAgo({
+              date: updatedAt || "",
+            })}`
+          );
         }
       }
     })();

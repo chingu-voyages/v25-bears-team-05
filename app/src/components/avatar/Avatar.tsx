@@ -13,8 +13,8 @@ function Avatar({ userData, size, className }: AvatarProps) {
 
   useEffect(() => {
     if (userData) {
-      const { avatar, firstName, lastName } = userData;
-      setUrl(avatar?.[0]?.url || "");
+      const { avatarUrls, firstName, lastName } = userData;
+      setUrl(avatarUrls?.[0]?.url || "");
       setName(
         `${firstName ? firstName : ""} ${lastName ? lastName : ""}`.trim()
       );

@@ -1,26 +1,12 @@
-import { ThreadVisibility } from "../../services/thread/thread.type";
-import { IUserProcessed } from "../../services/user/user.type";
-import { Avatar } from "../avatar/Avatar.type";
-
-export interface IBasicCardInfo {
-  firstName: string;
-  lastName: string;
-  jobTitle: string;
-}
-export interface ICardInfo extends IBasicCardInfo {
-  id: string;
-  nOfConnections?: number | null;
-  avatar?: Array<Avatar>;
-  dateTimePosted?: string;
-  visibility?: ThreadVisibility;
-  isAConnection?: boolean;
-  dateTimeConnected?: string;
-  isTeamMate?: boolean;
-}
+import { IStoreStateThreadData } from "../../redux/store.type";
+import { IThreadComment } from "../../services/thread/thread.type";
+import { IUser, IUserConnection } from "../../services/user/user.type";
 
 export default interface IProfileCard {
   type: "profile" | "connection" | "thread" | "comment" | "home-page";
-  userData: IUserProcessed;
+  userData: IUser;
   className?: string;
-  threadData?: any;
+  threadData?: IStoreStateThreadData;
+  connectionData?: IUserConnection;
+  commentData?: IThreadComment;
 }

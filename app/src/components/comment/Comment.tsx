@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { getUsers } from "../../redux/selectors";
+import { IStoreState } from "../../redux/store.type";
 import { IThreadComment } from "../../services/thread/thread.type";
-import { getCurrentUserInfo } from "../../services/user/getCurrentUserData";
-import { IUsersStore } from "../../services/user/user.type";
 import ContentClipper from "../contentClipper";
 import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";
@@ -15,26 +14,20 @@ function Comment({
   commentData,
   handleDeleteComment,
 }: {
-  users: IUsersStore;
+  users: IStoreState["users"];
   commentData: IThreadComment;
   handleDeleteComment: () => void;
 }) {
   const currentUserId = users.me.id;
   const isCurrentUser = currentUserId === commentData.postedByUserId;
 
-  useEffect(() => {
-    if (!currentUserId) {
-      getCurrentUserInfo();
-    }
-  }, [currentUserId]);
-
   return commentData ? (
     <div className="Comment">
       <div className="Comment__header">
         <ProfileCard
           type="comment"
-          userId={commentData.postedByUserId}
-          threadData={commentData}
+          userData={users[commentData.postedByUserId]}
+          commentData={commentData}
         />
         {isCurrentUser && (
           <OptionsMenu

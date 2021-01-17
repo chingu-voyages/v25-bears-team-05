@@ -1,17 +1,34 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Spinner from "../../components/spinner";
+import { addErrorMessage } from "../../redux/actions/dialog";
 import { setIsLoggedIn } from "../../redux/actions/session";
 import checkIfAuthed from "../../services/checkIfAuthed";
 
-function Login({ setIsLoggedIn }) {
+function Login() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const setIsAuthed = useCallback(
+    (isAuthed) => dispatch(setIsLoggedIn(isAuthed)),
+    [dispatch]
+  );
+  const addErrorToDialog = useCallback(
+    (message) => dispatch(addErrorMessage(message)),
+    [dispatch]
+  );
   useEffect(() => {
     (async () => {
       const isAuthed = await checkIfAuthed();
-      setIsLoggedIn(isAuthed);
-      // if undefined show error
-      // if false redirect to logout
-      // if true redirect to root
+      setIsAuthed(isAuthed);
+      if (!isAuthed) {
+        // if undefined show error
+        isAuthed !== false &&
+          addErrorToDialog("Sorry unable to login, please try later");
+        history.push("/logout");
+      } else {
+        history.push("/");
+      }
     })();
   }, []);
 
@@ -22,4 +39,4 @@ function Login({ setIsLoggedIn }) {
   );
 }
 
-export default connect(null, { setIsLoggedIn })(Login);
+export default Login;

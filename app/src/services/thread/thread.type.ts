@@ -37,15 +37,14 @@ export enum ThreadVisibility {
 export interface IRawResponseThread {
   id: string;
   postedByUserId: string;
-  threadType: ThreadType;
   visibility: ThreadVisibility;
   content: {
     html: string;
-    hashTags: Array<string>;
-    attachments: Array<string>;
   };
   comments: Array<IThreadComment>;
   reactions: { [keyof: string]: IThreadReaction };
+  reactionsCount: number;
+  currentUserReactions: { [keyof: string]: IThreadReaction };
   forks: { [userId: string]: IThreadFork };
   isAFork: boolean;
   updatedAt: string;

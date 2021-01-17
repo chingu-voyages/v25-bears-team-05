@@ -10,11 +10,10 @@ import Logout from "./pages/logout";
 import Login from "./pages/login";
 import { connect } from "react-redux";
 import { IStoreState } from "./redux/store.type";
+import { getLoggedInState } from "./redux/selectors";
 
 function App({ isLoggedIn }: IStoreState["session"]) {
-  return isLoggedIn === undefined ? (
-    <Login />
-  ) : (
+  return (
     <Router>
       <Switch>
         <Route path="/logout">
@@ -25,19 +24,19 @@ function App({ isLoggedIn }: IStoreState["session"]) {
         </Route>
         <ProtectedRoute
           path="/:userId/network"
-          allowed={isLoggedIn}
+          allowed={!!isLoggedIn}
           component={Network}
           redirectTo="/"
         />
         <ProtectedRoute
           path="/:userId/profile"
-          allowed={isLoggedIn}
+          allowed={!!isLoggedIn}
           component={Profile}
           redirectTo="/"
         />
         <ProtectedRoute
           path="/home"
-          allowed={isLoggedIn}
+          allowed={!!isLoggedIn}
           component={Home}
           redirectTo="/"
         />
@@ -59,8 +58,7 @@ function App({ isLoggedIn }: IStoreState["session"]) {
 }
 
 const mapStateToProps = (state: any) => {
-  const { session } = state;
-  const isLoggedIn = session.isLoggedin;
+  const isLoggedIn = getLoggedInState(state);
   return { isLoggedIn };
 };
 

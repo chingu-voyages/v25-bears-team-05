@@ -5,9 +5,7 @@ const getCurrentUserData = async () => {
   let state = store.getState();
   let currentUserInfo = state?.users.me;
   if (!currentUserInfo?.id) {
-    const userData = await fetchUserData({
-      userId: "me",
-    });
+    const userData = await fetchUserData("me");
     await userData;
     state = store.getState();
     currentUserInfo = state?.users.me;

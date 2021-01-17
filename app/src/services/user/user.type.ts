@@ -11,15 +11,29 @@ export interface IUserThreadsReference {
   createdAt: string;
   updatedAt: string;
   contentSnippet: string;
+  postedByUserId: string;
 }
 
-export interface IUserThreadsCommentReference extends IUserThreadsReference {
-  commentId: string;
+export interface IUserThreadsCommentReference {
+  threadData: IUserThreadsReference;
+  commentData: {
+    commentId: string;
+    createdAt: string;
+    updatedAt: string;
+    contentSnippet: string;
+    postedByUserId: string;
+  };
 }
 
-export interface IUserThreadsReactionReference extends IUserThreadsReference {
-  reactionId: string;
-  title: ThreadReactionTypeTitle;
+export interface IUserThreadsReactionReference {
+  threadData: IUserThreadsReference;
+  reactionData: {
+    reactionId: string;
+    postedByUserId: string;
+    title: ThreadReactionTypeTitle;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 export interface IUser {
@@ -43,7 +57,7 @@ export interface IUser {
       };
     };
   };
-  isMe: boolean;
+  isCurrentUser: boolean;
 }
 
 export interface IUserPatch {

@@ -20,7 +20,7 @@ function Comment({
   handleDeleteComment: () => void;
 }) {
   const currentUserId = users.me.id;
-  const isMe = currentUserId === commentData.postedByUserId;
+  const isCurrentUser = currentUserId === commentData.postedByUserId;
 
   useEffect(() => {
     if (!currentUserId) {
@@ -36,7 +36,7 @@ function Comment({
           userId={commentData.postedByUserId}
           threadData={commentData}
         />
-        {isMe && (
+        {isCurrentUser && (
           <OptionsMenu
             buttons={{
               "delete comment": {

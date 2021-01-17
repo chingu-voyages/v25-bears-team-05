@@ -22,7 +22,7 @@ function Network({ users }: { users: IUsersStore }) {
   };
 
   const currentUserId = users?.me?.id;
-  const isMe = currentUserId === userId || userId.match("me");
+  const isCurrentUser = currentUserId === userId || userId.match("me");
 
   useEffect(() => {
     if (!currentUserId) {
@@ -60,7 +60,7 @@ function Network({ users }: { users: IUsersStore }) {
   }) => (
     <li key={connectionData.userId}>
       <ProfileCard type="connection" userId={connectionData.userId} />
-      {isMe && <RemoveOption {...{ connectionData }} />}
+      {isCurrentUser && <RemoveOption {...{ connectionData }} />}
     </li>
   );
 

@@ -16,7 +16,7 @@ function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
     userData?.lastName ? userData.lastName : ""
   }`.trim();
   const title = userData?.jobTitle || "";
-  const isMe = userData.isMe;
+  const isCurrentUser = userData.isCurrentUser;
   const userId = userData.id;
   const [isAConnection, setIsAConnection] = useState(userData?.isAConnection);
 
@@ -103,16 +103,18 @@ function ProfileCard({ type, userData, className, threadData }: IProfileCard) {
       </Link>
       <p className="Profile-card__info">{info || ""}</p>
 
-      {(type === "thread" || type === "profile") && !isMe && !isAConnection && (
-        <FollowButton
-          className="Profile-card__follow"
-          connectionName={name || ""}
-          connectionId={userId}
-          onFollow={() => {
-            setIsAConnection(true);
-          }}
-        />
-      )}
+      {(type === "thread" || type === "profile") &&
+        !isCurrentUser &&
+        !isAConnection && (
+          <FollowButton
+            className="Profile-card__follow"
+            connectionName={name || ""}
+            connectionId={userId}
+            onFollow={() => {
+              setIsAConnection(true);
+            }}
+          />
+        )}
     </div>
   );
 }

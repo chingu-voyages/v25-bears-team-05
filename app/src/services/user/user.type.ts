@@ -1,4 +1,7 @@
-import { ThreadReactionTypeTitle } from "../thread/thread.type";
+import {
+  ThreadReactionTypeTitle,
+  ThreadVisibility,
+} from "../thread/thread.type";
 
 export interface IUserConnection {
   userId: string;
@@ -8,6 +11,7 @@ export interface IUserConnection {
 
 export interface IUserThreadsReference {
   threadId: string;
+  visibility: ThreadVisibility;
   createdAt: string;
   updatedAt: string;
   contentSnippet: string;

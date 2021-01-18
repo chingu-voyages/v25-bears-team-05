@@ -1,11 +1,10 @@
 import { IActionProps } from "../actions/actions.type";
-import { SET_IS_LOGGED_IN } from "../actionTypes";
+import { SET_APP_START_URL_PATH, SET_IS_LOGGED_IN } from "../actionTypes";
 import { IStoreState } from "../store.type";
 
-const initialState: {
-  isLoggedIn: boolean | undefined;
-} = {
+const initialState: IStoreState["session"] = {
   isLoggedIn: undefined,
+  appStartUrlPath: "/",
 };
 
 export default function session(
@@ -17,6 +16,12 @@ export default function session(
       return {
         ...state,
         isLoggedIn: action.payload.isLoggedIn,
+      };
+    }
+    case SET_APP_START_URL_PATH: {
+      return {
+        ...state,
+        appStartUrlPath: action.payload.path,
       };
     }
     default:

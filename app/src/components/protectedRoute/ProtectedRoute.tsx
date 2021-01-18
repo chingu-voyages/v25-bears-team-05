@@ -1,5 +1,6 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
+import Spinner from "../spinner";
 
 const ProtectedRoute = ({
   component: Component,
@@ -12,6 +13,10 @@ const ProtectedRoute = ({
   redirectTo: string;
   [keyof: string]: any;
 }) => {
+  const history = useHistory();
+  if (!allowed) {
+    history.push(redirectTo);
+  }
   return (
     <Route
       {...rest}
@@ -19,16 +24,7 @@ const ProtectedRoute = ({
         if (allowed) {
           return <Component {...rest} {...props} />;
         } else {
-          return (
-            <Redirect
-              to={{
-                pathname: redirectTo,
-                state: {
-                  from: props.location,
-                },
-              }}
-            />
-          );
+          return <Spinner message="Not Authorised" />;
         }
       }}
     />

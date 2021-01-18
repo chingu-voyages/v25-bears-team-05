@@ -62,6 +62,7 @@ export interface IStoreState {
   };
   session: {
     isLoggedIn: boolean | undefined;
+    appStartUrlPath: string;
   };
   threads: {
     [threadId: string]: IStoreStateThreadData;

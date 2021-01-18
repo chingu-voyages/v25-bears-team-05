@@ -15,7 +15,6 @@ function Logout() {
   useEffect(() => {
     (async () => {
       await logout();
-      console.log("set is authed to false");
       setIsAuthed(false);
       history.push("/");
     })();

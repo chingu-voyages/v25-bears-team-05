@@ -22,14 +22,14 @@ function ProfileCard({
     userData?.lastName ? userData.lastName : ""
   }`.trim();
   const title = userData?.jobTitle || "";
-  const isCurrentUser = userData.isCurrentUser;
-  const userId = userData.id;
+  const isCurrentUser = userData?.isCurrentUser;
+  const userId = userData?.id;
   const [isAConnection, setIsAConnection] = useState(userData?.isAConnection);
 
   useEffect(() => {
     (async () => {
       if (userData) {
-        setIsAConnection(userData?.isAConnection);
+        setIsAConnection(userData.isAConnection);
         const { nOfConnections } = userData;
         if (type === "profile") {
           setInfo(

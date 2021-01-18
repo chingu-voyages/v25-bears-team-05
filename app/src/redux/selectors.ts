@@ -2,7 +2,6 @@ import { IStoreState } from "./store.type";
 
 // users
 export const getUsers = (store: IStoreState) => store.users;
-
 export const getCurrentUser = (store: IStoreState) => store.users.me;
 
 // threads
@@ -14,4 +13,6 @@ export const getLatestFeed = (store: IStoreState) =>
 
 // session
 export const getLoggedInState = (store: IStoreState) =>
-  store.session?.isLoggedIn;
+  store.session.isLoggedIn;
+export const getAppStartUrlPath = (store: IStoreState) =>
+  store.session.appStartUrlPath;

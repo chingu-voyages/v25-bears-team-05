@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../components/spinner";
 import { addErrorMessage } from "../../redux/actions/dialog";
 import { setIsLoggedIn } from "../../redux/actions/session";
+import { getAppStartUrlPath } from "../../redux/selectors";
 import checkIfAuthed from "../../services/checkIfAuthed";
+import "./Login.css";
 
-function Login() {
+function Login({ appStartUrl }: { appStartUrl?: string }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const setIsAuthed = useCallback(
@@ -27,16 +29,29 @@ function Login() {
           addErrorToDialog("Sorry unable to login, please try later");
         history.push("/logout");
       } else {
-        history.push("/");
+        document.cookie = `synced-up-authed=${Date.now()}`;
+        if (appStartUrl && !appStartUrl.match("login")) {
+          history.push(appStartUrl);
+        } else {
+          history.push("/");
+        }
       }
     })();
   }, []);
 
   return (
-    <div>
-      <Spinner message="Checking authenication" />
+    <div className="Login-page">
+      <Spinner
+        className="Login-page__spinner"
+        message="Checking authenication"
+      />
     </div>
   );
 }
 
-export default Login;
+const mapStateToProps = (state: any) => {
+  const appStartUrl = getAppStartUrlPath(state);
+  return { appStartUrl };
+};
+
+export default connect(mapStateToProps)(Login);

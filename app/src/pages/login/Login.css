@@ -1,0 +1,8 @@
+.Login-page {
+  display: grid;
+  place-items: center center;
+}
+.Login-page__spinner {
+  width: 60%;
+  max-width: 80vh;
+}

@@ -12,7 +12,7 @@ import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 import { connect } from "react-redux";
-import { editCurrentUser, fetchUserData } from "../../redux/actions/users";
+import { editCurrentUser } from "../../redux/actions/users";
 
 function Profile({
   users,
@@ -22,10 +22,8 @@ function Profile({
   editCurrentUser: (userData: IUserPatch) => void;
 }) {
   const match: any = useRouteMatch("/:userId");
-  const urlIdParam = match.params.userId.toLowerCase();
-  const userId: string = urlIdParam;
+  const userId = match.params.userId.toLowerCase();
   const userData = users?.[userId];
-  const currentUserData = users.me;
 
   const [inputs, setInputs] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -48,22 +46,13 @@ function Profile({
     );
     if (inputsHaveChanged) {
       editCurrentUser({ ...inputs });
-    } else {
-      handleToggleEditMode();
     }
+    handleToggleEditMode();
   };
 
   useEffect(() => {
-    if (!userData) {
-      fetchUserData(userId);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    if (!currentUserData) {
-      fetchUserData("me");
-    }
-  }, [currentUserData]);
+    console.count("userid change");
+  }, [userId]);
 
   return (
     <div className="Profile-page">

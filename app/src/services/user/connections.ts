@@ -25,7 +25,7 @@ const addConnection = async ({
     data: { isTeamMate },
   });
   if (res.status === 200) {
-    return "Connection added";
+    return { data: res.data, successMessage: "Connection added" };
   } else {
     throw "Connection not added, please try again later";
   }

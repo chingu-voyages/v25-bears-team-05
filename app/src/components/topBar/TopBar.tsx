@@ -1,5 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { IStoreState } from "../../redux/store.type";
 import { IUser } from "../../services/user/user.type";
 import Avatar from "../avatar";
 import Logo from "../logo";
@@ -8,14 +10,9 @@ import OptionsMenu from "../optionsMenu";
 import Search from "../search";
 import "./TopBar.css";
 
-function TopBar({
-  currentUserData,
-  className,
-}: {
-  currentUserData: IUser;
-  className?: string;
-}) {
+function TopBar({ className }: { className?: string }) {
   const history = useHistory();
+  const currentUserData = useSelector((state: IStoreState) => state.users.me);
   return (
     <nav className={`Top-bar ${className || ""}`}>
       <Logo className="Top-bar__logo" condensed />

@@ -80,13 +80,16 @@ export const addConnection = ({
         isTeamMate,
       },
     });
-    res &&
+    const connectionData = res?.data?.[0];
+    connectionData &&
       dispatch({
         type: ADD_CONNECTION,
         payload: {
+          connectionData,
           connectionId,
           isTeamMate,
         },
       });
+    return connectionData;
   };
 };

@@ -1,3 +1,10 @@
+.Follow-button {
+  height: 20px;
+}
+.Follow-button__spinner {
+  height: 20px;
+  width: 20px;
+}
 .Follow-button__error,
 .Follow-button__done,
 .Follow-button__progress {

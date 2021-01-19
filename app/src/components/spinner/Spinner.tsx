@@ -9,7 +9,7 @@ function Spinner({
   message?: string;
 }) {
   return (
-    <div className={`wrapper__Spinner ${className}`}>
+    <div className={`wrapper__Spinner ${className || ""}`}>
       <svg
         className="Spinner"
         viewBox="0 0 100 100"

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../components/spinner";
 import { addErrorMessage } from "../../redux/actions/dialog";
@@ -8,36 +8,42 @@ import { getAppStartUrlPath } from "../../redux/selectors";
 import checkIfAuthed from "../../services/checkIfAuthed";
 import "./Login.css";
 
-function Login({ appStartUrl }: { appStartUrl?: string }) {
+function Login({ appStartUrl, setIsLoggedIn, addErrorMessage }: any) {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const setIsAuthed = useCallback(
-    (isAuthed) => dispatch(setIsLoggedIn(isAuthed)),
-    [dispatch]
-  );
-  const addErrorToDialog = useCallback(
-    (message) => dispatch(addErrorMessage(message)),
-    [dispatch]
-  );
   useEffect(() => {
     (async () => {
-      const isAuthed = await checkIfAuthed();
-      setIsAuthed(isAuthed);
-      if (!isAuthed) {
-        // if undefined show error
-        isAuthed !== false &&
-          addErrorToDialog("Sorry unable to login, please try later");
-        history.push("/logout");
-      } else {
-        document.cookie = `synced-up-authed=${Date.now()}`;
-        if (appStartUrl && !appStartUrl.match("login")) {
-          history.push(appStartUrl);
+      let isAuthed;
+      try {
+        isAuthed = await checkIfAuthed();
+        setIsLoggedIn(isAuthed);
+      } finally {
+        if (!isAuthed) {
+          // if undefined show error
+          isAuthed !== false &&
+            addErrorMessage("Sorry unable to login, please try later");
+          history.push("/logout");
         } else {
-          history.push("/");
+          document.cookie = `synced-up-authed=${Date.now()}`;
+          let pathname;
+          if (appStartUrl && !appStartUrl.match("login")) {
+            pathname = appStartUrl;
+          } else {
+            pathname = "/";
+          }
+          history.push({
+            pathname,
+            state: {
+              from: "/login",
+            },
+          });
         }
       }
     })();
-  }, []);
+  }, [appStartUrl, setIsLoggedIn, addErrorMessage]);
+
+  useEffect(() => {
+    console.count("login history call");
+  }, [history]);
 
   return (
     <div className="Login-page">
@@ -54,4 +60,6 @@ const mapStateToProps = (state: any) => {
   return { appStartUrl };
 };
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps, { setIsLoggedIn, addErrorMessage })(
+  Login
+);

@@ -47,18 +47,27 @@ export default function users(
       };
     }
     case ADD_CONNECTION: {
-      const userId = state.me.id;
-      const { connectionId, isTeamMate } = action.payload;
-      const newConnection = {
-        userId: connectionId,
-        isTeamMate,
+      const currentUserId = state.me.id;
+      const connectionData = action.payload.connectionData;
+      const newConnectionsData = { ...state.me.connections, ...connectionData };
+      const newCurrentUserData = {
+        ...state.me,
+        connections: newConnectionsData,
       };
-      const newConnectionsData = { ...state.me.connections, newConnection };
-      const newUserData = { ...state.me, connections: newConnectionsData };
+      const newConnectionUserData = state[action.payload.connectionId]
+        ? {
+            [action.payload.connectionId]: {
+              ...state[action.payload.connectionId],
+              isAConnection: true,
+              isTeamMate: action.payload.isTeamMate,
+            },
+          }
+        : {};
       return {
         ...state,
-        [userId]: newUserData,
-        me: newUserData,
+        ...newConnectionUserData,
+        [currentUserId]: newCurrentUserData,
+        me: newCurrentUserData,
       };
     }
     default:

@@ -5,25 +5,25 @@ import wallpaper from "../../images/profilewallpapergraphic.svg";
 import Avatar from "../../components/avatar";
 import editIcon from "../../images/editicon.svg";
 import Button from "../../components/button";
-import { IUser, IUserPatch } from "../../services/user/user.type";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
-import { connect } from "react-redux";
-import { editCurrentUser } from "../../redux/actions/users";
+import { useDispatch, useSelector } from "react-redux";
+import { editCurrentUser, fetchUserData } from "../../redux/actions/users";
+import { IStoreState } from "../../redux/store.type";
 
-function Profile({
-  users,
-  editCurrentUser,
-}: {
-  users: { [keyof: string]: IUser };
-  editCurrentUser: (userData: IUserPatch) => void;
-}) {
+function Profile() {
   const match: any = useRouteMatch("/:userId");
   const userId = match.params.userId.toLowerCase();
-  const userData = users?.[userId];
+  const userData = useSelector((state: IStoreState) => state.users[userId]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!userData) {
+      dispatch(fetchUserData(userId));
+    }
+  }, []);
 
   const [inputs, setInputs] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -45,18 +45,14 @@ function Profile({
       ([key, value]) => value !== ((userData as unknown) as any)[key]
     );
     if (inputsHaveChanged) {
-      editCurrentUser({ ...inputs });
+      dispatch(editCurrentUser({ ...inputs }));
     }
     handleToggleEditMode();
   };
 
-  useEffect(() => {
-    console.count("userid change");
-  }, [userId]);
-
   return (
     <div className="Profile-page">
-      <TopBar currentUserData={users.me} />
+      <TopBar />
       <main className="Profile-page__profile">
         <div className="wrapper__Profile-page__wall-paper">
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
@@ -115,9 +111,4 @@ function Profile({
   );
 }
 
-const mapStateToProps = (state: any) => {
-  const { users } = state;
-  return { users };
-};
-
-export default connect(mapStateToProps, { editCurrentUser })(Profile);
+export default Profile;

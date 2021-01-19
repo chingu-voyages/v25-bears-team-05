@@ -16,7 +16,12 @@ function Logout() {
     (async () => {
       await logout();
       setIsAuthed(false);
-      history.push("/");
+      history.push({
+        pathname: "/",
+        state: {
+          from: "/logout",
+        },
+      });
     })();
   }, []);
   return (

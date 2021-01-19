@@ -16,10 +16,11 @@ const handleServiceRequest = async ({
 }: IHandleServiceRequestProps) => {
   store.dispatch(setLoading(true));
   try {
-    const res = await requestFunction(requestProps);   
+    const res = await requestFunction(requestProps);
     res.successMessage && store.dispatch(addSuccessMessage(res.successMessage));
     return res;
   } catch (error) {
+    console.error(error);
     error && store.dispatch(addErrorMessage(error));
     return false;
   } finally {

@@ -1,0 +1,14 @@
+.Connection {
+  display: grid;
+  place-items: center stretch;
+  grid-template-columns: 1fr auto;
+  width: 100%;
+}
+.Connection:after {
+  content: "";
+  width: 100%;
+  margin-left: 50px;
+  margin-top: 4px;
+  border-bottom: 1px solid var(--color-grey-2);
+  grid-column: span 2;
+}

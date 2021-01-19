@@ -63,43 +63,9 @@ function Home({ currentUserData }: { currentUserData: IUser }) {
   // };
 
   return (
-    // <div className="Home-page">
-    //   <TopBar className="Home-page__top-bar" currentUserData={currentUserData} />
-    //   <ProfileCard
-    //     type="home-page"
-    //     userData={currentUserData}
-    //     className="Home-page__profile"
-    //   />
-    //   <div className="Home-page__post-maker-start">
-    //     {!isPostMakerOpen ? (
-    //       <Button
-    //         onClick={() => setIsPostMakerOpen(true)}
-    //         className="Home-page__post-maker-start__button"
-    //       >
-    //         <img src={editIcon} alt="" />
-    //         <h1>Share your thoughts or photos</h1>
-    //       </Button>
-    //     ) : (
-    //       <PostMaker {...postMakerOptions} />
-    //     )}
-    //   </div>
-    //   <div className="Home-page__feed">
-    //     <ul className="Home-page__feed__list">
-    //       {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
-    //         <FeedItem
-    //           {...{ suggestion, thread }}
-    //           key={
-    //             "feedItem" + (thread?.threadData?.id || suggestion?.id || index)
-    //           }
-    //         />
-    //       ))}
-    //     </ul>
-    //     {/* <Pagenator {...{ page, nextPage, active: isEndPage || connections.length > 0 }} />  */}
-    //   </div>
-    //   <Nav />
-    //   {inProgress && <Spinner className="Home-page__spinner" />}
-    // </div>
-    <></>
+    <div className="Home-page">
+      <TopBar className="Home-page__top-bar" />
+    </div>
   );
 }
 

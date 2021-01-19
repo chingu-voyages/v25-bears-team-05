@@ -11,9 +11,12 @@ function Landing() {
   useEffect(() => {
     if (document.cookie?.match("synced-up-authed")) {
       // if authed cookie is set request auth
-      history.push("/login");
+      if (!(history.location as any)?.state?.from?.match(/login|logout/)) {
+        history.push("/login");
+      }
     }
   }, []);
+
   return (
     <div className="Landing-page">
       <header className="Landing-page__header-bar">

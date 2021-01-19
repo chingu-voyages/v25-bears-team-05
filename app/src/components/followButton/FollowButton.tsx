@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addConnection } from "../../redux/actions/users";
 import Button from "../button";
 import OptionsMenu from "../optionsMenu";
@@ -19,8 +19,15 @@ function FollowButton({
 }) {
   const [isInProgress, setIsInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
-    addConnection({ connectionId, isTeamMate });
+  const dispatch = useDispatch();
+  const handleAddConnection = async ({
+    isTeamMate,
+  }: {
+    isTeamMate: boolean;
+  }) => {
+    setIsInProgress(true);
+    const res = await dispatch(addConnection({ connectionId, isTeamMate }));
+    res.hasOwnProperty(connectionId) && setIsDone(true);
   };
   const handleClose = () => {
     isDone && onFollow();
@@ -63,4 +70,4 @@ function FollowButton({
   );
 }
 
-export default connect(null, { addConnection })(FollowButton);
+export default FollowButton;

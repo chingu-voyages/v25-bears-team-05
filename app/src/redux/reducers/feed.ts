@@ -10,8 +10,8 @@ const initialState = {
   buckets: {},
   query: {
     filter: "",
-    offset: 0,
-    limit: 20,
+    latestBucketRecieved: "", 
+    oldestBucketRecieved: ""
   },
   lastBucketReached: false,
 };

@@ -55,9 +55,9 @@ export interface IStoreState {
       [dateTime: string]: IStoreStateFeedBucket;
     };
     query: {
-      filter: string;
-      offset: number;
-      limit: number;
+      filter: string; 
+      latestBucketRecieved: string;
+      oldestBucketRecieved: string;
     };
   };
   session: {

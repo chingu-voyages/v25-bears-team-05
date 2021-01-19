@@ -45,17 +45,15 @@ export const setFeedQuery = ({
   filter,
   latestBucketRecieved,
   oldestBucketRecieved,
-  limit,
 }: {
   filter?: string;
   latestBucketRecieved?: string;
   oldestBucketRecieved?: string;
   offset?: number;
-  limit?: number;
 }) => ({
   type: SET_FEED_QUERY,
   payload: {
-    query: { filter, latestBucketRecieved, oldestBucketRecieved, limit },
+    query: { filter, latestBucketRecieved, oldestBucketRecieved },
   },
 });
 
@@ -66,10 +64,11 @@ export const fetchLatestFeed = () => {
   const { latestBucketRecieved } = state.feed.query;
   const nowTIme = Date.now();
   if (lastFetchLatestFeedTime + oneMinute > nowTIme) {
+    const query = `type=updates;latestBucketRecieved=${latestBucketRecieved}`;
     return async (dispatch: Dispatch) => {
       const resBuckets = await handleServiceRequest({
         requestFunction: getFeed,
-        requestProps: { filter: "updates", latestBucketRecieved },
+        requestProps: { query },
       });
       lastFetchLatestFeedTime = nowTIme;
       if (resBuckets) {
@@ -90,11 +89,12 @@ export const setLastBuckReached = () => ({
 
 export const fetchFeedNext = () => {
   const state = store.getState();
-  const { oldestBucketRecieved, limit } = state.feed.query;
+  const { oldestBucketRecieved } = state.feed.query;
+  const query = `type=next;oldestBucketRecieved=${oldestBucketRecieved}`;
   return async (dispatch: Dispatch) => {
     const resBuckets = await handleServiceRequest({
       requestFunction: getFeed,
-      requestProps: { filter: "next", oldestBucketRecieved, limit },
+      requestProps: { query },
     });
     if (resBuckets) {
       const bucketDates = Object.keys(resBuckets).sort(

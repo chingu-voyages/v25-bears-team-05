@@ -15,6 +15,7 @@ import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
+import doSearch from "../../services/search";
 
 function Profile() {
   const firstLoad = useRef(true);
@@ -97,10 +98,14 @@ function Profile() {
       });
     }
   }, [match.params.userId]);
-
+  
+  const onSearchSubmit = (queryString: string) => {
+    // Do something
+    console.log("QueryString from Profile.tsx", queryString);
+  }
   return (
     <div className="Profile-page">
-      <TopBar />
+      <TopBar onSearchSubmit={onSearchSubmit} />
       <main className="Profile-page__profile">
         <div className="wrapper__Profile-page__wall-paper">
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />

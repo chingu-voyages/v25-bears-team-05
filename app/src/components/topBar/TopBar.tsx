@@ -8,7 +8,7 @@ import OptionsMenu from "../optionsMenu";
 import Search from "../search";
 import "./TopBar.css";
 
-function TopBar({ className }: { className?: string }) {
+function TopBar({ className, onSearchSubmit } : { onSearchSubmit: (queryString: string) => void; className?:string;}) {
   const [userInfo, setUserInfo] = useState<{
     url: string;
     firstName: string;
@@ -45,7 +45,7 @@ function TopBar({ className }: { className?: string }) {
           }
         />
       </OptionsMenu>
-      <Search className="Top-bar__search" />
+      <Search className="Top-bar__search" onSearchSubmit={ onSearchSubmit } />
       <Nav className="Top-bar__nav" />
     </nav>
   );

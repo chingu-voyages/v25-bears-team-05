@@ -5,7 +5,7 @@
   place-items: start stretch;
   grid-template-areas:
     "topBar"
-    "postMakerStart"
+   "postMakerStart"
     "feed";
 }
 .Home-page__top-bar {
@@ -24,6 +24,10 @@
   grid-area: postMakerStart;
 }
 .Home-page__feed {
+  grid-area: feed;
+}
+
+.Home-page__search-result {
   grid-area: feed;
 }
 

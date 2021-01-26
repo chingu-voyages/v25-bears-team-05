@@ -106,6 +106,10 @@ function Network() {
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
   );
+
+  const onSearchSubmit = (queryString: string) => {
+
+  }
   return (
     <div className="Network-page">
       <header className="Network-page__top-bar--mobile">
@@ -114,7 +118,7 @@ function Network() {
         </Button>
         <h1 className="Network-page__title">Connections</h1>
       </header>
-      <TopBar className="Network-page__top-bar--desktop" />
+      <TopBar className="Network-page__top-bar--desktop" onSearchSubmit={onSearchSubmit} />
       <main className="Network-page__main">
         {errorMessage && <p>{errorMessage}</p>}
         <ul className="Network-page__connections-list">

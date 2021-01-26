@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 const express = require("express");
 const app = require("express")();
 const http = require("http").createServer(app);
@@ -9,6 +9,9 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const isProduction = !(
   process.env.NODE_ENV && process.env.NODE_ENV.match("development")
 );
+
+console.log("Node environment is", process.env.NODE_ENV)
+console.log("isProduction?", isProduction)
 
 const apiUrl = !isProduction
   ? process.env.DEV_API_SERVICE_URL

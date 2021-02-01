@@ -3,7 +3,7 @@ import "./no-search-results.css"
 function NoSearchResult() {
   return (
     <div className="search-result__no-result">
-      <p> No results </p>
+      <p className="search-result__text-content"> No results </p>
     </div>
   )
 }

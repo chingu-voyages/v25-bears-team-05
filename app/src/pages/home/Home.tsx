@@ -19,6 +19,8 @@ import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
 import { doSearch, hasSearchResultContent } from "../../services/search/search";
 import NoSearchResult from "../../components/search/sub-components/no-results";
+import { ISearchResults } from "../../services/search/search.types";
+import UserSearchResultCard from "../../components/search/sub-components/search-users";
 
 
 function Home() {
@@ -27,7 +29,7 @@ function Home() {
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [searchTriggered, setSearchTriggered] = useState(false)
-  const [searchResultData, setSearchResultData] = useState<any>({})
+  const [searchResultData, setSearchResultData] = useState<ISearchResults>()
 
   useEffect(() => {
     const onSuccess = ({
@@ -174,6 +176,10 @@ function Home() {
          {!hasSearchResultContent(searchResultData) && 
           <NoSearchResult />
          }
+         
+         {searchResultData?.users?.map((user) => (
+           <UserSearchResultCard name={`${user.firstName} ${user.lastName}`} jobTitle={user.jobTitle || ""} avatarUrl={""} />
+         ))}
         </div>
       }
       <Nav />

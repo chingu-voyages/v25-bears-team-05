@@ -1,0 +1,8 @@
+.UserCard__follow-button {
+  grid-area: followButton;
+  text-align: center;
+}
+
+.UserCard__follow-button:hover {
+  cursor: pointer;
+}

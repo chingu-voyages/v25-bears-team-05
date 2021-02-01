@@ -1,0 +1,56 @@
+
+.UserCard__main {
+  font-family: "Roboto", Roboto, sans-serif;
+  border-color: black;
+  border-style: solid;
+  border-radius: 10px;
+  height: auto;
+  color: white;
+  background-color: black;
+  display: grid;
+
+  grid-template-areas:
+    ". avatar name   name . followButton"
+    ". avatar jobTitle   jobTitle . followButton"
+    ". avatar timeAgo visibility . followButton ";
+
+  grid-template-columns: 35px 80px 60px auto auto auto;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.UserCard__avatar {
+  grid-area: avatar;
+  width: 50px;
+  height: auto;
+  border-radius: 50%;
+  border-color: white;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.UserCard__name {
+  grid-area: name;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0px;
+}
+
+.UserCard__jobTitle {
+  font-size: 12px;
+  grid-area: jobTitle;
+  margin: 0px;
+}
+.UserCard__timeAgo {
+  font-size: 12px;
+  grid-area: timeAgo;
+  margin: 0px;
+}
+
+.UserCard__visibility {
+  grid-area: visibility;
+  font-size: 12px;
+  margin: 0px;
+}

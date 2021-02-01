@@ -28,7 +28,9 @@
 }
 
 .Home-page__search-result {
+  font-family: "Roboto", sans-serif;
   grid-area: feed;
+  width: 100%;
 }
 
 .Home-page__spinner {

@@ -24,11 +24,13 @@ export const doSearch = async (data: {
 };
 
 /** Returns true if there are search results, false if not */
-export function hasSearchResultContent(results: ISearchResults): boolean {
-  for (let [key, value] of Object.entries(results)) {
-    if (key !== "query_string") {
-      if (value.length > 0) {
-        return true;
+export function hasSearchResultContent(results?: ISearchResults): boolean {
+  if (results) {
+    for (let [key, value] of Object.entries(results)) {
+      if (key !== "query_string") {
+        if (value.length > 0) {
+          return true;
+        }
       }
     }
   }

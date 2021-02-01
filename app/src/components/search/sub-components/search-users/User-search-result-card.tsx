@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import FollowButton from "../../../followButton";
-
+import "./search-result-user-card.css";
 interface IUserSearchResultCard {
   avatarUrl: string;
   jobTitle: string;

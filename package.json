@@ -6,7 +6,7 @@
   "scripts": {
     "app-install": "cd app & npm install",
     "start": "node server.js",
-    "server": "nodemon server.js",
+    "server": "nodemon -r dotenv/config server.js",
     "app": "npm start --prefix app",
     "dev": "NODE_ENV=development concurrently \"npm run server\" \"npm run app\"",
     "dev-win": "SET NODE_ENV=development & concurrently \"npm run server\" \"npm run app\"",

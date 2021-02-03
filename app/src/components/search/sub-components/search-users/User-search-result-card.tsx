@@ -4,7 +4,7 @@ import { getUser } from "../../../../services/user";
 import Avatar from "../../../avatar/Avatar";
 
 import ProfileCard from "../../../profileCard";
-import "./search-result-user-card.css";
+import "./Search-result-user-card.css";
 
 function UserSearchResultCard({
   id,

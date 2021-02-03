@@ -1,0 +1,15 @@
+.Search-page-visible {
+  width: 50vw;
+  height: 100vh;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color:#535A57;
+  z-index: 100;
+  color: white;
+  position: fixed;
+  top: 100px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  font-family: "Roboto", Roboto, sans-serif;
+}

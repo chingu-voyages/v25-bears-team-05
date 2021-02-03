@@ -18,10 +18,9 @@ import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
 import { doSearch, hasSearchResultContent } from "../../services/search/search";
-import NoSearchResult from "../../components/search/sub-components/no-results";
-import { ISearchResults } from "../../services/search/search.types";
-import UserSearchResultCard from "../../components/search/sub-components/search-users";
 
+import { ISearchResults } from "../../services/search/search.types";
+import Search from "../../pages/search"
 
 function Home() {
   const history = useHistory();
@@ -172,15 +171,7 @@ function Home() {
         </div> 
       }
       {searchTriggered &&
-        <div className="Home-page__search-result">
-         {!hasSearchResultContent(searchResultData) && 
-          <NoSearchResult />
-         }
-         
-         {searchResultData?.users?.map((user) => (
-           <UserSearchResultCard name={`${user.firstName} ${user.lastName}`} jobTitle={user.jobTitle || ""} avatarUrl={""} />
-         ))}
-        </div>
+        <Search {...searchResultData!} />
       }
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}

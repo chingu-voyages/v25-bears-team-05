@@ -1,4 +1,4 @@
-// require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const app = require("express")();
 const http = require("http").createServer(app);
@@ -12,7 +12,7 @@ const isProduction = !(
 
 console.log("Node environment is", process.env.NODE_ENV)
 console.log("isProduction?", isProduction)
-
+console.log("DEV API SerVice URl pass", process.env.DEV_API_SERVICE_URL)
 const apiUrl = !isProduction
   ? process.env.DEV_API_SERVICE_URL
   : process.env.API_SERVICE_URL;

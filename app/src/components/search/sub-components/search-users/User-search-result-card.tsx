@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
-import Avatar from "../../../avatar";
+import { IPublicUserDetails } from "../../../../services/search/search.types";
+import { getUser } from "../../../../services/user";
+import Avatar from "../../../avatar/Avatar";
+
+import ProfileCard from "../../../profileCard";
 import "./search-result-user-card.css";
-interface IUserSearchResultCard {
-  avatarUrl: string;
-  jobTitle: string;
-  name: string;
-  timeAgo?: Date;
-  visibility?: string;
-}
-const UserSearchResultCard = ({
-  name,
+
+function UserSearchResultCard({
+  id,
+  firstName,
+  lastName,
   jobTitle,
-  avatarUrl,
-  timeAgo,
-  visibility,
-}: IUserSearchResultCard) => {
+  avatar
+}: IPublicUserDetails) {
+  const [currentUserData, setCurrentUserData] = useState({})
+  useEffect(()=> { 
+    (async () => { 
+      getUser({userId: id, onError: (message)=> { console.log(message)}, onSuccess: (data) => { 
+       setCurrentUserData({...data, id})
+      }})
+    })()
+  })
   return (
     <div className="UserCard__main">
-      <div className="UserCard__main">
-        <Avatar userName={name} url={avatarUrl} />
-        <p className="UserCard__name"> {name}</p>
-        <p className="UserCard__jobTitle"> {jobTitle} </p>
-        <p className="UserCard__timeAgo">{timeAgo} | </p>
-        <p className="UserCard__visibility">{visibility}</p>
-        {/* <FollowButton followButtonClicked={handleFollowButtonClicked} /> */}
-      </div>
+      <Avatar url={avatar![0].url} userName={`${firstName} ${lastName}`} />
+      <ProfileCard type="profile" userId={id} data={{id, firstName, lastName, ...currentUserData, jobTitle: jobTitle || ""}} />
     </div>
   );
 };

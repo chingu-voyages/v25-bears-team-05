@@ -9,12 +9,12 @@ export interface ISearchResults {
   private_thread_comments?: Array<IThreadCommentDetails>;
 }
 
-interface IPublicUserDetails {
+export interface IPublicUserDetails {
   id: string;
   firstName: string;
   lastName: string;
   jobTitle?: string;
-  avatars?: Array<{ url: string }>;
+  avatar?: Array<{ url: string }>;
 }
 
 interface IThreadDetails {

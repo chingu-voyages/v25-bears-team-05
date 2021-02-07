@@ -171,7 +171,7 @@ function Home() {
         </div> 
       }
       {searchTriggered &&
-        <Search {...searchResultData!} />
+        <Search searchResults={{...searchResultData!}} classNameInfo="test"  />
       }
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}

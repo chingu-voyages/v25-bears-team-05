@@ -1,10 +1,10 @@
-import { ThreadType, ThreadVisibility } from "../thread/thread.type";
+import { IThread, ThreadType, ThreadVisibility } from "../thread/thread.type";
 
 export interface ISearchResults {
   query_string: string;
   users?: Array<IPublicUserDetails>;
-  public_threads?: Array<IThreadDetails>;
-  private_threads?: Array<IThreadDetails>;
+  public_threads?: Array<IThread>;
+  private_threads?: Array<IThread>;
   public_thread_comments?: Array<IThreadCommentDetails>;
   private_thread_comments?: Array<IThreadCommentDetails>;
 }
@@ -17,7 +17,7 @@ export interface IPublicUserDetails {
   avatar?: Array<{ url: string }>;
 }
 
-interface IThreadDetails {
+export interface IThreadDetails {
   id: string;
   postedByUserId: string;
   threadType: ThreadType;

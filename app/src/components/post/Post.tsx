@@ -27,17 +27,20 @@ import {
 import Comment from "../comment";
 import PostMaker from "../postMaker";
 import Spinner from "../spinner";
+import { getStringExcerpt } from "../search/search.helpers";
 const md = require("markdown-it")();
 
 function Post({
   threadData,
   referral,
   className = "",
+  queryString,
 }: {
   threadData: IThreadDataProcessed;
   referral?: IThreadReferral;
   className?: string;
   showComments?: boolean;
+  queryString?: string;
 }) {
   const [inProgress, setInProgress] = useState(false);
   const [comments, setComments] = useState(threadData.comments);
@@ -135,6 +138,19 @@ function Post({
           <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>
         )}
         {referral?.reason}
+        {queryString && (
+          <p>
+            {" "}
+            <b>{queryString}</b>{" "}
+            <i>
+              {" "}
+              {getStringExcerpt({
+                queryString: queryString,
+                threadContent: threadData.content.html!,
+              })}{" "}
+            </i>{" "}
+          </p>
+        )}
       </header>
       <ProfileCard
         className="Post__profile-card"

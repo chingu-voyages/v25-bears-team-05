@@ -17,7 +17,7 @@ import {
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
-import { doSearch, hasSearchResultContent } from "../../services/search/search";
+import { doSearch } from "../../services/search/search";
 
 import { ISearchResults } from "../../services/search/search.types";
 import Search from "../../pages/search"
@@ -125,10 +125,10 @@ function Home() {
 
   const onSearchError = (data: any) => {
     // Some error occurred
-    console.log("some error occured")
+    console.log("Error", data)
   }
   const onSearchSubmit = (queryString: string) =>{
-    setSearchTriggered(true)
+    setSearchTriggered(!!queryString)
     doSearch({ queryString: queryString, onSuccess: onSearchSuccess, onError: onSearchError })
   }
 
@@ -171,7 +171,7 @@ function Home() {
         </div> 
       }
       {searchTriggered &&
-        <Search searchResults={{...searchResultData!}} classNameInfo="test"  />
+        <Search searchResults={{...searchResultData!}} />
       }
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}

@@ -56,8 +56,9 @@ function Search({
       }
     })();
   }, [searchResults.public_threads, searchResults.private_threads]);
+  
   return (
-    <div className={`${classNameInfo} Search-page-visible`}>
+    <div className={`${classNameInfo || ""} Search-page-visible`}>
       {!hasSearchResultContent(searchResults) && <NoSearchResult />}
       {hasSearchResultContent(searchResults) &&
         searchResults.users?.map((user) => (
@@ -69,6 +70,7 @@ function Search({
             {...{
               threadData: publicThread.threadData!,
               queryString: queryString,
+              className: "Post__searchResult"
             }}
             key={publicThread.threadData?.id}
           />
@@ -79,6 +81,7 @@ function Search({
             {...{
               threadData: privateThread.threadData!,
               queryString: queryString,
+              className: "Post__searchResult"
             }}
             key={privateThread.threadData?.id}
           />

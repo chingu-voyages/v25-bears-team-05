@@ -11,6 +11,9 @@ import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import TopBar from "../../components/topBar";
+import { ISearchResults } from "../../services/search/search.types";
+import { doSearch } from "../../services/search/search";
+import Search from "../search";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
@@ -23,6 +26,8 @@ function Network() {
   const [page, setPage] = useState(0);
   const [isEndPage, setIsEndPage] = useState(false);
   const isLoadingNextPage = useRef(true);
+  const [searchTriggered, setSearchTriggered] = useState(false)
+  const [searchResultData, setSearchResultData] = useState<ISearchResults>()
   const handleRemoveConnection = (connectionId: string) => {
     const onSuccess = () => {
       setConnections((connections) =>
@@ -61,9 +66,9 @@ function Network() {
       page === 0
         ? setConnections(connectionsArray)
         : setConnections((currentConnections) => [
-            ...currentConnections,
-            ...connectionsArray,
-          ]);
+          ...currentConnections,
+          ...connectionsArray,
+        ]);
       isLoadingNextPage.current = false;
     };
     getConnections({
@@ -107,8 +112,17 @@ function Network() {
     </li>
   );
 
-  const onSearchSubmit = (queryString: string) => {
+  const onSearchSuccess = (data: any) => {
+    setSearchResultData(data);
+  }
 
+  const onSearchError = (data: any) => {
+    // Some error occurred
+    console.log("Error", data)
+  }
+  const onSearchSubmit = (queryString: string) => {
+    setSearchTriggered(!!queryString)
+    doSearch({ queryString: queryString, onSuccess: onSearchSuccess, onError: onSearchError })
   }
   return (
     <div className="Network-page">
@@ -119,15 +133,20 @@ function Network() {
         <h1 className="Network-page__title">Connections</h1>
       </header>
       <TopBar className="Network-page__top-bar--desktop" onSearchSubmit={onSearchSubmit} />
-      <main className="Network-page__main">
-        {errorMessage && <p>{errorMessage}</p>}
-        <ul className="Network-page__connections-list">
-          {connections.map((connectionData: IUserConnection) => (
-            <ConnectionItem key={connectionData.id} {...{ connectionData }} />
-          ))}
-        </ul>
-        <Pagenator {...{ page, nextPage, active: !isEndPage }} />
-      </main>
+      {!searchTriggered &&
+        <main className="Network-page__main">
+          {errorMessage && <p>{errorMessage}</p>}
+          <ul className="Network-page__connections-list">
+            {connections.map((connectionData: IUserConnection) => (
+              <ConnectionItem key={connectionData.id} {...{ connectionData }} />
+            ))}
+          </ul>
+          <Pagenator {...{ page, nextPage, active: !isEndPage }} />
+        </main>
+      }
+      {searchTriggered &&
+        <Search searchResults={{ ...searchResultData! }} />
+      }
       <Nav />
     </div>
   );

@@ -12,7 +12,7 @@ function Search({ className, onSearchSubmit}: ISearchProps) {
 
   const handleEnterKeyPress = (e:React.KeyboardEvent) => {
     const queryString = (e.target as HTMLInputElement).value
-    if (e.key === "Enter" && queryString.trim() !== "" ) {
+    if (e.key === "Enter") {
       onSearchSubmit(queryString)
     }
   }

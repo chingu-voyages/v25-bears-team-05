@@ -1,0 +1,13 @@
+.SearchThreadComment__main {
+  width: 100%;
+  border-radius: 0px;
+  background-color: black;
+  font-family: "Roboto", sans-serif;
+  display: grid;
+}
+
+@media screen and (max-width: 800px) {
+  .SearchThreadComment__main {
+    border-radius: 10px;
+  }
+}

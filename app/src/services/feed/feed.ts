@@ -95,7 +95,9 @@ function processSuggestion(userData: IUserConnection) {
 async function processThread(
   threadData: IThread
 ): Promise<IProcessedThreadFeed> {
-  const comments = await getComments({ threadId: threadData._id });
+  const threadId = threadData._id || threadData.id!;
+
+  const comments = await getComments({ threadId: threadId });
   const sortCommentsByDate = (arr: IThreadComment[]) =>
     arr.sort(
       (a, b) =>
@@ -103,7 +105,7 @@ async function processThread(
         parseInt(a.updatedAt.replace(/[-\.\:\D]/g, ""))
     );
   const processedThreadData: IThreadDataProcessed = {
-    id: threadData._id,
+    id: threadId,
     content: threadData.content,
     postedByUserId: threadData.postedByUserId,
     threadType: threadData.threadType,

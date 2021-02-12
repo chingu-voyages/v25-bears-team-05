@@ -6,6 +6,7 @@ import { processThread } from "../../services/feed/feed";
 import { IProcessedThreadFeed } from "../../services/feed/feed.type";
 import { hasSearchResultContent } from "../../services/search/search";
 import { ISearchResults } from "../../services/search/search.types";
+import { IThreadCommentDetails }  from "../../services/search/search.types"
 
 import "./Search.css";
 
@@ -22,6 +23,7 @@ function Search({
   const [privateThreads, setPrivateThreads] = useState<IProcessedThreadFeed[]>(
     []
   );
+  const [publicThreadComments, setPublicThreadComments] = useState<IThreadCommentDetails>()
   const [queryString, setQueryString] = useState<string>("");
 
   useEffect(() => {

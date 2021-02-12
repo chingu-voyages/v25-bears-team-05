@@ -44,7 +44,7 @@ interface IParentThreadDetails {
   updatedAt: Date;
 }
 
-interface IThreadCommentDetails {
+export interface IThreadCommentDetails {
   parentThread: IParentThreadDetails | null;
   id: string;
   parentThreadId: string;

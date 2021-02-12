@@ -72,6 +72,7 @@ function Search({
               queryString: queryString,
               className: "Post__searchResult"
             }}
+            showComments={true}
             key={publicThread.threadData?.id}
           />
         ))}
@@ -83,6 +84,7 @@ function Search({
               queryString: queryString,
               className: "Post__searchResult"
             }}
+            showComments={true}
             key={privateThread.threadData?.id}
           />
         ))}

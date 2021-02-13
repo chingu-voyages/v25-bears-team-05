@@ -69,7 +69,6 @@ function Search({
   
   return (
     <div className={`${classNameInfo || ""} Search-page-visible`}>
-      <div className="Search-page__title"> Search Results </div>
       {!hasSearchResultContent(searchResults) && <NoSearchResult />}
       {hasSearchResultContent(searchResults) &&
         searchResults.users?.map((user) => (

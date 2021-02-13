@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IThreadCommentDetails } from "../../../../services/search/search.types";
 import { getUser } from "../../../../services/user";
 import { IUserProcessed } from "../../../../services/user/user.type";
-import Avatar from "../../../avatar";
-import ProfileCard from "../../../profileCard";
+import Comment from "../../../../components/comment"
 import "./Search-thread-comments.css";
 
 function SearchThreadComment ({ className, threadCommentData, queryString }: 
@@ -17,13 +16,18 @@ function SearchThreadComment ({ className, threadCommentData, queryString }:
         onError: (message)=> { console.log(message)}})
       })()
     }, [])
+  
+  const onDeleteComment = () => {
+
+  }
   return (
     <div className={`${className || ""} SearchThreadComment__main`}>
-      <ProfileCard type="comment" 
-        userId={matchedThreadQueryUser?.id} 
-        threadData={threadCommentData} 
+      <Comment commentData={{...threadCommentData, 
+        _id: threadCommentData.id!,
+        updatedAt: threadCommentData.updatedAt.toString(), 
+        createdAt: threadCommentData.createdAt.toString() }} 
+        handleDeleteComment={onDeleteComment} 
       />
-      
     </div>
   )
 }

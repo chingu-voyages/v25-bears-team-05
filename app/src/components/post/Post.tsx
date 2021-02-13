@@ -261,7 +261,7 @@ function Post({
                 key={commentData._id}
                 {...{ commentData }}
                 handleDeleteComment={() =>
-                  handleDeleteComment({ commentId: commentData._id })
+                  handleDeleteComment({ commentId: commentData._id! })
                 }
               />
             ))}

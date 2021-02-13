@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { IThreadCommentDetails } from "../../../../services/search/search.types";
+import { IThreadCommentWithParent } from "../../../../services/search/search.types";
 import { getUser } from "../../../../services/user";
 import { IUserProcessed } from "../../../../services/user/user.type";
 import Comment from "../../../../components/comment"
 import "./Search-thread-comments.css";
 
 function SearchThreadComment ({ className, threadCommentData, queryString }: 
-  { queryString: string, threadCommentData: IThreadCommentDetails, className?: string}) {
+  { queryString: string, threadCommentData: IThreadCommentWithParent, className?: string}) {
     const [matchedThreadQueryUser, setMatchedThreadQueryUser] = useState<IUserProcessed>()
     useEffect(()=> {
       (async ()=> {
@@ -18,16 +18,18 @@ function SearchThreadComment ({ className, threadCommentData, queryString }:
     }, [])
   
   const onDeleteComment = () => {
-
+    // To be deleted
   }
   return (
     <div className={`${className || ""} SearchThreadComment__main`}>
-      <Comment commentData={{...threadCommentData, 
-        _id: threadCommentData.id!,
-        updatedAt: threadCommentData.updatedAt.toString(), 
-        createdAt: threadCommentData.createdAt.toString() }} 
-        handleDeleteComment={onDeleteComment} 
-      />
+      <div className="SearchThreadComment__Comment-section">
+        <Comment commentData={{...threadCommentData, 
+          _id: threadCommentData.id!,
+          updatedAt: threadCommentData.updatedAt.toString(), 
+          createdAt: threadCommentData.createdAt.toString() }} 
+          handleDeleteComment={onDeleteComment} 
+        />
+      </div>
     </div>
   )
 }

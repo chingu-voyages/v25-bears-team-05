@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
+import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
 import { processThread } from "../../services/feed/feed";
 import { IProcessedThreadFeed } from "../../services/feed/feed.type";
@@ -23,7 +24,7 @@ function Search({
   const [privateThreads, setPrivateThreads] = useState<IProcessedThreadFeed[]>(
     []
   );
-  const [publicThreadComments, setPublicThreadComments] = useState<IThreadCommentDetails>()
+  const [publicThreadComments, setPublicThreadComments] = useState<IThreadCommentDetails[]>()
   const [queryString, setQueryString] = useState<string>("");
 
   useEffect(() => {
@@ -44,6 +45,7 @@ function Search({
         setPublicThreads([...publicThreads, ...processedThreadData]);
         setQueryString(searchResults.query_string);
       }
+
       if (
         searchResults.private_threads &&
         searchResults.private_threads?.length > 0
@@ -55,6 +57,12 @@ function Search({
         );
         setPrivateThreads([...privateThreads, ...processedPrivateThreadData]);
         setQueryString(searchResults.query_string);
+      }
+
+      if ( searchResults.public_thread_comments && 
+          searchResults.public_thread_comments.length > 0
+        ) {
+          setPublicThreadComments([...searchResults.public_thread_comments])
       }
     })();
   }, [searchResults.public_threads, searchResults.private_threads]);
@@ -91,6 +99,12 @@ function Search({
             key={privateThread.threadData?.id}
           />
         ))}
+      {publicThreadComments?.length! > 0 && 
+        publicThreadComments?.map((publicThreadComment) => (
+          <SearchThreadComment queryString={queryString} 
+          threadCommentData={publicThreadComment} />
+        ))
+      }
     </div>
   );
 }

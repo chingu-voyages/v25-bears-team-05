@@ -35,20 +35,21 @@ function Post({
   referral,
   className = "",
   queryString,
+  visibleExpanded
 }: {
   threadData: IThreadDataProcessed;
   referral?: IThreadReferral;
   className?: string;
   showComments?: boolean;
   queryString?: string;
+  visibleExpanded?: boolean
 }) {
   const [inProgress, setInProgress] = useState(false);
-  console.log("46 comments", threadData)
   const [comments, setComments] = useState(threadData.comments);
-
   const [nOfComments, setNOfComments] = useState(
     comments && Object.keys(comments).length
   );
+
   useEffect(() => {
     setNOfComments(comments && Object.keys(comments).length);
   }, [comments]);
@@ -141,8 +142,8 @@ function Post({
         {referral?.reason}
         {queryString && (
           <p>
-            {" "}
-            <b>{queryString}</b>{" "}
+            {"«"}
+            <b>{queryString}</b>{"»"}
             <i>
               {" "}
               {getStringExcerpt({

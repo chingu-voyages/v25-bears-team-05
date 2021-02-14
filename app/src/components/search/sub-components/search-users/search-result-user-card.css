@@ -1,11 +1,11 @@
 .UserCard__main {
   font-family: "Roboto", Roboto, sans-serif;
-  border-color: black;
+  border-color: var(--black-background-color)lack;
   border-style: solid;
   border-radius: 10px;
   height: auto;
-  color: white;
-  background-color: black;
+  color: var(--primary-text-color);
+  background-color: var(--black-background-color);
   display: grid;
 
   grid-template-areas:

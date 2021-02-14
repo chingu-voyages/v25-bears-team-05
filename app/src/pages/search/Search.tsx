@@ -25,13 +25,13 @@ function Search({
     []
   );
   const [publicThreadComments, setPublicThreadComments] = useState<IThreadCommentWithParent[]>()
+  const [privateThreadComments, setPrivateThreadComments] = useState<IThreadCommentWithParent[]>()
   const [queryString, setQueryString] = useState<string>("");
 
   useEffect(() => {
-    //
     setPublicThreads([]);
     setPrivateThreads([]);
-    setQueryString("");
+    
     (async () => {
       if (
         searchResults.public_threads &&
@@ -63,7 +63,15 @@ function Search({
           searchResults.public_thread_comments.length > 0
         ) {
           setPublicThreadComments([...searchResults.public_thread_comments])
+          setQueryString(searchResults.query_string)
       }
+
+      if (searchResults.private_thread_comments &&
+        searchResults.private_thread_comments.length > 0
+        ) {
+          setPrivateThreadComments([...searchResults.private_thread_comments])
+          setQueryString(searchResults.query_string)
+        }
     })();
   }, [searchResults.public_threads, searchResults.private_threads]);
   

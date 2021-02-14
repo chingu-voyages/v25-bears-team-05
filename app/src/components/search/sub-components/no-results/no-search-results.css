@@ -2,7 +2,7 @@
 .search-result__no-result {
   height: 5rem;
   border-radius: 18px;
-  background-color: black;
+  background-color: var(--black-background-color);
 }
 
 .search-result__text-content {

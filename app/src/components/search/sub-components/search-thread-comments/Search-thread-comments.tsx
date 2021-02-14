@@ -16,6 +16,7 @@ function SearchThreadComment ({ className, threadCommentData, queryString }:
       setMatchedThreadQueryUser] = useState<IUserProcessed>()
     
     const [parentThread, setParentThread] = useState<IProcessedThreadFeed>()
+    const [expandedParentThreadVisible, setExpandedParentThreadVisible] = useState(false);
     useEffect(()=> {
       (async ()=> {
         await getUser({ userId: threadCommentData.postedByUserId,
@@ -23,29 +24,40 @@ function SearchThreadComment ({ className, threadCommentData, queryString }:
           onError: (message)=> { console.log(message)}})
 
         const parentThreadComment = await processThread(threadCommentData.parentThread!)
-        console.log("26, parentThreadComment", parentThreadComment)
         setParentThread(parentThreadComment)
       })()
     }, [])
   
   const onDeleteComment = () => {
-    // To be deleted
+    // Not implemented for search
+  }
+  
+  const parentThreadDropDown = (visible: boolean) => {
+    if (parentThread && visible) {
+      return ( <Post {...{threadData: parentThread?.threadData!, 
+        queryString: queryString}}
+        visibleExpanded={expandedParentThreadVisible}
+        className="SearchThreadComment__parent-thread-excerpt"
+      />)
+    }
   }
   return (
     <div className={`${className || ""} SearchThreadComment__main`}>
       <div className="SearchThreadComment__Comment-section">
+        <div className="SearchThreadComment__query-string">
+          <p>"{queryString}"</p>
+        </div>
         <Comment commentData={{...threadCommentData, 
           _id: threadCommentData.id!,
           updatedAt: threadCommentData.updatedAt.toString(), 
           createdAt: threadCommentData.createdAt.toString() }} 
-          handleDeleteComment={onDeleteComment}
-         
+          handleDeleteComment={onDeleteComment}        
         />
-        {parentThread && 
-          <Post {...{threadData: parentThread?.threadData!, 
-            queryString: queryString}}
-          />
-        }
+        <div className="SearchThreadComment__expand-parent-thread-button" 
+          onClick={() => setExpandedParentThreadVisible((show)=> !show )}> 
+          {expandedParentThreadVisible ? "- Hide parent thread" : "+ Show parent thread"}
+        </div>
+        {parentThreadDropDown(expandedParentThreadVisible)}
       </div>
     </div>
   )

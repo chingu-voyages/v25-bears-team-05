@@ -43,6 +43,7 @@ function Post({
   queryString?: string;
 }) {
   const [inProgress, setInProgress] = useState(false);
+  console.log("46 comments", threadData)
   const [comments, setComments] = useState(threadData.comments);
 
   const [nOfComments, setNOfComments] = useState(

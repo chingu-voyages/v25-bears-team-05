@@ -11,9 +11,11 @@ const md = require("markdown-it")();
 function Comment({
   commentData,
   handleDeleteComment,
+  className
 }: {
   commentData: IThreadComment;
   handleDeleteComment: () => void;
+  className?: string;
 }) {
   const [isMe, setIsMe] = useState(false);
   useEffect(() => {
@@ -24,7 +26,7 @@ function Comment({
   }, []);
 
   return commentData ? (
-    <div className="Comment">
+    <div className={ `${className || ""} Comment`}>
       <div className="Comment__header">
         <ProfileCard
           type="comment"

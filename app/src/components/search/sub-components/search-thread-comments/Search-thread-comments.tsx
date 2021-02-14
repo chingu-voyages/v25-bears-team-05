@@ -38,7 +38,8 @@ function SearchThreadComment ({ className, threadCommentData, queryString }:
           _id: threadCommentData.id!,
           updatedAt: threadCommentData.updatedAt.toString(), 
           createdAt: threadCommentData.createdAt.toString() }} 
-          handleDeleteComment={onDeleteComment} 
+          handleDeleteComment={onDeleteComment}
+         
         />
         {parentThread && 
           <Post {...{threadData: parentThread?.threadData!, 

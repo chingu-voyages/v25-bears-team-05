@@ -7,8 +7,6 @@ interface IUploadPhotoFileProps {
   onError: (msg: string) => void | React.Dispatch<React.SetStateAction<string>>;
 }
 
-console.log("IMAGUR api key", process.env.REACT_APP_IMGUR_CLIENT_ID);
-
 const uploadPhotoFile = async ({
   file,
   route,

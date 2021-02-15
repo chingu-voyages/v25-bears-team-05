@@ -13,7 +13,6 @@ export const doSearch = async (data: {
       params: { query: data.queryString },
     });
     if (req.status === 200) {
-      // do something
       data.onSuccess(req.data);
     } else {
       data.onError(req.statusText);
@@ -23,7 +22,11 @@ export const doSearch = async (data: {
   }
 };
 
-/** Returns true if there are search results, false if not */
+/**
+ * Helper function that indicates if search results have
+ * been returned (true)
+ * @param results True if there are results, false if none
+ */
 export function hasSearchResultContent(results?: ISearchResults): boolean {
   if (results) {
     for (let [key, value] of Object.entries(results)) {

@@ -10,17 +10,11 @@ const isProduction = !(
   process.env.NODE_ENV && process.env.NODE_ENV.match("development")
 );
 
-console.log("Node environment is", process.env.NODE_ENV)
-console.log("isProduction?", isProduction)
-console.log("DEV API SerVice URl pass", process.env.DEV_API_SERVICE_URL)
 const apiUrl = !isProduction
   ? process.env.DEV_API_SERVICE_URL
   : process.env.API_SERVICE_URL;
 
-
 // redirect http traffic to https
-
-console.log("apiUrl is", apiUrl);
 if (isProduction) {
   app.enable("trust proxy");
   app.use(function (request, response, next) {

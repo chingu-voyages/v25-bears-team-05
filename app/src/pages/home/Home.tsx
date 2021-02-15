@@ -111,6 +111,10 @@ function Home() {
   }, [history.location.hash]);
 
   const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
+    if (!thread?.threadData.id) {
+      console.log("115 thread.threadData.id is undefined", thread)
+      return (<li className="Home-page__invisible-item"></li>)
+    }
     return (
       <li className="Home-page__feed__list__item">
         {thread && <Post {...thread} />}

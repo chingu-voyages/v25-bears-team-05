@@ -72,6 +72,10 @@
   font-size: 18px;
 }
 
+.Home-page__invisible-item {
+  display: none;
+}
+
 @media only screen and (min-width: 800px) {
   .Home-page__post-maker-start__button {
     border-radius: 16px;

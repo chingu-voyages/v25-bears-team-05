@@ -20,15 +20,15 @@ import { useHistory } from "react-router-dom";
 import { doSearch } from "../../services/search/search";
 
 import { ISearchResults } from "../../services/search/search.types";
-import Search from "../../pages/search"
+import Search from "../../pages/search";
 
 function Home() {
   const history = useHistory();
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [searchTriggered, setSearchTriggered] = useState(false)
-  const [searchResultData, setSearchResultData] = useState<ISearchResults>()
+  const [searchTriggered, setSearchTriggered] = useState(false);
+  const [searchResultData, setSearchResultData] = useState<ISearchResults>();
 
   useEffect(() => {
     const onSuccess = ({
@@ -112,8 +112,7 @@ function Home() {
 
   const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
     if (!thread?.threadData.id) {
-      console.log("115 thread.threadData.id is undefined", thread)
-      return (<li className="Home-page__invisible-item"></li>)
+      return <li className="Home-page__invisible-item"></li>;
     }
     return (
       <li className="Home-page__feed__list__item">
@@ -125,16 +124,20 @@ function Home() {
 
   const onSearchSuccess = (data: any) => {
     setSearchResultData(data);
-  }
+  };
 
   const onSearchError = (data: any) => {
     // Some error occurred
-    console.log("Error", data)
-  }
-  const onSearchSubmit = (queryString: string) =>{
-    setSearchTriggered(!!queryString)
-    doSearch({ queryString: queryString, onSuccess: onSearchSuccess, onError: onSearchError })
-  }
+    console.log("Error", data);
+  };
+  const onSearchSubmit = (queryString: string) => {
+    setSearchTriggered(!!queryString);
+    doSearch({
+      queryString: queryString,
+      onSuccess: onSearchSuccess,
+      onError: onSearchError,
+    });
+  };
 
   return (
     <div className="Home-page">
@@ -144,7 +147,7 @@ function Home() {
         userId="me"
         className="Home-page__profile"
       />
-      {!searchTriggered && 
+      {!searchTriggered && (
         <div className="Home-page__post-maker-start">
           {!isPostMakerOpen ? (
             <Button
@@ -157,29 +160,29 @@ function Home() {
           ) : (
             <PostMaker {...postMakerOptions} />
           )}
-        </div> 
-      }
-      {!searchTriggered && 
+        </div>
+      )}
+      {!searchTriggered && (
         <div className="Home-page__feed">
-          {errorMessage && <div className="Home-page__error">{errorMessage}</div>}
+          {errorMessage && (
+            <div className="Home-page__error">{errorMessage}</div>
+          )}
           <ul className="Home-page__feed__list">
             {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
               <FeedItem
                 {...{ suggestion, thread }}
                 key={
-                  "feedItem" + (thread?.threadData?.id || suggestion?.id || index)
+                  "feedItem" +
+                  (thread?.threadData?.id || suggestion?.id || index)
                 }
               />
             ))}
           </ul>
-        </div> 
-      }
-      {searchTriggered &&
-        <Search searchResults={{...searchResultData!}} />
-      }
+        </div>
+      )}
+      {searchTriggered && <Search searchResults={{ ...searchResultData! }} />}
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}
-    
     </div>
   );
 }

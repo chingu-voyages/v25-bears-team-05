@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { IPublicUserDetails } from "../../../../services/search/search.types";
+import React from "react";
 import { IUserProcessed } from "../../../../services/user/user.type";
 import Avatar from "../../../avatar/Avatar";
 
@@ -15,7 +14,6 @@ function UserSearchResultCard({
   nOfConnections,
   isAConnection,
 }: IUserProcessed) {
-  const [currentUserData, setCurrentUserData] = useState({});
   return (
     <div className="UserCard__main">
       <Avatar url={avatar![0].url} userName={`${firstName} ${lastName}`} />

@@ -119,12 +119,10 @@ function Profile() {
       <TopBar onSearchSubmit={onSearchSubmit} />
 
       <main className="Profile-page__profile">
-        {!searchTriggered &&
+        
           <div className="wrapper__Profile-page__wall-paper">
             <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
           </div>
-        }
-        {!searchTriggered &&
           <figure className="Profile-page__avatar">
             <PhotoUploader
               route={{
@@ -143,8 +141,6 @@ function Profile() {
               />
             </PhotoUploader>
           </figure>
-        }
-        {!searchTriggered &&
           <div className="Profile-page__info">
             {userId === "me" && (
               <>
@@ -182,11 +178,8 @@ function Profile() {
               </p>
             )}
           </div>
-        }
+        
       </main>
-      {searchTriggered &&
-        <Search searchResults={{ ...searchResultData! }} />
-      }
       <Nav />
     </div>
   );

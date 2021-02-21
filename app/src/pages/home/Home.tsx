@@ -17,9 +17,6 @@ import {
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
-import { doSearch } from "../../services/search/search";
-
-import { ISearchResults } from "../../services/search/search.types";
 import Search from "../../pages/search";
 
 function Home() {
@@ -27,8 +24,7 @@ function Home() {
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [searchTriggered, setSearchTriggered] = useState(false);
-  const [searchResultData, setSearchResultData] = useState<ISearchResults>();
+  const [onSearchSubmitTriggered, setOnSearchSubmitTriggered] = useState<string>();
 
   useEffect(() => {
     const onSuccess = ({
@@ -122,22 +118,11 @@ function Home() {
     );
   };
 
-  const onSearchSuccess = (data: any) => {
-    setSearchResultData(data);
-  };
-
-  const onSearchError = (data: any) => {
-    // Some error occurred
-    console.log("Error", data);
-  };
   const onSearchSubmit = (queryString: string) => {
-    setSearchTriggered(!!queryString);
-    doSearch({
-      queryString: queryString,
-      onSuccess: onSearchSuccess,
-      onError: onSearchError,
-    });
-  };
+    console.log(queryString)
+    // Set the trigger
+    setOnSearchSubmitTriggered(queryString)
+  }
 
   return (
     <div className="Home-page">
@@ -147,7 +132,7 @@ function Home() {
         userId="me"
         className="Home-page__profile"
       />
-      {!searchTriggered && (
+      <Search setOnSearchSubmit={setOnSearchSubmitTriggered}>
         <div className="Home-page__post-maker-start">
           {!isPostMakerOpen ? (
             <Button
@@ -161,8 +146,6 @@ function Home() {
             <PostMaker {...postMakerOptions} />
           )}
         </div>
-      )}
-      {!searchTriggered && (
         <div className="Home-page__feed">
           {errorMessage && (
             <div className="Home-page__error">{errorMessage}</div>
@@ -179,8 +162,7 @@ function Home() {
             ))}
           </ul>
         </div>
-      )}
-      {searchTriggered && <Search searchResults={{ ...searchResultData! }} />}
+      </Search>
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}
     </div>

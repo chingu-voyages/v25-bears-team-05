@@ -42,4 +42,14 @@
   .Search-page__title {
     border-radius: 10px;
   }
+
+  .Search-page__search-invisible-main-body {
+    margin-left: 25%;
+    width: 50vw;
+    height: auto;
+    margin-right: 10%;
+    position: absolute;
+    top: 100px;
+    overflow: hidden;
+  }
 }

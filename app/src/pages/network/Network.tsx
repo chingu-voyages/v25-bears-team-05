@@ -26,8 +26,6 @@ function Network() {
   const [page, setPage] = useState(0);
   const [isEndPage, setIsEndPage] = useState(false);
   const isLoadingNextPage = useRef(true);
-  const [searchTriggered, setSearchTriggered] = useState(false)
-  const [searchResultData, setSearchResultData] = useState<ISearchResults>()
   const handleRemoveConnection = (connectionId: string) => {
     const onSuccess = () => {
       setConnections((connections) =>
@@ -111,18 +109,9 @@ function Network() {
       {isMe && <RemoveOption {...{ connectionData }} />}
     </li>
   );
-
-  const onSearchSuccess = (data: any) => {
-    setSearchResultData(data);
-  }
-
-  const onSearchError = (data: any) => {
-    // Some error occurred
-    console.log("Error", data)
-  }
+  
   const onSearchSubmit = (queryString: string) => {
-    setSearchTriggered(!!queryString)
-    doSearch({ queryString: queryString, onSuccess: onSearchSuccess, onError: onSearchError })
+    // Placeholder
   }
   return (
     <div className="Network-page">
@@ -133,7 +122,7 @@ function Network() {
         <h1 className="Network-page__title">Connections</h1>
       </header>
       <TopBar className="Network-page__top-bar--desktop" onSearchSubmit={onSearchSubmit} />
-      {!searchTriggered &&
+     
         <main className="Network-page__main">
           {errorMessage && <p>{errorMessage}</p>}
           <ul className="Network-page__connections-list">
@@ -143,10 +132,6 @@ function Network() {
           </ul>
           <Pagenator {...{ page, nextPage, active: !isEndPage }} />
         </main>
-      }
-      {searchTriggered &&
-        <Search searchResults={{ ...searchResultData! }} />
-      }
       <Nav />
     </div>
   );

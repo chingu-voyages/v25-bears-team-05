@@ -24,7 +24,8 @@ function Home() {
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [onSearchSubmitTriggered, setOnSearchSubmitTriggered] = useState<string>();
+  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
+  const [searchQueryString, setSearchQueryString] = useState<string>("");
 
   useEffect(() => {
     const onSuccess = ({
@@ -119,9 +120,9 @@ function Home() {
   };
 
   const onSearchSubmit = (queryString: string) => {
-    console.log(queryString)
     // Set the trigger
-    setOnSearchSubmitTriggered(queryString)
+    setSearchIsTriggered(!!queryString)
+    setSearchQueryString(queryString)
   }
 
   return (
@@ -132,7 +133,7 @@ function Home() {
         userId="me"
         className="Home-page__profile"
       />
-      <Search setOnSearchSubmit={setOnSearchSubmitTriggered}>
+      <Search query={searchQueryString} triggered={searchIsTriggered}>
         <div className="Home-page__post-maker-start">
           {!isPostMakerOpen ? (
             <Button

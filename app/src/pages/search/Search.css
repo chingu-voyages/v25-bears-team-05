@@ -33,6 +33,7 @@
     top: 100px;
     font-family: "Roboto", Roboto, sans-serif;
     overflow: hidden;
+    display: grid;
   }
   
   .Post__searchResult {
@@ -44,12 +45,14 @@
   }
 
   .Search-page__search-invisible-main-body {
-    margin-left: 25%;
-    width: 50vw;
-    height: auto;
-    margin-right: 10%;
+    margin-left: 35%;
     position: absolute;
     top: 100px;
-    overflow: hidden;
+  width: 50vw;
+    /*
+    height: auto;
+    margin-right: 10%;
+    top: 100px;
+    overflow: hidden; */
   }
 }

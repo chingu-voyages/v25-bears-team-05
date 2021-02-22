@@ -16,11 +16,13 @@ import "./Search.css";
 
 function Search({
   classNameInfo = "",
-  setOnSearchSubmit,
+  triggered,
+  query,
   children,
 }: {
   classNameInfo?: string;
-  setOnSearchSubmit: (queryString:string) => void;
+  triggered: boolean;
+  query: string
   children?: JSX.Element[]
 }) {
   const [publicThreads, setPublicThreads] = useState<IProcessedThreadFeed[]>(
@@ -38,16 +40,19 @@ function Search({
   const [processedUsers, setProcessedUsers] = useState<any[]>([]);
   const [queryString, setQueryString] = useState<string>("");
 
-  const [searchTriggered, setSearchTriggered] = useState(false);
   const [searchResultData, setSearchResultData] = useState<ISearchResults>();
+  const [displaySearchResults, setDisplaySearchResults] = useState<boolean>(false);
 
-  /**
+  
   useEffect(() => {
     (async () => {
       setPublicThreadComments([]);
       setPrivateThreadComments([]);
       setProcessedUsers([]);
-      if (searchResultData!.users && searchResultData!.users.length > 0) {
+      // if (!searchResultData) {
+      //   return;
+      // }
+      if (searchResultData?.users && searchResultData?.users.length > 0) {
         const processedUserData = await Promise.all(
           searchResultData!.users.map((user) =>
             getUser({
@@ -60,8 +65,8 @@ function Search({
         console.log("41 - processed user data", processedUserData);
       }
       if (
-        searchResultData!.public_threads &&
-        searchResultData!.public_threads.length > 0
+        searchResultData?.public_threads &&
+        searchResultData?.public_threads.length > 0
       ) {
         const processedThreadData = await Promise.all(
           searchResultData!.public_threads.map((publicThread) =>
@@ -73,11 +78,11 @@ function Search({
       }
 
       if (
-        searchResultData!.private_threads &&
-        searchResultData!.private_threads?.length > 0
+        searchResultData?.private_threads &&
+        searchResultData?.private_threads?.length > 0
       ) {
         const processedPrivateThreadData = await Promise.all(
-          searchResultData!.private_threads.map((privateThread) =>
+          searchResultData?.private_threads.map((privateThread) =>
             processThread(privateThread)
           )
         );
@@ -86,30 +91,32 @@ function Search({
       }
 
       if (
-        searchResultData!.public_thread_comments &&
-        searchResultData!.public_thread_comments.length > 0
+        searchResultData?.public_thread_comments &&
+        searchResultData?.public_thread_comments.length > 0
       ) {
         setPublicThreadComments([...searchResultData!.public_thread_comments]);
         setQueryString(searchResultData!.query_string);
       }
 
       if (
-        searchResultData!.private_thread_comments &&
-        searchResultData!.private_thread_comments.length > 0
+        searchResultData?.private_thread_comments &&
+        searchResultData?.private_thread_comments.length > 0
       ) {
         setPrivateThreadComments([...searchResultData!.private_thread_comments]);
         setQueryString(searchResultData!.query_string);
       }
     })();
   }, [
-    searchResultData!.public_threads,
-    searchResultData!.private_threads,
-    searchResultData!.public_thread_comments,
-    searchResultData!.private_thread_comments,
-    searchResultData!.users,
+    searchResultData?.public_threads,
+    searchResultData?.private_threads,
+    searchResultData?.public_thread_comments,
+    searchResultData?.private_thread_comments,
+    searchResultData?.users,
   ]);
-  */
+
   const onSearchSuccess = (data: any) => {
+    console.log("114 searchSuccess triggered!", data)
+    setDisplaySearchResults(!!data);
     setSearchResultData(data);
   };
 
@@ -118,13 +125,19 @@ function Search({
     console.log("Error", data);
   };
   const onSearchSubmit = (queryString: string) => {
-    setSearchTriggered(!!queryString);
+    console.log("onSearchSubmit line 122", queryString)
     doSearch({
       queryString: queryString,
       onSuccess: onSearchSuccess,
       onError: onSearchError,
     });
   };
+
+  useEffect(() => {
+    if (triggered) {
+      onSearchSubmit(query);
+    }
+  }, [triggered, query, displaySearchResults])
 
   const searchSection = () => {
     return (
@@ -176,12 +189,13 @@ function Search({
     );
   }
 
+  
   return (
    <div className="Search-page__search-invisible-main-body">
-     {!searchTriggered && children?.map((child) => (
+     {!triggered && children?.map((child) => (
        child
      ))}
-     {searchTriggered && (searchSection)}
+     {displaySearchResults && searchSection()}
    </div>
   )
 }

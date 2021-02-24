@@ -120,7 +120,6 @@ function Home() {
   };
 
   const onSearchSubmit = (queryString: string) => {
-    // Set the trigger
     setSearchIsTriggered(!!queryString)
     setSearchQueryString(queryString)
   }

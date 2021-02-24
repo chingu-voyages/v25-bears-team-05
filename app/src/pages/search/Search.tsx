@@ -48,10 +48,10 @@ function Search({
     (async () => {
       setPublicThreadComments([]);
       setPrivateThreadComments([]);
+      setPublicThreads([]);
+      setPrivateThreads([]);
       setProcessedUsers([]);
-      // if (!searchResultData) {
-      //   return;
-      // }
+     
       if (searchResultData?.users && searchResultData?.users.length > 0) {
         const processedUserData = await Promise.all(
           searchResultData!.users.map((user) =>
@@ -62,7 +62,6 @@ function Search({
           )
         );
         setProcessedUsers([...processedUserData]);
-        console.log("41 - processed user data", processedUserData);
       }
       if (
         searchResultData?.public_threads &&
@@ -115,17 +114,14 @@ function Search({
   ]);
 
   const onSearchSuccess = (data: any) => {
-    console.log("114 searchSuccess triggered!", data)
     setDisplaySearchResults(!!data);
     setSearchResultData(data);
   };
 
   const onSearchError = (data: any) => {
-    // Some error occurred
     console.log("Error", data);
   };
   const onSearchSubmit = (queryString: string) => {
-    console.log("onSearchSubmit line 122", queryString)
     doSearch({
       queryString: queryString,
       onSuccess: onSearchSuccess,

@@ -11,8 +11,6 @@ import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
 import TopBar from "../../components/topBar";
-import { ISearchResults } from "../../services/search/search.types";
-import { doSearch } from "../../services/search/search";
 import Search from "../search";
 
 function Network() {
@@ -26,6 +24,8 @@ function Network() {
   const [page, setPage] = useState(0);
   const [isEndPage, setIsEndPage] = useState(false);
   const isLoadingNextPage = useRef(true);
+  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
+  const [searchQueryString, setSearchQueryString] = useState<string>("");
   const handleRemoveConnection = (connectionId: string) => {
     const onSuccess = () => {
       setConnections((connections) =>
@@ -111,8 +111,10 @@ function Network() {
   );
   
   const onSearchSubmit = (queryString: string) => {
-    // Placeholder
+    setSearchIsTriggered(!!queryString)
+    setSearchQueryString(queryString)
   }
+
   return (
     <div className="Network-page">
       <header className="Network-page__top-bar--mobile">
@@ -122,7 +124,8 @@ function Network() {
         <h1 className="Network-page__title">Connections</h1>
       </header>
       <TopBar className="Network-page__top-bar--desktop" onSearchSubmit={onSearchSubmit} />
-     
+      <Search query={searchQueryString} triggered={searchIsTriggered}>
+        <div />
         <main className="Network-page__main">
           {errorMessage && <p>{errorMessage}</p>}
           <ul className="Network-page__connections-list">
@@ -132,6 +135,7 @@ function Network() {
           </ul>
           <Pagenator {...{ page, nextPage, active: !isEndPage }} />
         </main>
+        </Search>
       <Nav />
     </div>
   );

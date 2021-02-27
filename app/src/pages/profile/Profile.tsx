@@ -15,6 +15,9 @@ import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
+import { ISearchResults } from "../../services/search/search.types";
+import { doSearch } from "../../services/search/search";
+import Search from "../search";
 
 function Profile() {
   const firstLoad = useRef(true);
@@ -33,7 +36,8 @@ function Profile() {
     jobTitle: "",
     isAConnection: true,
   });
-
+  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
+  const [searchQueryString, setSearchQueryString] = useState<string>("");
   const getUserDataForInputs = () => {
     return {
       firstName: userInfo.firstName,
@@ -98,69 +102,76 @@ function Profile() {
     }
   }, [match.params.userId]);
 
+  const onSearchSubmit = (queryString: string) => {
+    setSearchIsTriggered(!!queryString)
+    setSearchQueryString(queryString)
+  }
   return (
     <div className="Profile-page">
-      <TopBar />
-      <main className="Profile-page__profile">
-        <div className="wrapper__Profile-page__wall-paper">
-          <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
-        </div>
-        <figure className="Profile-page__avatar">
-          <PhotoUploader
-            route={{
-              url: "/api/users/me",
-              method: "patch",
-              urlPropertyName: "avatar",
-            }}
-            onUpload={(url) => setAvatar(url)}
-          >
-            <Avatar
-              url={avatar}
-              userName={
-                `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
-                "user avatar"
-              }
-            />
-          </PhotoUploader>
-        </figure>
-        <div className="Profile-page__info">
-          {userId === "me" && (
-            <>
-              <Button
-                onClick={handleToggleEditMode}
-                className="Profile-page__info__edit"
+      <TopBar onSearchSubmit={onSearchSubmit} />
+      <Search query={searchQueryString} triggered={searchIsTriggered}>
+        <div></div>
+        <main className="Profile-page__profile">
+            <div className="wrapper__Profile-page__wall-paper">
+              <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
+            </div>
+            <figure className="Profile-page__avatar">
+              <PhotoUploader
+                route={{
+                  url: "/api/users/me",
+                  method: "patch",
+                  urlPropertyName: "avatar",
+                }}
+                onUpload={(url) => setAvatar(url)}
               >
-                <img src={editIcon} alt="edit" />
-              </Button>
-              {isEditing && (
-                <Button
-                  onClick={handleUpdateInfo}
-                  className="Profile-page__info__save square"
-                >
-                  Save
-                </Button>
+                <Avatar
+                  url={avatar}
+                  userName={
+                    `${userInfo.firstName} ${userInfo.lastName}`.trim() ||
+                    "user avatar"
+                  }
+                />
+              </PhotoUploader>
+            </figure>
+            <div className="Profile-page__info">
+              {userId === "me" && (
+                <>
+                  <Button
+                    onClick={handleToggleEditMode}
+                    className="Profile-page__info__edit"
+                  >
+                    <img src={editIcon} alt="edit" />
+                  </Button>
+                  {isEditing && (
+                    <Button
+                      onClick={handleUpdateInfo}
+                      className="Profile-page__info__save square"
+                    >
+                      Save
+                    </Button>
+                  )}
+                </>
               )}
-            </>
-          )}
-          {isEditing ? (
-            <ProfileEditor
-              {...{ inputs, setInputs, errorMessage: editorErrorMessage }}
-              className="Profile-page__editor"
-            />
-          ) : (
-            <ProfileCard
-              type="profile"
-              data={{ ...userInfo, id: userId, nOfConnections }}
-              className="Profile-page__info__text"
-            />
-          )}
-          {getDataErrorMessage && (
-            <p className="Profile-page__get-data-error">
-              {getDataErrorMessage}
-            </p>
-          )}
-        </div>
-      </main>
+              {isEditing ? (
+                <ProfileEditor
+                  {...{ inputs, setInputs, errorMessage: editorErrorMessage }}
+                  className="Profile-page__editor"
+                />
+              ) : (
+                  <ProfileCard
+                    type="profile"
+                    data={{ ...userInfo, id: userId, nOfConnections }}
+                    className="Profile-page__info__text"
+                  />
+                )}
+              {getDataErrorMessage && (
+                <p className="Profile-page__get-data-error">
+                  {getDataErrorMessage}
+                </p>
+              )}
+            </div>
+        </main>
+      </Search>
       <Nav />
     </div>
   );

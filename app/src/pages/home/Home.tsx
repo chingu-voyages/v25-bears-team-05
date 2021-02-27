@@ -17,12 +17,15 @@ import {
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
+import Search from "../../pages/search";
 
 function Home() {
   const history = useHistory();
   const [feed, setFeed] = useState<any[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
+  const [searchQueryString, setSearchQueryString] = useState<string>("");
 
   useEffect(() => {
     const onSuccess = ({
@@ -105,6 +108,9 @@ function Home() {
   }, [history.location.hash]);
 
   const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
+    if (!thread?.threadData.id) {
+      return <li className="Home-page__invisible-item"></li>;
+    }
     return (
       <li className="Home-page__feed__list__item">
         {thread && <Post {...thread} />}
@@ -113,41 +119,50 @@ function Home() {
     );
   };
 
+  const onSearchSubmit = (queryString: string) => {
+    setSearchIsTriggered(!!queryString)
+    setSearchQueryString(queryString)
+  }
+
   return (
     <div className="Home-page">
-      <TopBar className="Home-page__top-bar" />
+      <TopBar className="Home-page__top-bar" onSearchSubmit={onSearchSubmit} />
       <ProfileCard
         type="home-page"
         userId="me"
         className="Home-page__profile"
       />
-      <div className="Home-page__post-maker-start">
-        {!isPostMakerOpen ? (
-          <Button
-            onClick={() => setIsPostMakerOpen(true)}
-            className="Home-page__post-maker-start__button"
-          >
-            <img src={editIcon} alt="" />
-            <h1>Share your thoughts or photos</h1>
-          </Button>
-        ) : (
-          <PostMaker {...postMakerOptions} />
-        )}
-      </div>
-      <div className="Home-page__feed">
-        {errorMessage && <div className="Home-page__error">{errorMessage}</div>}
-        <ul className="Home-page__feed__list">
-          {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
-            <FeedItem
-              {...{ suggestion, thread }}
-              key={
-                "feedItem" + (thread?.threadData?.id || suggestion?.id || index)
-              }
-            />
-          ))}
-        </ul>
-        {/* <Pagenator {...{ page, nextPage, active: isEndPage || connections.length > 0 }} />  */}
-      </div>
+      <Search query={searchQueryString} triggered={searchIsTriggered}>
+        <div className="Home-page__post-maker-start">
+          {!isPostMakerOpen ? (
+            <Button
+              onClick={() => setIsPostMakerOpen(true)}
+              className="Home-page__post-maker-start__button"
+            >
+              <img src={editIcon} alt="" />
+              <h1>Share your thoughts or photos</h1>
+            </Button>
+          ) : (
+            <PostMaker {...postMakerOptions} />
+          )}
+        </div>
+        <div className="Home-page__feed">
+          {errorMessage && (
+            <div className="Home-page__error">{errorMessage}</div>
+          )}
+          <ul className="Home-page__feed__list">
+            {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
+              <FeedItem
+                {...{ suggestion, thread }}
+                key={
+                  "feedItem" +
+                  (thread?.threadData?.id || suggestion?.id || index)
+                }
+              />
+            ))}
+          </ul>
+        </div>
+      </Search>
       <Nav />
       {inProgress && <Spinner className="Home-page__spinner" />}
     </div>

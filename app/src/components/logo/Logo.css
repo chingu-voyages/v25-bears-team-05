@@ -3,6 +3,9 @@
   place-items: center center;
 }
 
+.wrapper__Logo:hover {
+  cursor: pointer;
+}
 .Logo {
   width: 100%;
 }

@@ -1,0 +1,22 @@
+.UserCard__main {
+  font-family: "Roboto", Roboto, sans-serif;
+  border-color: var(--black-background-color)lack;
+  border-style: solid;
+  border-radius: 10px;
+  height: auto;
+  color: var(--primary-text-color);
+  background-color: var(--black-background-color);
+  display: grid;
+
+  grid-template-areas:
+    ". avatar profile-details";
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 2%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.Avatar {
+  margin-left: 5%;
+}

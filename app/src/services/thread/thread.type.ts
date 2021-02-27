@@ -3,6 +3,7 @@ export interface IAttachmentType {
 }
 
 export interface IThreadComment {
+  id?: string;
   _id: string;
   postedByUserId: string;
   content: string;
@@ -49,6 +50,7 @@ export enum ThreadVisibility {
 }
 
 export interface IThread {
+  id?: string;
   _id: string;
   postedByUserId: string;
   threadType: ThreadType;

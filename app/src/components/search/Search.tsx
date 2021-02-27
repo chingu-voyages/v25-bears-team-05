@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import searchIcon from "../../images/searchicon.svg";
 import "./Search.css";
+import ISearchProps from "./search.types";
 
-function Search({ className }: { className: string }) {
+function Search({ className, onSearchSubmit }: ISearchProps) {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   useEffect(() => {
     setError(query ? "Search not yet implemented" : "");
-  });
+  }, [query]);
+
+  const handleEnterKeyPress = (e: React.KeyboardEvent) => {
+    const queryString = (e.target as HTMLInputElement).value;
+    if (e.key === "Enter") {
+      onSearchSubmit(queryString);
+    }
+  };
   return (
     <div className={`Search ${className || ""}`}>
       <input
@@ -16,6 +24,8 @@ function Search({ className }: { className: string }) {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyPress={(e) => handleEnterKeyPress(e)}
+        onBlur={(e) => setQuery(e.target.value)}
       />
       <label className="Search__label" htmlFor="SearchInput">
         <img src={searchIcon} alt="" />

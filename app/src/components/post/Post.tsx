@@ -27,24 +27,29 @@ import {
 import Comment from "../comment";
 import PostMaker from "../postMaker";
 import Spinner from "../spinner";
+import { getStringExcerpt } from "../search/search.helpers";
 const md = require("markdown-it")();
 
 function Post({
   threadData,
   referral,
   className = "",
+  queryString,
+  visibleExpanded
 }: {
   threadData: IThreadDataProcessed;
   referral?: IThreadReferral;
   className?: string;
   showComments?: boolean;
+  queryString?: string;
+  visibleExpanded?: boolean
 }) {
   const [inProgress, setInProgress] = useState(false);
   const [comments, setComments] = useState(threadData.comments);
-
   const [nOfComments, setNOfComments] = useState(
     comments && Object.keys(comments).length
   );
+
   useEffect(() => {
     setNOfComments(comments && Object.keys(comments).length);
   }, [comments]);
@@ -135,6 +140,19 @@ function Post({
           <Link to={`/${referral.userId}/profile`}>{referral.userName}</Link>
         )}
         {referral?.reason}
+        {queryString && (
+          <p>
+            {"«"}
+            <b>{queryString}</b>{"»"}
+            <i>
+              {" "}
+              {getStringExcerpt({
+                queryString: queryString,
+                threadContent: threadData.content.html!,
+              })}{" "}
+            </i>{" "}
+          </p>
+        )}
       </header>
       <ProfileCard
         className="Post__profile-card"
@@ -245,7 +263,7 @@ function Post({
                 key={commentData._id}
                 {...{ commentData }}
                 handleDeleteComment={() =>
-                  handleDeleteComment({ commentId: commentData._id })
+                  handleDeleteComment({ commentId: commentData._id! })
                 }
               />
             ))}

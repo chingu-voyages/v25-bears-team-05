@@ -5,7 +5,7 @@
   place-items: start stretch;
   grid-template-areas:
     "topBar"
-    "postMakerStart"
+   "postMakerStart"
     "feed";
 }
 .Home-page__top-bar {
@@ -25,6 +25,12 @@
 }
 .Home-page__feed {
   grid-area: feed;
+}
+
+.Home-page__search-result {
+  font-family: "Roboto", sans-serif;
+  grid-area: feed;
+  width: 100%;
 }
 
 .Home-page__spinner {
@@ -51,7 +57,6 @@
 }
 .Home-page__post-maker-start {
   box-sizing: border-box;
-  margin: 16px 24px 0 24px;
 }
 .Home-page__post-maker-start__button {
   width: 100%;
@@ -64,6 +69,10 @@
 }
 .Home-page__post-maker-start h1 {
   font-size: 18px;
+}
+
+.Home-page__invisible-item {
+  display: none;
 }
 
 @media only screen and (min-width: 800px) {

@@ -1,19 +1,11 @@
 import { IActionProps } from "../actions/actions.type";
-import {
-  SET_FEED_QUERY,
-  SET_LAST_BUCKET_REACHED,
-  UPDATE_FEED,
-} from "../actionTypes";
-import { IStoreState } from "../store.type";
+import { UPDATE_FEED } from "../actionTypes";
+import { IBucketItem, IStoreState } from "../store.type";
 
 const initialState = {
-  buckets: {},
-  query: {
-    filter: "",
-    latestBucketRecieved: "", 
-    oldestBucketRecieved: ""
-  },
-  lastBucketReached: false,
+  home: {},
+  profile: {},
+  notification: {},
 };
 
 export default function feed(
@@ -24,19 +16,10 @@ export default function feed(
     case UPDATE_FEED: {
       return {
         ...state,
-        buckets: { ...action.payload.buckets, ...state.buckets },
-      };
-    }
-    case SET_FEED_QUERY: {
-      return {
-        ...state,
-        query: { ...state.query, ...action.payload.query },
-      };
-    }
-    case SET_LAST_BUCKET_REACHED: {
-      return {
-        ...state,
-        lastBucketReached: true,
+        [action.payload.destination as IBucketItem["destination"]]: {
+          ...action.payload.buckets,
+          ...state[action.payload.destination as IBucketItem["destination"]],
+        },
       };
     }
     default:

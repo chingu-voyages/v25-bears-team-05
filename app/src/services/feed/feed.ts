@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const getFeed = async ({ query }: { query: string }) => {
-  const res = await axios(`/api/feed?${query}`);
+const getHomeFeed = async ({ query }: { query: string }) => {
+  const res = await axios(`/api/feed/home?${query}`);
   if (res.data) {
     return res.data;
   } else {
@@ -9,4 +9,4 @@ const getFeed = async ({ query }: { query: string }) => {
   }
 };
 
-export { getFeed };
+export { getHomeFeed };

@@ -1,4 +1,4 @@
-import { IFeedReferral } from "../services/feed/feed.type";
+import { IFeedItem } from "../services/feed/feed.type";
 import { IThreadFork, ThreadVisibility } from "../services/thread/thread.type";
 import { IUser } from "../services/user/user.type";
 
@@ -32,17 +32,18 @@ export interface IStoreStateThreadData {
   createdAt: string;
 }
 
-export interface IStoreStateFeedBucket {
-  threads?: {
-    [threadId: string]: {
-      refferal: IFeedReferral;
-    };
+export interface IBucketItem extends IFeedItem {
+  documentData: any; // IThreadResponse | IProfile | IThreadCommentDocument | IThreadReactionDocument | IUserConnectionDocument;
+  destination: "home" | "profile" | "notification";
+}
+
+export interface IBucket {
+  collection: {
+    [priority: number]: Array<IBucketItem>;
   };
-  users?: {
-    [userId: string]: {
-      refferal: IFeedReferral;
-    };
-  };
+  latestUpdate: Date;
+  oldestUpdate: Date;
+  next: (olderThanDate: string) => void;
 }
 
 export interface IStoreState {
@@ -51,13 +52,14 @@ export interface IStoreState {
     log: Array<{ type: "error" | "success" | "info"; message: string }>;
   };
   feed: {
-    buckets: {
-      [dateTime: string]: IStoreStateFeedBucket;
+    home: {
+      [latestItemDate: string]: IBucket;
     };
-    query: {
-      filter: string; 
-      latestBucketRecieved: string;
-      oldestBucketRecieved: string;
+    profile: {
+      [latestItemDate: string]: IBucket;
+    };
+    notification: {
+      [latestItemDate: string]: IBucket;
     };
   };
   session: {

@@ -1,26 +1,18 @@
-import { IRawResponseThread } from "../thread/thread.type";
-import { IUser } from "../user/user.type";
-
-export interface IFeedReferral {
-  type: string;
-  reason: string;
-}
-
-export interface IRawResponseBucket {
-  threads?: {
-    [threadId: string]: {
-      threadData: IRawResponseThread;
-      refferal: IFeedReferral;
-    };
+export interface IFeedItem {
+  documentId: string;
+  documentType: "thread" | "user" | "comment" | "connection" | "reaction";
+  documentUpdatedAt: Date;
+  action:
+    | "posted"
+    | "updated"
+    | "commented"
+    | "updated their comment"
+    | "reacted to"
+    | "connected with"
+    | "joined"
+    | "no action defined";
+  byUserId: string;
+  propertiesChanged?: {
+    [propertyName: string]: any;
   };
-  users?: {
-    [userId: string]: {
-      userData: IUser;
-      refferal: IFeedReferral;
-    };
-  };
-}
-
-export interface IRawResponseFeed {
-  [dateTime: string]: IRawResponseBucket;
 }

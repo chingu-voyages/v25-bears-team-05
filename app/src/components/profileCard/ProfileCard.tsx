@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import IProfileCard, { IBasicCardInfo, ICardInfo } from "./profileCard.type";
-import convertDateStringToTimeAgo from "../../utils/convertDateStringToTimeAgo";
+import convertDateStringToTimeAgo from "../../utils/convert-time-ago";
 import { Link } from "react-router-dom";
 import "./ProfileCard.css";
 import Avatar from "../avatar";

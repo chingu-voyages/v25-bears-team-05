@@ -4,6 +4,8 @@ import { UPDATE_FEED } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
 import store from "../store";
 import { IBucket, IBucketItem } from "../store.type";
+import { updateThread } from "./threads";
+import { updateUser } from "./users";
 
 export const updateFeed = ({
   collection,
@@ -14,18 +16,38 @@ export const updateFeed = ({
   destination: IBucketItem["destination"];
   setNextDone?: () => void;
 }) => {
-  // TODO: Split out thread and user data from buckets
-  // TODO: add to or update data in thread and user stores
+  // Add to or update data in thread and user stores
+  Object.entries(collection).forEach(([priorty, bucket]) => {
+    bucket.forEach((item, index) => {
+      switch (item.documentType) {
+        case "thread":
+          store.dispatch(updateThread(item.documentData));
+          break;
+        case "user":
+          store.dispatch(updateUser(item.documentData));
+          break;
+        case "comment":
+          // TODO: make updateThreadComment action
+          break;
+        case "connection":
+          // TODO: make updateUserConnections action
+          break;
+        case "reaction":
+          // TODO: make updateThreadReactions action
+          break;
+      }
+      delete collection[priorty as any][index].documentData;
+    });
+  });
+
   // TODO: add next function (handles calling fetchFeedNext) into collection
   // TODO: if setNextDone exists call it (collection is the result response of caliing that next so it's finished)
-
-  const newCollection: any = { ...collection };
 
   return {
     type: UPDATE_FEED,
     payload: {
       destination,
-      collection: newCollection,
+      collection,
     },
   };
 };

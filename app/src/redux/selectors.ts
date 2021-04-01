@@ -8,8 +8,8 @@ export const getCurrentUser = (store: IStoreState) => store.users.me;
 export const getThreads = (store: IStoreState) => store.threads;
 
 // feed
-export const getLatestFeed = (store: IStoreState) =>
-  store.feed.buckets[Object.keys(store.feed.buckets).sort().reverse()[0]];
+export const getLatestHomeFeed = (store: IStoreState) =>
+  store.feed.home[Object.keys(store.feed.home.buckets).sort().reverse()[0]];
 
 // session
 export const getLoggedInState = (store: IStoreState) =>

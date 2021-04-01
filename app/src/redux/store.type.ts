@@ -33,7 +33,7 @@ export interface IStoreStateThreadData {
 }
 
 export interface IBucketItem extends IFeedItem {
-  documentData: any; // IThreadResponse | IProfile | IThreadCommentDocument | IThreadReactionDocument | IUserConnectionDocument;
+  documentData?: any; // IThreadResponse | IProfile | IThreadCommentDocument | IThreadReactionDocument | IUserConnectionDocument;
   destination: "home" | "profile" | "notification";
 }
 

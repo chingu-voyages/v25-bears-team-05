@@ -27,7 +27,7 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --error-color: var(--color-pale);
+  --error-color: var(--color-red);
   --primary-green-color: var(--color-green-4);
   --active-icon-color: var(--color-grey-3);
   --inactive-icon-color: var(--color-grey-2);

@@ -71,7 +71,6 @@ function PasswordRecovery() {
       {!requestSuccessfullySubmitted && (
         <div className="Password-recovery-request-page__input_section">
           <h2 className="black-header-text">
-            {" "}
             Enter the e-mail address associated with your profile
           </h2>
           <Input

@@ -1,5 +1,5 @@
 import { IActionProps } from "../actions/actions.type";
-import { UPDATE_FEED } from "../actionTypes";
+import { SET_NEXT_DONE, UPDATE_FEED } from "../actionTypes";
 import { IBucketItem, IStoreState } from "../store.type";
 
 const initialState = {
@@ -17,8 +17,23 @@ export default function feed(
       return {
         ...state,
         [action.payload.destination as IBucketItem["destination"]]: {
-          ...action.payload.buckets,
           ...state[action.payload.destination as IBucketItem["destination"]],
+          [action.payload.latestUpdate]: action.payload.bucket,
+        },
+      };
+    }
+    case SET_NEXT_DONE: {
+      return {
+        ...state,
+        [action.payload.destination as IBucketItem["destination"]]: {
+          ...state[action.payload.destination as IBucketItem["destination"]],
+          [action.payload.latestUpdate]: {
+            collection:
+              state[action.payload.destination as IBucketItem["destination"]][
+                action.payload.latestUpdate
+              ].collection,
+            next: action.payload.nextDateKey,
+          },
         },
       };
     }

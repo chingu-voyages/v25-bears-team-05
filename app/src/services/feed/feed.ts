@@ -1,7 +1,14 @@
 import axios from "axios";
+import { IBucketItem } from "../../redux/store.type";
 
-const getHomeFeed = async ({ query }: { query: string }) => {
-  const res = await axios(`/api/feed/home?${query}`);
+const fetchFeed = async ({
+  query,
+  destination,
+}: {
+  query: string;
+  destination: IBucketItem["destination"];
+}) => {
+  const res = await axios(`/api/feed/${destination}?${query}`);
   if (res.data) {
     return res.data;
   } else {
@@ -9,4 +16,4 @@ const getHomeFeed = async ({ query }: { query: string }) => {
   }
 };
 
-export { getHomeFeed };
+export { fetchFeed };

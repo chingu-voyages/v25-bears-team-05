@@ -19,6 +19,7 @@ export const ADD_COMMENT = "ADD_COMMENT";
 export const REMOVE_COMMENT = "REMOVE_COMMENT";
 // feed
 export const UPDATE_FEED = "UPDATE_FEED";
+export const SET_NEXT_DONE = "SET_NEXT_DONE";
 // session
 export const SET_IS_LOGGED_IN = "SET_IS_LOGGED_IN";
 export const SET_APP_START_URL_PATH = "SET_APP_START_URL_PATH";

@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
-import { getHomeFeed } from "../../services/feed/feed";
-import { UPDATE_FEED } from "../actionTypes";
+import { fetchFeed } from "../../services/feed/feed";
+import { SET_NEXT_DONE, UPDATE_FEED } from "../actionTypes";
 import handleServiceRequest from "../handleServiceRequest";
 import store from "../store";
 import { IBucket, IBucketItem } from "../store.type";
@@ -14,46 +14,87 @@ export const updateFeed = ({
 }: {
   collection: IBucket["collection"];
   destination: IBucketItem["destination"];
-  setNextDone?: () => void;
+  setNextDone?: (latestUpdate: string) => void;
 }) => {
-  // Add to or update data in thread and user stores
+  // Extract documentData (if present)
   Object.entries(collection).forEach(([priorty, bucket]) => {
     bucket.forEach((item, index) => {
-      switch (item.documentType) {
-        case "thread":
-          store.dispatch(updateThread(item.documentData));
-          break;
-        case "user":
-          store.dispatch(updateUser(item.documentData));
-          break;
-        case "comment":
-          // TODO: make updateThreadComment action
-          break;
-        case "connection":
-          // TODO: make updateUserConnections action
-          break;
-        case "reaction":
-          // TODO: make updateThreadReactions action
-          break;
+      if (item.documentData) {
+        switch (item.documentType) {
+          case "thread":
+            store.dispatch(updateThread(item.documentData));
+            break;
+          case "user":
+            store.dispatch(updateUser(item.documentData));
+            break;
+          case "comment":
+            // TODO: make updateThreadComment action
+            break;
+          case "connection":
+            // TODO: make updateUserConnections action
+            break;
+          case "reaction":
+            // TODO: make updateThreadReactions action
+            break;
+        }
+        delete collection[priorty as any][index].documentData;
       }
-      delete collection[priorty as any][index].documentData;
     });
   });
 
-  // TODO: add next function (handles calling fetchFeedNext) into collection
-  // TODO: if setNextDone exists call it (collection is the result response of caliing that next so it's finished)
+  const itemDates = Object.values(collection)
+    .flat()
+    .map((item) => item.documentUpdatedAt)
+    .sort((a, b) => b.getTime() - a.getTime());
+  const latestUpdate = itemDates[0].toString();
+  const oldestUpdate = itemDates[itemDates.length - 1].toString();
+
+  // next function, handles calling fetchFeedNext when end of this bucket is reached
+  const next = new Promise((resolve, reject) => () => {
+    try {
+      const done = (nextDateKey: string) => {
+        store.dispatch({
+          type: SET_NEXT_DONE,
+          payload: {
+            destination,
+            latestUpdate,
+            nextDateKey,
+          },
+        });
+        resolve(true);
+        fetchFeedNext({
+          destination,
+          olderThanDate: oldestUpdate,
+          setNextDone: done,
+        });
+      };
+    } catch (e) {
+      reject(`Feed next failed: ${e}`);
+    }
+  });
+  // if setNextDone exists call it (collection is the result response of caliing that next so it's finished)
+  if (setNextDone) {
+    setNextDone(latestUpdate);
+  }
+
+  const bucket = {
+    collection,
+    next,
+  };
 
   return {
     type: UPDATE_FEED,
     payload: {
       destination,
-      collection,
+      latestUpdate,
+      bucket,
     },
   };
 };
 
 let lastFetchLatestFeedTime = 0;
 const oneMinute = 1000 * 60;
+
 export const fetchLatestFeed = (destination: IBucketItem["destination"]) => {
   const state = store.getState();
   const latestBucketRecieved = Object.keys(state.feed[destination]).sort(
@@ -64,10 +105,15 @@ export const fetchLatestFeed = (destination: IBucketItem["destination"]) => {
     const query = `newerThanDate=${latestBucketRecieved}`;
     return async (dispatch: Dispatch) => {
       const resBuckets = await handleServiceRequest({
-        requestFunction: getHomeFeed,
-        requestProps: { query },
+        requestFunction: fetchFeed,
+        requestProps: { query, destination },
       });
-      dispatch(updateFeed(resBuckets));
+      dispatch(
+        updateFeed({
+          collection: resBuckets as IBucket["collection"],
+          destination,
+        })
+      );
       lastFetchLatestFeedTime = nowTime;
     };
   }
@@ -80,7 +126,20 @@ export const fetchFeedNext = ({
 }: {
   destination: IBucketItem["destination"];
   olderThanDate: string;
-  setNextDone: IBucket["next"];
+  setNextDone: (latestUpdate: string) => void;
 }) => {
-  // TODO
+  const query = `olderThanDate=${olderThanDate}`;
+  return async (dispatch: Dispatch) => {
+    const resBuckets = await handleServiceRequest({
+      requestFunction: fetchFeed,
+      requestProps: { query, destination },
+    });
+    dispatch(
+      updateFeed({
+        collection: resBuckets as IBucket["collection"],
+        destination,
+        setNextDone,
+      })
+    );
+  };
 };

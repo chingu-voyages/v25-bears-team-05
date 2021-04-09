@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
@@ -6,32 +6,36 @@ import Landing from "./pages/landing";
 import Network from "./pages/network";
 import Profile from "./pages/profile";
 import Signup from "./pages/signup";
-import checkIfAuthed from "./services/checkIfAuthed";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
 import Loading from "./pages/loading";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  checkIsAuthedAsync,
+  selectAuthStatus,
+  selectIsLoggedIn,
+} from "./appSlice";
 
 function App() {
-  const [authChecked, setAuthChecked] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const status = useSelector(selectAuthStatus);
+  const dispatch = useDispatch();
+
+  // On first load check if authed
   useEffect(() => {
-    checkIfAuthed({
-      setDone: (authed: boolean) => {
-        setIsLoggedIn(authed);
-        setAuthChecked(true);
-      },
-    });
-  }, []);
-  return !authChecked ? (
-    <Loading message="Checking auth" />
+    dispatch(checkIsAuthedAsync());
+  }, [dispatch, isLoggedIn]);
+
+  return status !== "idle" ? (
+    <Loading message={status} />
   ) : (
     <Router>
       <Switch>
         <Route path="/logout">
-          <Logout onLogout={() => setIsLoggedIn(false)} />
+          <Logout />
         </Route>
         <Route path="/login">
-          <Login setIsLoggedIn={setIsLoggedIn} />
+          <Login />
         </Route>
         <ProtectedRoute
           path="/:userId/network"

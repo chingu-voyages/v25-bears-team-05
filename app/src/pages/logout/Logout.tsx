@@ -1,17 +1,24 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import {
+  logoutAsync,
+  selectAuthStatus,
+  selectIsLoggedIn,
+} from "../../appSlice";
 import Spinner from "../../components/spinner";
-import logout from "../../services/logout";
 
-function Logout({ onLogout }: { onLogout: () => void }) {
+function Logout() {
+  const dispatch = useDispatch();
+  const status = useSelector(selectAuthStatus);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   useEffect(() => {
-    onLogout();
-    logout();
-  }, []);
+    dispatch(logoutAsync());
+  }, [dispatch]);
   return (
     <div>
-      <Spinner message="logging out" />
-      <Redirect to="/" />
+      {status !== "idle" && <Spinner message={status} />}
+      {status === "idle" && !isLoggedIn && <Redirect to="/" />}
     </div>
   );
 }

@@ -49,7 +49,6 @@ function PasswordRecovery() {
         });
         if (req.status === 200) {
           setRequestSuccessfullySubmitted(true);
-          console.log("Successful", req.data); //to be updated
         }
       } catch (exception) {
         setErrorMessageResponse(

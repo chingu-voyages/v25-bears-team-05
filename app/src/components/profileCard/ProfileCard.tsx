@@ -81,6 +81,7 @@ function ProfileCard({
           );
         } else if (type === "connection") {
           const { dateTimeConnected, avatar } = data as ICardInfo;
+          console.log("84 ProfileCard.tsx", data);
           setInfo(
             convertDateStringToTimeAgo({ date: dateTimeConnected || "" })
           );
@@ -88,12 +89,12 @@ function ProfileCard({
         } else if (type === "thread") {
           const { avatar } = data as ICardInfo;
           const actionTitle =
-            threadData?.updatedAt !== threadData?.createdAt
+            threadData?.content.updatedAt !== threadData?.content.createdAt
               ? "Edited"
               : "Posted";
           setInfo(
             `${actionTitle} ${convertDateStringToTimeAgo({
-              date: threadData?.updatedAt || "",
+              date: threadData?.content.updatedAt || "",
             })} • ${
               threadData?.visibility === 0
                 ? "anyone"
@@ -106,12 +107,12 @@ function ProfileCard({
         } else if (type === "comment") {
           const { avatar } = data as ICardInfo;
           const actionTitle =
-            threadData?.updatedAt !== threadData?.createdAt
+            threadData?.content.updatedAt !== threadData?.content.createdAt
               ? "Edited"
               : "Posted";
           setInfo(
             `${actionTitle} ${convertDateStringToTimeAgo({
-              date: threadData?.updatedAt || "",
+              date: threadData?.content.updatedAt || "",
             })}`
           );
           setAvatarUrl(avatar?.[0]?.url);

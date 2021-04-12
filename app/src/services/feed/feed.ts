@@ -115,8 +115,8 @@ async function processThread(
     comments:
       comments?.threadComments &&
       sortCommentsByDate(Object.values(comments.threadComments)),
-    updatedAt: threadData.updatedAt,
-    createdAt: threadData.createdAt,
+    updatedAt: threadData.content.updatedAt,
+    createdAt: threadData.content.createdAt,
   };
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {

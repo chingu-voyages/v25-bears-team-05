@@ -3,12 +3,7 @@ import Input from "../../components/input";
 import IProfileEditor from "./ProfileEditor.type";
 import "./ProfileEditor.css";
 
-function ProfileEditor({
-  inputs,
-  setInputs,
-  errorMessage,
-  className,
-}: IProfileEditor) {
+function ProfileEditor({ inputs, setInputs, className }: IProfileEditor) {
   const handleSetInput = (key: string, value: string) => {
     setInputs((values: any) => ({ ...values, [key]: value }));
   };
@@ -31,8 +26,6 @@ function ProfileEditor({
         id="ProfilePageFirstName"
         value={inputs.firstName || ""}
         setValue={handleSetFirstName}
-        errorMessage={errorMessage}
-        errorMessageReturner={() => null}
       />
       <Input
         label={"Last name"}
@@ -41,8 +34,6 @@ function ProfileEditor({
         id="ProfilePageLastName"
         value={inputs.lastName || ""}
         setValue={handleSetLastName}
-        errorMessage={errorMessage}
-        errorMessageReturner={() => null}
       />
       <Input
         label={"Job title"}
@@ -51,7 +42,6 @@ function ProfileEditor({
         id="ProfileJobTitle"
         value={inputs.jobTitle || ""}
         setValue={handleSetJobTitle}
-        errorMessage={errorMessage}
       />
     </div>
   );

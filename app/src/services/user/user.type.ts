@@ -32,7 +32,7 @@ export interface IUserPatchRequest {
   avatar?: string | undefined;
 }
 
-export interface IUserProcessed extends IUserInfo {
+export interface IUserProcessed extends IUserRawResponse {
   nOfConnections?: number | null;
   isAConnection?: boolean;
 }

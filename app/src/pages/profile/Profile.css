@@ -64,13 +64,7 @@
 .Profile-page__editor {
   grid-area: inputs;
 }
-@media (orientation: landscape) {
-  .Profile-page__wall-paper {
-    width: 100%;
-    margin-left: 0;
-  }
-}
-.Profile-page__get-data-error {
+.Profile-page__error {
   position: absolute;
   bottom: -40px;
   font-size: 11px;
@@ -81,4 +75,11 @@
 }
 .Profile-page__follow .Follow-button__text {
   padding: 24px 0;
+}
+
+@media (orientation: landscape) {
+  .Profile-page__wall-paper {
+    width: 100%;
+    margin-left: 0;
+  }
 }

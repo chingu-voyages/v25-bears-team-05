@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import checkIfAuthed from "./services/checkIfAuthed";
 import logout from "./services/logout";
+import { getCookie } from "./utils/cookie";
 
 const initialState = {
   status: "idle",
-  isLoggedIn: false,
+  isLoggedIn: getCookie("has-existing-auth-cookie") === "true" ? true : false,
 };
 
 export const checkIsAuthedAsync = createAsyncThunk(

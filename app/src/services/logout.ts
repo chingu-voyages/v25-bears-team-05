@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setCookie } from "../utils/cookie";
 
 const logout = async () => {
   try {
@@ -6,6 +7,7 @@ const logout = async () => {
       method: "post",
       url: "/api/logout",
     });
+    setCookie("has-existing-auth-cookie", "false", 90);
     sessionStorage.clear();
   } catch (error) {
     console.error(error);

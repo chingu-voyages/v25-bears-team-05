@@ -5,21 +5,17 @@ import {
   removeConnection,
   updateUser,
 } from "../../services/user";
-import {
-  IUserPatchRequest,
-  IUserProcessed,
-} from "../../services/user/user.type";
+import { IUserPatchRequest } from "../../services/user/user.type";
+import stateStatus from "../../utils/stateStatus";
 
 const initialState: {
-  users: any; // { [keyof: string]: IUserProcessed; };
-  currentUserId: "" | string;
-  status: "idle" | string;
-  error: "" | string;
+  [keyof: string]: any;
 } = {
   users: {},
   currentUserId: "",
-  status: "idle",
-  error: "",
+  status: {
+    state: "idle",
+  },
 };
 
 export const getUserAsync = createAsyncThunk(
@@ -87,10 +83,10 @@ export const profileSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getUserAsync.pending, (state) => {
-        state.status = "getting user info";
+        stateStatus.loading(state, "getting user info");
       })
       .addCase(getUserAsync.fulfilled, (state, action) => {
-        state.status = "idle";
+        stateStatus.idle(state);
         state.users = {
           ...state.users,
           [action.payload.userData.id]: action.payload.userData,
@@ -100,15 +96,14 @@ export const profileSlice = createSlice({
         }
       })
       .addCase(getUserAsync.rejected, (state) => {
-        state.status = "idle";
-        state.error = "unable to get user";
+        stateStatus.error(state, "unable to get user");
       })
 
       .addCase(updateProfileAsync.pending, (state) => {
-        state.status = "updating info";
+        stateStatus.loading(state, "updating info");
       })
       .addCase(updateProfileAsync.fulfilled, (state, action) => {
-        state.status = "idle";
+        stateStatus.idle(state);
         state.users = {
           ...state.users,
           [state.currentUserId]: {
@@ -120,19 +115,18 @@ export const profileSlice = createSlice({
         };
       })
       .addCase(updateProfileAsync.rejected, (state) => {
-        state.status = "idle";
-        state.error = "unable to update info";
+        stateStatus.error(state, "unable to update info");
       })
 
       .addCase(addConnectionAsync.pending, (state) => {
-        state.status = "adding connection";
+        stateStatus.loading(state, "adding connection");
       })
       .addCase(addConnectionAsync.fulfilled, (state, action) => {
         const [
           connections,
           connectionOf,
         ] = (action.payload as unknown) as Object[];
-        state.status = "idle";
+        stateStatus.idle(state);
         state.users = {
           ...state.users,
           [state.currentUserId]: {
@@ -145,19 +139,18 @@ export const profileSlice = createSlice({
         };
       })
       .addCase(addConnectionAsync.rejected, (state) => {
-        state.status = "idle";
-        state.error = "unable to add connection";
+        stateStatus.error(state, "unable to add connection");
       })
 
       .addCase(removeConnectionAsync.pending, (state) => {
-        state.status = "removing connection";
+        stateStatus.loading(state, "removing connection");
       })
       .addCase(removeConnectionAsync.fulfilled, (state, action) => {
         const [
           connections,
           connectionOf,
         ] = (action.payload as unknown) as Object[];
-        state.status = "idle";
+        stateStatus.idle(state);
         state.users = {
           ...state.users,
           [state.currentUserId]: {
@@ -170,8 +163,7 @@ export const profileSlice = createSlice({
         };
       })
       .addCase(removeConnectionAsync.rejected, (state) => {
-        state.status = "idle";
-        state.error = "unable to remove connection";
+        stateStatus.error(state, "unable to remove connection");
       });
   },
 });

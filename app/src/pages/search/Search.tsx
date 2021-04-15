@@ -3,13 +3,11 @@ import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
-import { processThread } from "../../services/feed/feed";
 import { IProcessedThreadFeed } from "../../services/feed/feed.type";
 import { doSearch, hasSearchResultContent } from "../../services/search/search";
-import {
-  ISearchResults,
-} from "../../services/search/search.types";
+import { ISearchResults } from "../../services/search/search.types";
 import { IThreadCommentWithParent } from "../../services/search/search.types";
+import { processThread } from "../../services/thread/thread";
 import { getUser } from "../../services/user";
 
 import "./Search.css";
@@ -22,8 +20,8 @@ function Search({
 }: {
   classNameInfo?: string;
   triggered: boolean;
-  query: string
-  children?: JSX.Element[]
+  query: string;
+  children?: JSX.Element[];
 }) {
   const [publicThreads, setPublicThreads] = useState<IProcessedThreadFeed[]>(
     []
@@ -41,9 +39,10 @@ function Search({
   const [queryString, setQueryString] = useState<string>("");
 
   const [searchResultData, setSearchResultData] = useState<ISearchResults>();
-  const [displaySearchResults, setDisplaySearchResults] = useState<boolean>(false);
+  const [displaySearchResults, setDisplaySearchResults] = useState<boolean>(
+    false
+  );
 
-  
   useEffect(() => {
     (async () => {
       setPublicThreadComments([]);
@@ -51,7 +50,7 @@ function Search({
       setPublicThreads([]);
       setPrivateThreads([]);
       setProcessedUsers([]);
-     
+
       if (searchResultData?.users && searchResultData?.users.length > 0) {
         const processedUserData = await Promise.all(
           searchResultData!.users.map((user) =>
@@ -101,7 +100,9 @@ function Search({
         searchResultData?.private_thread_comments &&
         searchResultData?.private_thread_comments.length > 0
       ) {
-        setPrivateThreadComments([...searchResultData!.private_thread_comments]);
+        setPrivateThreadComments([
+          ...searchResultData!.private_thread_comments,
+        ]);
         setQueryString(searchResultData!.query_string);
       }
     })();
@@ -133,7 +134,7 @@ function Search({
     if (triggered) {
       onSearchSubmit(query);
     }
-  }, [triggered, query, displaySearchResults])
+  }, [triggered, query, displaySearchResults]);
 
   const searchSection = () => {
     return (
@@ -183,17 +184,14 @@ function Search({
           ))}
       </div>
     );
-  }
+  };
 
-  
   return (
-   <div className="Search-page__search-invisible-main-body">
-     {!triggered && children?.map((child) => (
-       child
-     ))}
-     {displaySearchResults && searchSection()}
-   </div>
-  )
+    <div className="Search-page__search-invisible-main-body">
+      {!triggered && children?.map((child) => child)}
+      {displaySearchResults && searchSection()}
+    </div>
+  );
 }
 
 export default Search;

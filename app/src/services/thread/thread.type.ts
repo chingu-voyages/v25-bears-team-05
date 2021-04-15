@@ -59,6 +59,8 @@ export interface IThread {
     html: string;
     hashTags: Array<string>;
     attachments: Array<string>;
+    updatedAt: string;
+    createdAt: string;
   };
   comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };

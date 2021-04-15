@@ -11,7 +11,7 @@ const md = require("markdown-it")();
 function Comment({
   commentData,
   handleDeleteComment,
-  className
+  className,
 }: {
   commentData: IThreadComment;
   handleDeleteComment: () => void;
@@ -24,9 +24,8 @@ function Comment({
       setIsMe(currentUserInfo.id === commentData.postedByUserId);
     })();
   }, []);
-
   return commentData ? (
-    <div className={ `${className || ""} Comment`}>
+    <div className={`${className || ""} Comment`}>
       <div className="Comment__header">
         <ProfileCard
           type="comment"

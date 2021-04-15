@@ -55,12 +55,12 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
         } else if (type === "thread") {
           const { avatar } = userData as ICardInfo;
           const actionTitle =
-            threadData?.updatedAt !== threadData?.createdAt
+            threadData?.content.updatedAt !== threadData?.content.createdAt
               ? "Edited"
               : "Posted";
           setInfo(
             `${actionTitle} ${convertDateStringToTimeAgo({
-              date: threadData?.updatedAt || "",
+              date: threadData?.content.updatedAt || "",
             })} • ${
               threadData?.visibility === 0
                 ? "anyone"

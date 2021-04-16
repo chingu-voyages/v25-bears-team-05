@@ -10,61 +10,69 @@ import { processThread } from "../thread/thread";
 
 const getFeed = async ({ query }: { query: string }) => {
   const res = await axios(`/api/feed?${query}`);
-  const {
-    connectionThreads,
-    connectionSuggestions,
-    publicThreads,
-  }: IFeedRawResponse = res.data;
+  const { connectionThreads, publicThreads }: IFeedRawResponse = res.data;
+  let latestUpdate: Date;
+  let oldestUpdate: Date;
+  const checkIfLatestThread = (threadData: IThread) => {
+    const threadDate = new Date(threadData.updatedAt);
+    // First time called
+    if (!latestUpdate && !oldestUpdate) {
+      latestUpdate = threadDate;
+      oldestUpdate = threadDate;
+    } else {
+      if (threadDate.valueOf() > latestUpdate.valueOf()) {
+        latestUpdate = threadDate;
+      }
+      if (threadDate.valueOf() < oldestUpdate.valueOf()) {
+        oldestUpdate = threadDate;
+      }
+    }
+  };
   const processedConnectionThreads = connectionThreads
     ? await Promise.all(
-        connectionThreads.map((threadData: IThread) =>
-          processThread(threadData)
-        )
+        connectionThreads.map((threadData: IThread) => {
+          checkIfLatestThread(threadData);
+          return processThread(threadData);
+        })
       )
     : [];
   const processedPublicThreads = publicThreads
     ? await Promise.all(
-        publicThreads.map((threadData: IThread) => processThread(threadData))
+        publicThreads.map((threadData: IThread) => {
+          checkIfLatestThread(threadData);
+          return processThread(threadData);
+        })
       )
     : [];
-  const processedConnectionSuggestions = connectionSuggestions
-    ? connectionSuggestions.map((suggestionData: IUserConnection) =>
-        processSuggestion(suggestionData)
-      )
-    : [];
-  const processedData = {
-    connectionThreads:
-      ((processedConnectionThreads.map((data) => ({
-        thread: { threadData: data },
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
-    connectionSuggestions:
-      ((processedConnectionSuggestions.map((data) => ({
-        suggestion: data,
-      })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }>) || [],
-    publicThreads:
-      ((processedPublicThreads.map((data) => ({
-        thread: { threadData: data },
-      })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
-  };
-  return processedData;
+  const processedData = () => ({
+    // should add uuid to end of key but this process will be moved to the backend later
+    [latestUpdate.valueOf() + ""]: {
+      documents: {
+        ...processedConnectionThreads,
+        ...processedPublicThreads,
+      },
+      collection: {
+        [50]:
+          ((processedConnectionThreads.map((data) => ({
+            documentId: data.id,
+            documentType: "thread",
+            documentUpdatedAt: data.content.updatedAt,
+          })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
+        [10]:
+          ((processedPublicThreads.map((data) => ({
+            documentId: data.id,
+            documentType: "thread",
+            documentUpdatedAt: data.content.updatedAt,
+          })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
+      },
+      latestUpdate,
+      next: (nextLatestUpdateInFeed: Date) => {
+        const query = `olderThanDate=${oldestUpdate}&newerThanDate=${nextLatestUpdateInFeed}`;
+        return query;
+      },
+    },
+  });
+  return processedData();
 };
-
-function processSuggestion(userData: IUserConnection) {
-  const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
-  const data = {
-    profileData: {
-      firstName,
-      lastName,
-      jobTitle,
-      avatar,
-      id,
-      isAConnection: isAConnection || false,
-    },
-    referral: {
-      reason: `Want to add ${firstName} ${lastName} as a connection?`,
-    },
-  };
-  return data;
-}
 
 export { getFeed };

@@ -40,7 +40,12 @@ const addThreadReaction = async ({
     url: `/api/threads/${threadId}/likes`,
     data: { title },
   });
-  return res?.data?.threadLikeDocument;
+  if (res?.data?.updatedThread) {
+    const processedThreadData = await processThread(res.data.updatedThread);
+    return processedThreadData;
+  } else {
+    throw Error(res.statusText);
+  }
 };
 
 const removeThreadReaction = async ({
@@ -55,7 +60,12 @@ const removeThreadReaction = async ({
     url: `/api/threads/${threadId}/likes`,
     data: { threadLikeId },
   });
-  return res;
+  if (res?.data?.updatedThread) {
+    const processedThreadData = await processThread(res.data.updatedThread);
+    return processedThreadData;
+  } else {
+    throw Error(res.statusText);
+  }
 };
 
 const addComment = async ({
@@ -70,12 +80,17 @@ const addComment = async ({
     url: `/api/threads/${threadId}/comments`,
     data,
   });
-  return res.data.newComment;
+  if (res?.data?.updatedThread) {
+    const processedThreadData = await processThread(res.data.updatedThread);
+    return processedThreadData;
+  } else {
+    throw Error(res.statusText);
+  }
 };
 
 const getComments = async ({ threadId }: { threadId: string }) => {
   const res = await axios(`/api/threads/${threadId}/comments`);
-  return res.data;
+  return res.data.threadComments;
 };
 
 const deleteComment = async ({
@@ -89,7 +104,12 @@ const deleteComment = async ({
     method: "delete",
     url: `/api/threads/${threadId}/comments/${commentId}`,
   });
-  return res;
+  if (res?.data?.updatedThread) {
+    const processedThreadData = await processThread(res.data.updatedThread);
+    return processedThreadData;
+  } else {
+    throw Error(res.statusText);
+  }
 };
 
 const currentUserId = sessionStorage.getItem("currentUserId");

@@ -88,6 +88,8 @@ export interface IThreadDataProcessed {
     html: string;
     hashTags?: Array<string>;
     attachments?: Array<string>;
+    updatedAt: string;
+    createdAt: string;
   };
   postedByUserId: string;
   threadType: ThreadType;

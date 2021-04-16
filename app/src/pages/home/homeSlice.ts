@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getFeed } from "../../services/feed/feed";
+import { IFeed } from "../../services/feed/feed.type";
 import { addThread } from "../../services/thread";
 import {
   addComment,
@@ -74,11 +75,14 @@ export const createThreadCommentAsync = createAsyncThunk(
     return res;
   }
 );
-export const readThreadCommentAsync = createAsyncThunk(
+export const readThreadCommentsAsync = createAsyncThunk(
   "home/readThreadComment",
   async ({ threadId }: { threadId: string }) => {
     const res = getComments({ threadId });
-    return res;
+    return {
+      threadId,
+      comments: res,
+    };
   }
 );
 // Updating comment not yet implemented
@@ -97,7 +101,14 @@ export const deleteThreadCommentAsync = createAsyncThunk(
 );
 
 // Feed thunks
-export const readHomeFeedAsync = createAsyncThunk(
+export const readHomeFeedLatestAsync = createAsyncThunk(
+  "home/readHomeFeed",
+  async ({ query }: { query: string }) => {
+    const res = await getFeed({ query });
+    return res;
+  }
+);
+export const readHomeFeedNextAsync = createAsyncThunk(
   "home/readHomeFeed",
   async ({ query }: { query: string }) => {
     const res = await getFeed({ query });
@@ -166,45 +177,60 @@ export const homeSlice = createSlice({
 
       // Reaction reducers
       .addCase(createThreadReactionAsync.pending, (state) => {
-        stateStatus.loading(state, "");
+        stateStatus.loading(state, "uploading reaction");
       })
       .addCase(createThreadReactionAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          //  [action.payload.id]: action.payload,
+          [action.payload.id]: action.payload,
         };
       })
       .addCase(createThreadReactionAsync.rejected, (state) => {
-        stateStatus.error(state, "");
+        stateStatus.error(state, "unable to upload reaction");
       })
       .addCase(deleteThreadReactionAsync.pending, (state) => {
-        stateStatus.loading(state, "");
+        stateStatus.loading(state, "removing reaction");
       })
       .addCase(deleteThreadReactionAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          //  [action.payload.id]: action.payload,
+          [action.payload.id]: action.payload,
         };
       })
       .addCase(deleteThreadReactionAsync.rejected, (state) => {
-        stateStatus.error(state, "");
+        stateStatus.error(state, "unable to remove reaction");
       })
 
       // Comment reducers
       .addCase(createThreadCommentAsync.pending, (state) => {
-        stateStatus.loading(state, "");
+        stateStatus.loading(state, "uploading comment");
       })
       .addCase(createThreadCommentAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          //  [action.payload.id]: action.payload,
+          [action.payload.id]: action.payload,
         };
       })
-      .addCase(createThreadCommentAsync.rejected, (state) => {
-        stateStatus.error(state, "");
+      .addCase(readThreadCommentsAsync.pending, (state) => {
+        stateStatus.loading(state, "getting comments");
+      })
+      .addCase(readThreadCommentsAsync.fulfilled, (state, action) => {
+        stateStatus.idle(state);
+        state.threads = {
+          ...state.threads,
+          [action.payload.threadId]: {
+            ...(state.threads[
+              action.payload.threadId as keyof typeof state.threads
+            ] as Object),
+            comments: action.payload.comments,
+          },
+        };
+      })
+      .addCase(readThreadCommentsAsync.rejected, (state) => {
+        stateStatus.error(state, "unable to get comments");
       })
       // .addCase(updateThreadCommentAsync.pending, (state) => {
       //   stateStatus.loading(state, "");
@@ -220,34 +246,58 @@ export const homeSlice = createSlice({
       //   stateStatus.error(state, "");
       // })
       .addCase(deleteThreadCommentAsync.pending, (state) => {
-        stateStatus.loading(state, "");
+        stateStatus.loading(state, "deleting comment");
       })
       .addCase(deleteThreadCommentAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          //  [action.payload.id]: action.payload,
+          [action.payload.id]: action.payload,
         };
       })
       .addCase(deleteThreadCommentAsync.rejected, (state) => {
-        stateStatus.error(state, "");
+        stateStatus.error(state, "unable to delete comment");
       })
 
       // Feed reducers
-      .addCase(readHomeFeedAsync.pending, (state) => {
-        stateStatus.loading(state, "");
+      .addCase(readHomeFeedLatestAsync.pending, (state) => {
+        stateStatus.loading(state, "getting latest feed");
       })
-      .addCase(readHomeFeedAsync.fulfilled, (state, action) => {
+      .addCase(readHomeFeedLatestAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          //  [action.payload.id]: action.payload,
+          ...action.payload.documents,
+        };
+        state.feed = {
+          ...state.feed,
+          ...action.payload.bucket,
         };
       })
-      .addCase(readHomeFeedAsync.rejected, (state) => {
-        stateStatus.error(state, "");
+      .addCase(readHomeFeedLatestAsync.rejected, (state) => {
+        stateStatus.error(state, "unable to get feed");
       });
   },
 });
 
 export default homeSlice.reducer;
+
+export const selectHomeFeed = (state: any) => {
+  const sortedBuckets = Object.keys(state.home.feed as IFeed)
+    .sort((a, b) => parseInt(b) - parseInt(a))
+    .map((key) => state.home.feed[key]);
+  return sortedBuckets
+    .map((bucket) => {
+      const sortedCollection = Object.keys(bucket)
+        .sort()
+        .reverse()
+        .map((priority) => bucket[priority]);
+      return sortedCollection.flat();
+    })
+    .flat();
+};
+export const selectHomeStatus = (state: any) => state.home.status;
+export const selectHomeError = (state: any) => state.home.error;
+
+export const selectThreadById = (threadId: string) => (state: any) =>
+  state.home.threads[threadId];

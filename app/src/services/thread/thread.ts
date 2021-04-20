@@ -140,6 +140,7 @@ async function processThread(
     updatedAt: threadData.updatedAt,
     createdAt: threadData.createdAt,
   };
+  console.log({ threadData });
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
       const type = reaction.title;

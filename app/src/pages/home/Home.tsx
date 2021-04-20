@@ -13,23 +13,32 @@ import Search from "../../pages/search";
 import {
   createThreadAsync,
   readHomeFeedLatestAsync,
-  selectHomeError,
   selectHomeFeed,
   selectHomeStatus,
+  selectLatestBucketDate,
 } from "./homeSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IFeedItem } from "../../services/feed/feed.type";
+import Status from "../../components/status";
 
 function Home() {
   const history = useHistory();
+
   const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
   const [searchQueryString, setSearchQueryString] = useState<string>("");
 
-  const errorMessage = useSelector(selectHomeError);
+  const dispatch = useDispatch();
+
   const status = useSelector(selectHomeStatus);
   const feed = useSelector(selectHomeFeed);
+  const lastestFeedItem = useSelector(selectLatestBucketDate);
 
   useEffect(() => {
-    readHomeFeedLatestAsync({ query: `` });
+    dispatch(
+      readHomeFeedLatestAsync({
+        query: lastestFeedItem ? `newerThanDate=${lastestFeedItem}` : "",
+      })
+    );
   }, []);
 
   const resetPostMaker = () => {
@@ -46,7 +55,7 @@ function Home() {
         visibility: threadVisibility,
         hashTags: [],
       };
-      createThreadAsync(data);
+      dispatch(createThreadAsync(data));
       resetPostMaker();
     },
     handleCancel: () => {
@@ -64,15 +73,22 @@ function Home() {
     }
   }, [history.location.hash]);
 
-  const FeedItem = ({ thread }) => {
-    if (!thread?.threadData.id) {
-      return <li className="Home-page__invisible-item"></li>;
+  const FeedItem = ({
+    documentId,
+    documentType,
+    documentUpdatedAt,
+  }: IFeedItem) => {
+    switch (documentType) {
+      case "thread":
+        return (
+          <li className="Home-page__feed__list__item">
+            {/* TODO: edit Post componet to thread data from home slice */}
+            <Post threadId={documentId} />
+          </li>
+        );
+      default:
+        return <li className="Home-page__invisible-item"></li>;
     }
-    return (
-      <li className="Home-page__feed__list__item">
-        {thread && <Post {...thread} />}
-      </li>
-    );
   };
 
   const onSearchSubmit = (queryString: string) => {
@@ -82,6 +98,8 @@ function Home() {
 
   return (
     <div className="Home-page">
+      <Status status={status} />
+
       <TopBar className="Home-page__top-bar" onSearchSubmit={onSearchSubmit} />
       <ProfileCard
         type="home-page"
@@ -104,12 +122,11 @@ function Home() {
         </div>
         <div className="Home-page__feed">
           <ul className="Home-page__feed__list">
-            {feed.map((item) => (
-              <FeedItem
-                {...{ thread }}
-                key={"feedItem" + thread?.threadData?.id}
-              />
-            ))}
+            {feed.map((item) =>
+              item?.documentId ? (
+                <FeedItem {...item} key={"feedItem" + item?.documentId} />
+              ) : null
+            )}
           </ul>
         </div>
       </Search>

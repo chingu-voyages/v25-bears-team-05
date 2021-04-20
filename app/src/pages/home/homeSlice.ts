@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getFeed } from "../../services/feed/feed";
-import { IFeed } from "../../services/feed/feed.type";
+import { IFeed, IFeedItem } from "../../services/feed/feed.type";
 import { addThread } from "../../services/thread";
 import {
   addComment,
@@ -102,15 +102,22 @@ export const deleteThreadCommentAsync = createAsyncThunk(
 
 // Feed thunks
 export const readHomeFeedLatestAsync = createAsyncThunk(
-  "home/readHomeFeed",
+  "home/readHomeFeedLatest",
   async ({ query }: { query: string }) => {
     const res = await getFeed({ query });
     return res;
   }
 );
 export const readHomeFeedNextAsync = createAsyncThunk(
-  "home/readHomeFeed",
-  async ({ query }: { query: string }) => {
+  "home/readHomeFeedNext",
+  async ({
+    oldestUpdateFromCurrentBucket,
+    latestUpdateFromNextNext,
+  }: {
+    oldestUpdateFromCurrentBucket: string;
+    latestUpdateFromNextNext: string;
+  }) => {
+    const query = `olderThanDate=${oldestUpdateFromCurrentBucket}&newerThanDate=${latestUpdateFromNextNext}`;
     const res = await getFeed({ query });
     return res;
   }
@@ -282,22 +289,30 @@ export const homeSlice = createSlice({
 
 export default homeSlice.reducer;
 
-export const selectHomeFeed = (state: any) => {
+export const selectHomeFeed = (state: any): Array<IFeedItem> => {
   const sortedBuckets = Object.keys(state.home.feed as IFeed)
-    .sort((a, b) => parseInt(b) - parseInt(a))
+    .sort(
+      (a, b) => parseInt(b.split("_uuid_")[0]) - parseInt(a.split("_uuid_")[0])
+    )
     .map((key) => state.home.feed[key]);
-  return sortedBuckets
+  const feedItems = sortedBuckets
     .map((bucket) => {
-      const sortedCollection = Object.keys(bucket)
+      const sortedCollection = Object.keys(bucket.collection)
         .sort()
         .reverse()
-        .map((priority) => bucket[priority]);
+        .map((priority) => bucket.collection[priority]);
       return sortedCollection.flat();
     })
     .flat();
+  return feedItems;
 };
 export const selectHomeStatus = (state: any) => state.home.status;
-export const selectHomeError = (state: any) => state.home.error;
 
 export const selectThreadById = (threadId: string) => (state: any) =>
   state.home.threads[threadId];
+
+export const selectLatestBucketDate = (state: any) =>
+  Object.keys(state.home.feed)
+    .map((key) => key.substr(0, 24))
+    .sort()
+    .reverse()[0];

@@ -14,17 +14,14 @@ import Search from "../search";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserAsync,
-  selectProfileError,
   selectProfileStatus,
   selectUserById,
   updateAvatarURL,
   updateProfileAsync,
 } from "./profileSlice";
-import StatusSpinner from "../../components/statusSpinner";
-import PageError from "../../components/pageError";
+import Status from "../../components/status";
 
 function Profile() {
-  const errorMessage = useSelector(selectProfileError);
   const status = useSelector(selectProfileStatus);
   const match: any = useRouteMatch("/:userId");
   const userId = match.params.userId.toLowerCase();
@@ -69,8 +66,7 @@ function Profile() {
 
   return (
     <div className="Profile-page">
-      <StatusSpinner status={status} />
-      <PageError error={errorMessage} />
+      <Status status={status} />
       <TopBar onSearchSubmit={onSearchSubmit} />
       <Search query={searchQueryString} triggered={searchIsTriggered}>
         <div></div>

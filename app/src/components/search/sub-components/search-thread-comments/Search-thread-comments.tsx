@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IThreadCommentWithParent } from "../../../../services/search/search.types";
-import { getUser } from "../../../../services/user";
-import { IUserProcessed } from "../../../../services/user/user.type";
 import Comment from "../../../../components/comment";
 import "./Search-thread-comments.css";
 import Post from "../../../post";
-import { IProcessedThreadFeed } from "../../../../services/feed/feed.type";
-import { processThread } from "../../../../services/thread/thread";
 
 function SearchThreadComment({
   className,
@@ -18,44 +14,20 @@ function SearchThreadComment({
   className?: string;
 }) {
   const [
-    matchedThreadQueryUser,
-    setMatchedThreadQueryUser,
-  ] = useState<IUserProcessed>();
-
-  const [parentThread, setParentThread] = useState<IProcessedThreadFeed>();
-  const [
     expandedParentThreadVisible,
     setExpandedParentThreadVisible,
   ] = useState(false);
-  useEffect(() => {
-    (async () => {
-      await getUser({
-        userId: threadCommentData.postedByUserId,
-        onSuccess: (data) => {
-          setMatchedThreadQueryUser(data);
-        },
-        onError: (message) => {
-          console.log(message);
-        },
-      });
-
-      const parentThreadComment = await processThread(
-        threadCommentData.parentThread!
-      );
-      setParentThread(parentThreadComment);
-    })();
-  }, []);
 
   const onDeleteComment = () => {
     // Not implemented for search
   };
 
   const parentThreadDropDown = (visible: boolean) => {
-    if (parentThread && visible) {
+    if (threadCommentData?.parentThread && visible) {
       return (
         <Post
           {...{
-            threadData: parentThread?.threadData!,
+            threadId: threadCommentData.parentThread.id!,
             queryString: queryString,
           }}
           visibleExpanded={expandedParentThreadVisible}

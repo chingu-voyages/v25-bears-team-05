@@ -15,12 +15,12 @@ export interface IUserInfo {
 }
 
 export interface IUserRawResponse extends IUserInfo {
-  connections: { [keyof: string]: IUserConnection };
-  connectionOf: { [keyof: string]: IUserConnection };
+  connections: { [userId: string]: IUserConnection };
+  connectionOf: { [userId: string]: IUserConnection };
   threads: {
-    started?: { [keyof: string]: IThread };
-    commented?: { [keyof: string]: IThreadComment };
-    liked?: { [keyof: string]: IThreadLike };
+    started?: { [threadId: string]: IThread };
+    commented?: { [threadId: string]: { [commentId: string]: IThreadComment } };
+    liked?: { [threadId: string]: { [likeId: string]: IThreadLike } };
     shared?: { [keyof: string]: IThreadShare };
   };
 }

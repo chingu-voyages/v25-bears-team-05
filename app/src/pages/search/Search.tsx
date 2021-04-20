@@ -3,11 +3,11 @@ import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
-import { IProcessedThreadFeed } from "../../services/feed/feed.type";
 import { doSearch, hasSearchResultContent } from "../../services/search/search";
 import { ISearchResults } from "../../services/search/search.types";
 import { IThreadCommentWithParent } from "../../services/search/search.types";
 import { processThread } from "../../services/thread/thread";
+import { IThreadDataProcessed } from "../../services/thread/thread.type";
 import { getUser } from "../../services/user";
 
 import "./Search.css";
@@ -23,10 +23,10 @@ function Search({
   query: string;
   children?: JSX.Element[];
 }) {
-  const [publicThreads, setPublicThreads] = useState<IProcessedThreadFeed[]>(
+  const [publicThreads, setPublicThreads] = useState<IThreadDataProcessed[]>(
     []
   );
-  const [privateThreads, setPrivateThreads] = useState<IProcessedThreadFeed[]>(
+  const [privateThreads, setPrivateThreads] = useState<IThreadDataProcessed[]>(
     []
   );
   const [publicThreadComments, setPublicThreadComments] = useState<
@@ -148,24 +148,24 @@ function Search({
           publicThreads.map((publicThread) => (
             <Post
               {...{
-                threadData: publicThread.threadData!,
+                threadId: publicThread.id!,
                 queryString: queryString,
                 className: "Post__searchResult",
               }}
               showComments={true}
-              key={publicThread.threadData?.id}
+              key={publicThread.id}
             />
           ))}
         {privateThreads.length > 0 &&
           privateThreads.map((privateThread) => (
             <Post
               {...{
-                threadData: privateThread.threadData!,
+                threadId: privateThread.id!,
                 queryString: queryString,
                 className: "Post__searchResult",
               }}
               showComments={true}
-              key={privateThread.threadData?.id}
+              key={privateThread.id}
             />
           ))}
         {publicThreadComments?.length! > 0 &&

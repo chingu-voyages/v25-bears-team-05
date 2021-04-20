@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   IThreadReferral,
   IThreadDataProcessed,
-  IThreadComment,
 } from "../../services/thread/thread.type";
 import Button from "../button";
 import OptionsMenu from "../optionsMenu";
@@ -18,74 +17,110 @@ import smallProcessingIcon from "../../images/smallprocessingicon.svg";
 import reactButton from "../../images/reactbutton.svg";
 import commentButton from "../../images/commentbutton.svg";
 import folkButton from "../../images/folkbutton.svg";
-import {
-  addThreadReaction,
-  removeThreadReaction,
-  addComment,
-  deleteComment,
-} from "../../services/thread";
 import Comment from "../comment";
 import PostMaker from "../postMaker";
-import Spinner from "../spinner";
 import { getStringExcerpt } from "../search/search.helpers";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createThreadCommentAsync,
+  createThreadReactionAsync,
+  deleteThreadCommentAsync,
+  deleteThreadReactionAsync,
+  selectThreadById,
+} from "../../pages/home/homeSlice";
 const md = require("markdown-it")();
 
 function Post({
-  threadData,
+  threadId,
   referral,
   className = "",
   queryString,
-  visibleExpanded
+  visibleExpanded,
 }: {
-  threadData: IThreadDataProcessed;
+  threadId: string;
   referral?: IThreadReferral;
   className?: string;
   showComments?: boolean;
   queryString?: string;
-  visibleExpanded?: boolean
+  visibleExpanded?: boolean;
 }) {
-  const [inProgress, setInProgress] = useState(false);
-  const [comments, setComments] = useState(threadData.comments);
-  const [nOfComments, setNOfComments] = useState(
-    comments && Object.keys(comments).length
+  const threadData: IThreadDataProcessed = useSelector(
+    selectThreadById(threadId)
   );
+  const dispatch = useDispatch();
+  const nOfComments =
+    threadData?.comments && Object.keys(threadData.comments).length;
 
-  useEffect(() => {
-    setNOfComments(comments && Object.keys(comments).length);
-  }, [comments]);
+  const articleRef = useRef<any>();
 
-  const [threadReactionsCounts, setThreadReactionsCounts] = useState(
-    threadData.reactionsCount
-  );
-  const [currentUserReactions, setCurrentUserReactions] = useState(
-    threadData.currentUserReactions
-  );
-  const handleThreadReaction = (title: string) => {
-    let countValue = 0;
-    const onSuccess = (threadLikeId: string | false) => {
-      setCurrentUserReactions((reactions) => ({
-        ...reactions,
-        [title]: threadLikeId,
-      }));
-      setThreadReactionsCounts((counts) => {
-        const newCount = (counts[title] || 0) + countValue;
-        return { ...counts, [title]: newCount > 0 ? newCount : 0 };
-      });
-    };
-    const onError = (msg: string) => {
-      console.error(msg);
-    };
-    if (currentUserReactions[title]) {
-      countValue = -1;
-      removeThreadReaction({
-        threadId: threadData.id,
-        threadLikeId: currentUserReactions[title] || "",
-        onSuccess,
-        onError,
-      });
+  const [showComments, setShowComments] = useState(false);
+  const [commentEditorOpen, setCommentEditorOpen] = useState(false);
+  const commentMakerRef = useRef<any>();
+  const handleToggleCommentMaker = () => {
+    if (commentEditorOpen) {
+      setCommentEditorOpen(false);
     } else {
-      countValue = 1;
-      addThreadReaction({ threadId: threadData.id, title, onSuccess, onError });
+      setShowComments(true);
+      setCommentEditorOpen(true);
+      setTimeout(
+        () =>
+          commentMakerRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          }),
+        0
+      );
+    }
+  };
+  const resetCommentMaker = () => {
+    setCommentEditorOpen(false);
+    articleRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const commentMakerOptions = {
+    title: "Comment",
+    placeholder: "Your comment",
+    onSubmit: ({ content }: { content: string }) => {
+      const data = {
+        content,
+      };
+      dispatch(
+        createThreadCommentAsync({
+          threadId,
+          data,
+        })
+      );
+      resetCommentMaker();
+    },
+    handleCancel: () => {
+      resetCommentMaker();
+    },
+    className: "Home__comment-maker",
+    fullView: false,
+  };
+  const handleDeleteComment = ({ commentId }: { commentId: string }) => {
+    dispatch(
+      deleteThreadCommentAsync({
+        threadId,
+        commentId,
+      })
+    );
+  };
+
+  const handleThreadReaction = (title: string) => {
+    if (threadData?.currentUserReactions[title]) {
+      dispatch(
+        deleteThreadReactionAsync({
+          threadId,
+          threadLikeId: threadData.currentUserReactions[title] as string,
+        })
+      );
+    } else {
+      dispatch(
+        createThreadReactionAsync({
+          threadId,
+          title,
+        })
+      );
     }
   };
   const ReactionOptions = {
@@ -113,27 +148,8 @@ function Post({
     heart: smallHeartIcon,
     process: smallProcessingIcon,
   };
-  const [showComments, setShowComments] = useState(false);
-  const [commentEditorOpen, setCommentEditorOpen] = useState(false);
-  const articleRef = useRef<any>();
-  const commentMakerRef = useRef<any>();
-  const handleToggleCommentMaker = () => {
-    if (commentEditorOpen) {
-      setCommentEditorOpen(false);
-    } else {
-      setShowComments(true);
-      setCommentEditorOpen(true);
-      setTimeout(
-        () =>
-          commentMakerRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          }),
-        0
-      );
-    }
-  };
-  const postArticle = (
+
+  const postArticle = threadData ? (
     <article ref={articleRef} className={`Post ${className}`}>
       <header className="Post__relational-info">
         {referral?.userId && referral.userName && (
@@ -143,7 +159,8 @@ function Post({
         {queryString && (
           <p>
             {"«"}
-            <b>{queryString}</b>{"»"}
+            <b>{queryString}</b>
+            {"»"}
             <i>
               {" "}
               {getStringExcerpt({
@@ -166,7 +183,7 @@ function Post({
         dangerouslySetInnerHTML={{ __html: md.render(threadData.content.html) }}
       ></main>
       <ul className="Post__reactions">
-        {Object.entries(threadReactionsCounts).map(
+        {Object.entries(threadData.reactionsCount).map(
           ([type, amount]) =>
             !!amount && (
               <li key={threadData.id + type + amount}>
@@ -196,69 +213,15 @@ function Post({
         </Button>
       </footer>
     </article>
-  );
-
-  const [makeCommentError, setMakeCommentError] = useState("");
-  const resetCommentMaker = () => {
-    setCommentEditorOpen(false);
-    setMakeCommentError("");
-    articleRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-  const commentMakerOptions = {
-    title: "Comment",
-    placeholder: "Your comment",
-    onSubmit: ({ content }: { content: string }) => {
-      setInProgress(true);
-      const onSuccess = (data: IThreadComment) => {
-        setInProgress(false);
-        setComments((comments) => [data, ...comments]);
-        resetCommentMaker();
-      };
-      addComment({
-        threadId: threadData.id,
-        data: {
-          content,
-        },
-        onSuccess,
-        onError: (msg: string) => {
-          setMakeCommentError(msg);
-        },
-      });
-    },
-    handleCancel: () => {
-      resetCommentMaker();
-    },
-    errorMessage: makeCommentError,
-    className: "Home__comment-maker",
-    fullView: false,
-  };
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const handleDeleteComment = ({ commentId }: { commentId: string }) => {
-    setInProgress(true);
-    deleteComment({
-      threadId: threadData.id,
-      commentId,
-      onSuccess: () => {
-        setComments((comments) =>
-          comments.filter((comment) => comment._id !== commentId)
-        );
-        setInProgress(false);
-      },
-      onError: (msg) => {
-        setErrorMessage(msg);
-        setInProgress(false);
-      },
-    });
-  };
+  ) : null;
 
   return (
     <>
-      {showComments ? (
+      {postArticle}
+      {showComments && (
         <>
-          {postArticle}
-          {comments &&
-            Object.values(comments).map((commentData) => (
+          {threadData?.comments &&
+            Object.values(threadData.comments).map((commentData) => (
               <Comment
                 key={commentData._id}
                 {...{ commentData }}
@@ -270,11 +233,7 @@ function Post({
           <div ref={commentMakerRef}></div>
           {commentEditorOpen && <PostMaker {...commentMakerOptions} />}
         </>
-      ) : (
-        postArticle
       )}
-      {errorMessage && <p className="Post__error">{errorMessage}</p>}
-      {inProgress && <Spinner />}
     </>
   );
 }

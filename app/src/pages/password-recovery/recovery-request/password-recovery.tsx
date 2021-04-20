@@ -1,9 +1,9 @@
 import assert from "assert";
 import React, { useState } from "react";
-import Button from "../../components/button";
-import Input from "../../components/input";
-import Logo from "../../components/logo";
-import isEmailValid from "../../utils/isEmailValid";
+import Button from "../../../components/button";
+import Input from "../../../components/input";
+import Logo from "../../../components/logo";
+import isEmailValid from "../../../utils/isEmailValid";
 import "./password-recovery.css";
 import axios from "axios";
 

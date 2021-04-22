@@ -51,13 +51,13 @@ const getFeed = async ({ query }: { query: string }) => {
     bucket: {
       [latestUpdate.toISOString().replace(/\D/g, "") + "_uuid_"]: {
         collection: {
-          [50]:
+          50:
             ((processedConnectionThreads.map((data) => ({
               documentId: data.id,
               documentType: "thread",
               documentUpdatedAt: data.content.updatedAt,
             })) as unknown) as Array<IFeedItem>) || [],
-          [10]:
+          10:
             ((processedPublicThreads.map((data) => ({
               documentId: data.id,
               documentType: "thread",

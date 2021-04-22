@@ -118,8 +118,6 @@ async function processThread(
   threadData: IThread
 ): Promise<IThreadDataProcessed> {
   const threadId = threadData._id || threadData.id!;
-
-  const comments = await getComments({ threadId: threadId });
   const sortCommentsByDate = (arr: IThreadComment[]) =>
     arr.sort(
       (a, b) =>
@@ -135,12 +133,11 @@ async function processThread(
     reactionsCount: {},
     currentUserReactions: {},
     comments:
-      comments?.threadComments &&
-      sortCommentsByDate(Object.values(comments.threadComments)),
+      threadData.comments &&
+      sortCommentsByDate(Object.values(threadData.comments)),
     updatedAt: threadData.updatedAt,
     createdAt: threadData.createdAt,
   };
-  console.log({ threadData });
   threadData.likes &&
     Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
       const type = reaction.title;

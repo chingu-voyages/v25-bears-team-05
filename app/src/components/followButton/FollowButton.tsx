@@ -19,8 +19,8 @@ function FollowButton({
 }) {
   const dispatch = useDispatch();
   const isAConnection = useSelector(selectIsAConnection(connectionId));
-  const isMe =
-    connectionId === "me" || connectionId === useSelector(selectCurrentUserId);
+  const currentUserId = useSelector(selectCurrentUserId);
+  const isMe = connectionId === "me" || connectionId === currentUserId;
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
     dispatch(addConnectionAsync({ connectionId, isTeamMate }));
   };

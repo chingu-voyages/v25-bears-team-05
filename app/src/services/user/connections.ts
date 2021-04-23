@@ -31,8 +31,6 @@ const getConnections = async ({
 
 const removeConnection = async ({
   connectionId,
-  onSuccess, // Remove when redux update done
-  onError, // Remove when redux update done
 }: {
   connectionId: string;
   onSuccess?: (data: any) => any;
@@ -48,8 +46,6 @@ const removeConnection = async ({
 const addConnection = async ({
   connectionId,
   isTeamMate,
-  onSuccess, // Remove when redux update done
-  onError, // Remove when redux update done
 }: {
   connectionId: string;
   isTeamMate: boolean;

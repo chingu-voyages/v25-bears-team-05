@@ -1,6 +1,5 @@
 import { IUserPatchRequest, IUserProcessed } from "./user.type";
 import axios from "axios";
-import { getCurrentUserInfo, setCurrentUserInfo } from "./currentUserInfo";
 
 const getUser = async ({
   userId,
@@ -12,23 +11,10 @@ const getUser = async ({
   onError?: (message: any) => any;
 }) => {
   const res = await axios(`/api/users/${userId}`);
-  let currentUserId;
-  if (userId === "me") {
-    const { id, avatar, firstName, lastName, jobTitle } = res.data;
-    setCurrentUserInfo(
-      JSON.stringify({ id, avatar, firstName, lastName, jobTitle })
-    );
-    currentUserId = id;
-  } else {
-    const currentUserInfo = await getCurrentUserInfo();
-    currentUserId = currentUserInfo?.id;
-  }
   const connectionIds = Object.keys(res.data.connections);
-  const connectionOfIds = Object.keys(res.data.connectionOf);
   const processedUserData: IUserProcessed = {
     ...res.data,
     nOfConnections: connectionIds.length,
-    isAConnection: !!(currentUserId && connectionOfIds.includes(currentUserId)),
   };
   return processedUserData;
 };

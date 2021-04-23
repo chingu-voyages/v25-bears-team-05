@@ -173,5 +173,14 @@ export const { updateAvatarURL } = profileSlice.actions;
 export const selectUserById = (userId: string) => (state: any) =>
   state.profile.users[userId === "me" ? state.profile.currentUserId : userId];
 export const selectProfileStatus = (state: any) => state.profile.status;
+export const selectCurrentUserId = (state: any) => state.profile.currentUserId;
+export const selectIsAConnection = (userId: string) => (state: any) => {
+  const connections =
+    state.profile.users[state.profile.currentUserId]?.connections;
+  if (connections && Object.keys(connections).includes(userId)) {
+    return true;
+  }
+  return false;
+};
 
 export default profileSlice.reducer;

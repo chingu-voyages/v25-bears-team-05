@@ -13,6 +13,9 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
     throw Error("Can't make ProfileCard! no userId provided");
   }
   const userData = useSelector(selectUserById(userId));
+  const connectionData = useSelector(selectUserById("me"))?.connections?.[
+    userId
+  ];
   const dispatch = useDispatch();
   const name = `${userData?.firstName ? userData?.firstName : ""} ${
     userData?.lastName ? userData?.lastName : ""
@@ -37,7 +40,7 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
       );
       break;
     case "connection":
-      const dateTimeConnected = userData?.dateTimeConnected;
+      const dateTimeConnected = connectionData?.dateTimeConnected;
       info = convertDateStringToTimeAgo({ date: dateTimeConnected || "" });
       break;
     case "thread":
@@ -78,7 +81,7 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
         className ? className : ""
       } Profile-card--${type}`}
     >
-      {avatarUrl && (
+      {type !== "profile" && (
         <Link className="Profile-card__avatar" to={`/${userId}/profile`}>
           <Avatar
             url={avatarUrl || ""}

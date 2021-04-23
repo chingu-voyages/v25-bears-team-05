@@ -29,18 +29,12 @@ const getConnections = async ({
   }
 };
 
-const removeConnection = async ({
-  connectionId,
-}: {
-  connectionId: string;
-  onSuccess?: (data: any) => any;
-  onError?: (message: any) => any;
-}) => {
-  const req = await axios({
+const removeConnection = async ({ connectionId }: { connectionId: string }) => {
+  const res = await axios({
     method: "delete",
     url: `/api/users/connections/${connectionId}`,
   });
-  return req;
+  return res?.data;
 };
 
 const addConnection = async ({
@@ -49,15 +43,13 @@ const addConnection = async ({
 }: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess?: (data: any) => any;
-  onError?: (message: any) => any;
 }) => {
   const req = await axios({
     method: "put",
     url: `/api/users/connections/${connectionId}`,
     data: { isTeamMate },
   });
-  return req;
+  return req?.data;
 };
 
 export { getConnections, removeConnection, addConnection };

@@ -10,6 +10,7 @@ function Avatar({ url, userName, size, className }: AvatarProps) {
   if (!url || url === "defaultAvatar") {
     url = defaultAvatar;
   }
+  console.log({ url });
   return (
     <div className={`Avatar ${size ? size : ""} ${className ? className : ""}`}>
       <img

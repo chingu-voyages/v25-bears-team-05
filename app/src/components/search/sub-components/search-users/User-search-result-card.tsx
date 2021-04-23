@@ -16,7 +16,7 @@ function UserSearchResultCard({
 }: IUserProcessed) {
   return (
     <div className="UserCard__main">
-      <Avatar url={avatar![0].url} userName={`${firstName} ${lastName}`} />
+      <Avatar url={avatar?.[0]?.url} userName={`${firstName} ${lastName}`} />
       <ProfileCard
         type="profile"
         userId={id}

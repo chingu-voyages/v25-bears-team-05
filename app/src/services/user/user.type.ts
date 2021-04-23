@@ -45,9 +45,14 @@ export interface IUserProfile {
   nOfConnections: number | null;
   isAConnection: boolean;
 }
-export interface IUserConnection extends IUserProcessed {
+export interface IUserConnection {
   dateTimeConnected: string;
   isTeamMate: boolean;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  avatar: Array<Avatar>;
+  userId: string;
 }
 export interface IUserThread extends IUserProcessed {
   dateTimePosted: string;

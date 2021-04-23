@@ -182,5 +182,8 @@ export const selectIsAConnection = (userId: string) => (state: any) => {
   }
   return false;
 };
+export const selectUserConnections = (userId: string) => (state: any) =>
+  state.profile.users[userId === "me" ? state.profile.currentUserId : userId]
+    ?.connections;
 
 export default profileSlice.reducer;

@@ -13,8 +13,10 @@ import { makeClaimRequest } from "../utils/make-claim-request";
 function RecoveryClaim() {
   const search = useLocation().search;
   const parseResult = parseIdParameter({ fullQueryString: search });
-  const id = new URLSearchParams(search).get("id")?.replace(" ", "+");
+
+  const id = new URLSearchParams(search).get("id")?.replace(/\s+/g, "+");
   const data = new URLSearchParams(search).get("data");
+
   const [validRequestState, setValidRequestState] = useState<boolean>(true);
   const [firstPasswordEntry, setFirstPasswordEntry] = useState("");
   const [secondPasswordEntry, setSecondPasswordEntry] = useState("");
@@ -29,7 +31,10 @@ function RecoveryClaim() {
     to ensure that the parseResult and the .replace(" ", "+") method call
     return identical values
   */
+  console.log("id is ", id);
+  console.log("parseResult is", parseResult);
   assert(id === parseResult, "id parameter query string mismatch"); // POIJ: Need a more graceful fail
+
   useEffect(() => {
     (async () => {
       try {
@@ -78,7 +83,7 @@ function RecoveryClaim() {
         <Logo dark={true} />
         <h2 className="black-header-text">Recover password</h2>
       </header>
-      { validRequestState === true &&
+      {validRequestState === true && (
         <div className="Password-recovery-claim__input-section">
           <Input
             label="Enter a new password"
@@ -99,8 +104,8 @@ function RecoveryClaim() {
             className="breakout-on-large-view"
           />
         </div>
-      }
-      { validRequestState === true && 
+      )}
+      {validRequestState === true && (
         <div className="Password-submit-buttons">
           <Button
             onClick={handleSubmitRequest}
@@ -111,12 +116,15 @@ function RecoveryClaim() {
             Submit
           </Button>
         </div>
-      }
-      {!validRequestState &&
+      )}
+      {!validRequestState && (
         <div className="Password-recovery-claim__error-messages">
-          <p className="Password-recovery-claim__error-messages-content"> {requestErrorMessage} </p>
+          <p className="Password-recovery-claim__error-messages-content">
+            {" "}
+            {requestErrorMessage}{" "}
+          </p>
         </div>
-      }
+      )}
       {claimSuccessful && (
         <div className="Password-recovery-claim-success">
           <p>
@@ -124,7 +132,7 @@ function RecoveryClaim() {
             Password successfully claimed. Please log in with your new
             credentials.
           </p>
-        </div>  
+        </div>
       )}
     </div>
   );

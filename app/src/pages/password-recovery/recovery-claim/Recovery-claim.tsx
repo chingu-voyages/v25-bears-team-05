@@ -37,14 +37,14 @@ function RecoveryClaim() {
           params: {
             id: id,
             data: data,
-            devBypass: true, // POIJ: to be removed - this is just to test that UI loads without having a valid request
           },
         });
         setHashedEmail(res.data.id);
         setRequestToken(res.data.data);
       } catch (error) {
         setValidRequestState(false);
-        setRequestErrorMessage(error.response.data);
+        console.log(error.response.statusText);
+        setRequestErrorMessage(error.response.statusText);
       }
     })();
   }, []);
@@ -78,48 +78,45 @@ function RecoveryClaim() {
         <Logo dark={true} />
         <h2 className="black-header-text">Recover password</h2>
       </header>
-      { claimSuccessful && 
-      <div className="Password-recovery-claim__input-section">
-        <Input
-          label="Enter a new password"
-          id="updatePassword1"
-          type="password"
-          value={firstPasswordEntry}
-          setValue={setFirstPasswordEntry}
-          validationMessenger={getInvalidPasswordMessage}
-          // errorMessageReturner={(message) =>
-          //   handleErrorMessageReturn(3, message)
-          // }
-          className="breakout-on-large-view"
-        />
-        <Input
-          label="Confirm new password"
-          id="updatePassword2"
-          type="password"
-          value={secondPasswordEntry}
-          setValue={setSecondPasswordEntry}
-          validationMessenger={getInvalidPasswordMessage}
-          // errorMessageReturner={(message) =>
-          //   handleErrorMessageReturn(3, message)
-          // }
-          className="breakout-on-large-view"
-        />
-      </div>
+      { validRequestState === true &&
+        <div className="Password-recovery-claim__input-section">
+          <Input
+            label="Enter a new password"
+            id="updatePassword1"
+            type="password"
+            value={firstPasswordEntry}
+            setValue={setFirstPasswordEntry}
+            validationMessenger={getInvalidPasswordMessage}
+            className="breakout-on-large-view"
+          />
+          <Input
+            label="Confirm new password"
+            id="updatePassword2"
+            type="password"
+            value={secondPasswordEntry}
+            setValue={setSecondPasswordEntry}
+            validationMessenger={getInvalidPasswordMessage}
+            className="breakout-on-large-view"
+          />
+        </div>
       }
-      <div className="Password-submit-buttons">
-        <Button
-          onClick={handleSubmitRequest}
-          type="submit"
-          aria-label="Submit"
-          className="square Register__submit"
-        >
-          Submit
-        </Button>
-      </div>
-
-      <div className="Password-recovery-claim__error-messages">
-        {!validRequestState && <p> {requestErrorMessage} </p>}
-      </div>
+      { validRequestState === true && 
+        <div className="Password-submit-buttons">
+          <Button
+            onClick={handleSubmitRequest}
+            type="submit"
+            aria-label="Submit"
+            className="square Register__submit"
+          >
+            Submit
+          </Button>
+        </div>
+      }
+      {!validRequestState &&
+        <div className="Password-recovery-claim__error-messages">
+          <p className="Password-recovery-claim__error-messages-content"> {requestErrorMessage} </p>
+        </div>
+      }
       {claimSuccessful && (
         <div className="Password-recovery-claim-success">
           <p>
@@ -127,7 +124,7 @@ function RecoveryClaim() {
             Password successfully claimed. Please log in with your new
             credentials.
           </p>
-        </div>
+        </div>  
       )}
     </div>
   );

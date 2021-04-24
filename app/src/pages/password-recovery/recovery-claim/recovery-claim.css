@@ -36,8 +36,16 @@
   margin-right: 15%
 }
 
-.Button {
+.Password-submit-buttons>.Button {
   width: 100%;
+}
+
+.Password-recovery-claim__error-messages {
+  text-align: center;
+}
+
+.Password-recovery-claim__error-messages-content {
+  color: var(--error-color);  
 }
 
 @media only screen and (min-width: 720px) {

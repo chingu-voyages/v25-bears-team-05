@@ -22,6 +22,6 @@ export async function makeClaimRequest({
     result.status === 200 && onSuccess(result);
     onError("Some error happened during claim request");
   } catch (exception) {
-    onError(exception);
+    onError(exception.response.statusText);
   }
 }

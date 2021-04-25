@@ -59,7 +59,6 @@ function RecoveryClaim() {
           onError: (error) => {
             setRequestErrorMessage(error.statusText);
             setValidRequestState(false);
-            console.log(error);
           },
           onSuccess: (_result) => setClaimSuccessful(true),
         });

@@ -51,9 +51,12 @@ function PasswordRecovery() {
           setRequestSuccessfullySubmitted(true);
         }
       } catch (exception) {
-        setErrorMessageResponse(
-          "Please ensure you have completed the captcha challenge."
-        );
+        if (exception.response.statusText.includes("challenge")) {
+          setErrorMessageResponse(exception.response.statusText);
+        } else {
+          setRequestSuccessfullySubmitted(true);
+          console.log(exception.response.statusText);
+        }
         e.target.disabled = false;
         setReceivedError(true);
       }
@@ -106,8 +109,9 @@ function PasswordRecovery() {
       {requestSuccessfullySubmitted && (
         <div className="request-success-response-message">
           <h4>
-            Your request is being processed. Please check your e-mail for
-            further instructions.
+            Your request is being processed. If your request is successful, you
+            will receive an e-mail with further instructions about how to update
+            your password.
           </h4>
         </div>
       )}

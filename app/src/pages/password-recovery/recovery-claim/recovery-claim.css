@@ -48,6 +48,10 @@
   color: var(--error-color);  
 }
 
+.success-message {
+  text-align: center;
+}
+
 @media only screen and (min-width: 720px) {
   .Password-recovery-claim__input-section {
     margin: 5vh 0;

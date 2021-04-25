@@ -24,15 +24,7 @@ function RecoveryClaim() {
   const [hashedEmail, setHashedEmail] = useState<string>("");
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);
-  // const [errorMessages, setErrorMessages] = useState(["", "", "", "", ""]);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  /* URLSearchParams replaces the '+' symbol with spaces. This assert is
-    to ensure that the parseResult and the .replace(" ", "+") method call
-    return identical values
-  */
-  console.log("id is ", id);
-  console.log("parseResult is", parseResult);
   assert(id === parseResult, "id parameter query string mismatch"); // POIJ: Need a more graceful fail
 
   useEffect(() => {
@@ -64,7 +56,11 @@ function RecoveryClaim() {
             first_password: firstPasswordEntry,
             second_password: secondPasswordEntry,
           },
-          onError: (error) => setRequestErrorMessage(error.statusText),
+          onError: (error) => {
+            setRequestErrorMessage(error.statusText);
+            setValidRequestState(false);
+            console.log(error);
+          },
           onSuccess: (_result) => setClaimSuccessful(true),
         });
       } else {
@@ -127,9 +123,8 @@ function RecoveryClaim() {
       )}
       {claimSuccessful && (
         <div className="Password-recovery-claim-success">
-          <p>
-            {" "}
-            Password successfully claimed. Please log in with your new
+          <p className="success-message">
+            Password successfully updated. Please log in with your new
             credentials.
           </p>
         </div>

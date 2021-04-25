@@ -18,9 +18,9 @@ function RecoveryClaim() {
   const data = new URLSearchParams(search).get("data");
 
   const [validRequestState, setValidRequestState] = useState<boolean>(true);
-  const [firstPasswordEntry, setFirstPasswordEntry] = useState("");
-  const [secondPasswordEntry, setSecondPasswordEntry] = useState("");
-  const [requestErrorMessage, setRequestErrorMessage] = useState("");
+  const [firstPasswordEntry, setFirstPasswordEntry] = useState<string>("");
+  const [secondPasswordEntry, setSecondPasswordEntry] = useState<string>("");
+  const [requestErrorMessage, setRequestErrorMessage] = useState<string>("");
   const [hashedEmail, setHashedEmail] = useState<string>("");
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);

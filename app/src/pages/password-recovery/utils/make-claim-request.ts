@@ -20,7 +20,6 @@ export async function makeClaimRequest({
       second_password: updatedPasswords.second_password
     });
     result.status === 200 && onSuccess(result);
-    onError("An error occurred during claim request");
   } catch (exception) {
     onError(exception.response.statusText);
   }

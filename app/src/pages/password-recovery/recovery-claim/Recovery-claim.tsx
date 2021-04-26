@@ -9,6 +9,7 @@ import Input from "../../../components/input";
 import Button from "../../../components/button";
 import getInvalidPasswordMessage from "../../../utils/getInvalidPasswordMessage";
 import { makeClaimRequest } from "../utils/make-claim-request";
+import { isPasswordValid } from "../../../utils/passwordValidations";
 
 function RecoveryClaim() {
   const search = useLocation().search;
@@ -24,6 +25,7 @@ function RecoveryClaim() {
   const [hashedEmail, setHashedEmail] = useState<string>("");
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);
+  const [hasPasswordError, setHasPasswordError] = useState<boolean>(false);
 
   assert(id === parseResult, "id parameter query string mismatch"); // POIJ: Need a more graceful fail
 
@@ -46,9 +48,14 @@ function RecoveryClaim() {
     })();
   }, []);
 
-  const handleSubmitRequest = async () => {
+  const handleSubmitRequest = async (e: any) => {
+    e.target.disabled = true;
     if (hashedEmail && requestToken) {
-      if (firstPasswordEntry === secondPasswordEntry) {
+      if (
+        isPasswordValid(firstPasswordEntry) &&
+        isPasswordValid(secondPasswordEntry) &&
+        firstPasswordEntry === secondPasswordEntry
+      ) {
         makeClaimRequest({
           hashedEmail: hashedEmail,
           authToken: requestToken,
@@ -66,9 +73,13 @@ function RecoveryClaim() {
         setRequestErrorMessage(
           "Please check that you've entered valid matching passwords."
         );
+        setHasPasswordError(true);
+        e.target.disabled = false;
       }
     } else {
       setRequestErrorMessage("Request cannot be completed");
+      setValidRequestState(false);
+      e.target.disabled = false;
     }
   };
 
@@ -112,9 +123,9 @@ function RecoveryClaim() {
           </Button>
         </div>
       )}
-      {!validRequestState && (
+      {hasPasswordError && (
         <div className="Password-recovery-claim__error-messages">
-          <p className="Password-recovery-claim__error-messages-content">
+          <p className="Password-recovery-claim__error-messages-content shadow-text">
             {" "}
             {requestErrorMessage}{" "}
           </p>
@@ -126,7 +137,7 @@ function RecoveryClaim() {
             Password successfully updated. Please log in with your new
             credentials.
           </p>
-          <Button className="square">
+          <Button className="square back-to-login-center">
             <Link to="/">Back to Login</Link>
           </Button>
         </div>

@@ -13,9 +13,8 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
     throw Error("Can't make ProfileCard! no userId provided");
   }
   const userData = useSelector(selectUserById(userId));
-  const connectionData = useSelector(selectUserById("me"))?.connections?.[
-    userId
-  ];
+  const currentUserData = useSelector(selectUserById("me"));
+  const connectionData = currentUserData?.connections?.[userId];
   const dispatch = useDispatch();
   const name = `${userData?.firstName ? userData?.firstName : ""} ${
     userData?.lastName ? userData?.lastName : ""
@@ -29,6 +28,14 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
       : "Posted";
 
   let info: any = "...";
+  const getConnectionsInCommon = () =>
+    Object.keys(userData.connections)
+      .map((connectionId) =>
+        currentUserData.connections[connectionId]
+          ? currentUserData.connections[connectionId]
+          : null
+      )
+      .filter((notNull) => notNull);
   switch (type) {
     case "profile":
       info = (
@@ -68,6 +75,15 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
           </span>
         </Link>
       );
+      break;
+    case "search":
+      info = `Connected with ${getConnectionsInCommon().map(
+        ({ firstName, lastName, id }) => (
+          <Link to={`/${id}/profile`}>
+            {firstName} {lastName}
+          </Link>
+        )
+      )}`;
       break;
   }
 

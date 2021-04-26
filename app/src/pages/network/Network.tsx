@@ -15,7 +15,6 @@ import {
   removeConnectionAsync,
   selectCurrentUserId,
   selectProfileStatus,
-  selectUserById,
   selectUserConnections,
 } from "../profile/profileSlice";
 import Status from "../../components/status";

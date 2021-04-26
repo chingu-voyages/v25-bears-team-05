@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./recovery-claim.css";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { parseIdParameter } from "../utils/parse-id-parameter";
 import assert from "assert";
 import axios from "axios";
@@ -78,7 +78,7 @@ function RecoveryClaim() {
         <Logo dark={true} />
         <h2 className="black-header-text">Recover password</h2>
       </header>
-      {validRequestState === true && (
+      {validRequestState === true && !claimSuccessful && (
         <div className="Password-recovery-claim__input-section">
           <Input
             label="Enter a new password"
@@ -126,6 +126,9 @@ function RecoveryClaim() {
             Password successfully updated. Please log in with your new
             credentials.
           </p>
+          <Button className="square">
+            <Link to="/">Back to Login</Link>
+          </Button>
         </div>
       )}
     </div>

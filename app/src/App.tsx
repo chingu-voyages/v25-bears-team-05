@@ -10,7 +10,8 @@ import checkIfAuthed from "./services/checkIfAuthed";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
 import Loading from "./pages/loading";
-import PasswordRecovery from "./pages/password-recovery";
+import PasswordRecovery from "./pages/password-recovery/recovery-request";
+import RecoveryClaim from "./pages/password-recovery/recovery-claim";
 
 function App() {
   const [authChecked, setAuthChecked] = useState(false);
@@ -38,6 +39,7 @@ function App() {
           path="/request-password-reset"
           component={PasswordRecovery}
         ></Route>
+        <Route path="/recover" component={RecoveryClaim} />
         <ProtectedRoute
           path="/:userId/network"
           allowed={isLoggedIn}

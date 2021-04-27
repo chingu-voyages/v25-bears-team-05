@@ -18,14 +18,15 @@ function RecoveryClaim() {
   const id = new URLSearchParams(search).get("id")?.replace(/\s+/g, "+");
   const data = new URLSearchParams(search).get("data");
 
-  const [validRequestState, setValidRequestState] = useState<boolean>(true);
   const [firstPasswordEntry, setFirstPasswordEntry] = useState<string>("");
   const [secondPasswordEntry, setSecondPasswordEntry] = useState<string>("");
-  const [requestErrorMessage, setRequestErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
   const [hashedEmail, setHashedEmail] = useState<string>("");
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);
-  const [hasPasswordError, setHasPasswordError] = useState<boolean>(false);
+  const [showUpdateUI, setShowUpdateUI] = useState<boolean>(false);
+  const [showRecoveryRequestLink, setShowRecoverRequestLink] = useState<boolean>(false);
 
   assert(id === parseResult, "id parameter query string mismatch"); // POIJ: Need a more graceful fail
 
@@ -40,10 +41,13 @@ function RecoveryClaim() {
         });
         setHashedEmail(res.data.id);
         setRequestToken(res.data.data);
+        setShowUpdateUI(true);
       } catch (error) {
-        setValidRequestState(false);
         console.log(error.response.statusText);
-        setRequestErrorMessage(error.response.statusText);
+        setShowRecoverRequestLink(true);
+        setShowErrorMessage(true);
+        setErrorMessage(error.response.statusText);
+        setShowUpdateUI(false);
       }
     })();
   }, []);
@@ -64,23 +68,68 @@ function RecoveryClaim() {
             second_password: secondPasswordEntry,
           },
           onError: (error) => {
-            setRequestErrorMessage(error.statusText);
-            setValidRequestState(false);
+            setErrorMessage(error.statusText);
+            setShowErrorMessage(true);
           },
-          onSuccess: (_result) => setClaimSuccessful(true),
+          onSuccess: (_result) => {
+            setClaimSuccessful(true);
+            setShowUpdateUI(false);
+            setShowErrorMessage(false);
+          },
         });
       } else {
-        setRequestErrorMessage(
+        setShowErrorMessage(true);
+        setErrorMessage(
           "Please check that you've entered valid matching passwords."
         );
-        setHasPasswordError(true);
         e.target.disabled = false;
       }
     } else {
-      setRequestErrorMessage("Request cannot be completed");
-      setValidRequestState(false);
+      setShowErrorMessage(true);
+      setErrorMessage("Request cannot be completed");
+      setShowUpdateUI(false);
       e.target.disabled = false;
     }
+  };
+
+  const passwordInputs = () => {
+    return (
+      <div className="Password-recovery-claim__input-section">
+        <Input
+          label="Enter a new password"
+          id="updatePassword1"
+          type="password"
+          value={firstPasswordEntry}
+          setValue={setFirstPasswordEntry}
+          validationMessenger={getInvalidPasswordMessage}
+          className="breakout-on-large-view"
+        />
+        <Input
+          label="Confirm new password"
+          id="updatePassword2"
+          type="password"
+          value={secondPasswordEntry}
+          setValue={setSecondPasswordEntry}
+          validationMessenger={getInvalidPasswordMessage}
+          className="breakout-on-large-view"
+        />
+      </div>
+    );
+  };
+
+  const submitButton = () => {
+    return (
+      <div className="Password-submit-buttons">
+        <Button
+          onClick={handleSubmitRequest}
+          type="submit"
+          aria-label="Submit"
+          className="square Register__submit"
+        >
+          Submit
+        </Button>
+      </div>
+    );
   };
 
   return (
@@ -89,46 +138,21 @@ function RecoveryClaim() {
         <Logo dark={true} />
         <h2 className="black-header-text">Recover password</h2>
       </header>
-      {validRequestState === true && !claimSuccessful && (
-        <div className="Password-recovery-claim__input-section">
-          <Input
-            label="Enter a new password"
-            id="updatePassword1"
-            type="password"
-            value={firstPasswordEntry}
-            setValue={setFirstPasswordEntry}
-            validationMessenger={getInvalidPasswordMessage}
-            className="breakout-on-large-view"
-          />
-          <Input
-            label="Confirm new password"
-            id="updatePassword2"
-            type="password"
-            value={secondPasswordEntry}
-            setValue={setSecondPasswordEntry}
-            validationMessenger={getInvalidPasswordMessage}
-            className="breakout-on-large-view"
-          />
+      {showUpdateUI && (
+        <div>
+          {passwordInputs()}
+          {submitButton()}
         </div>
       )}
-      {validRequestState === true && (
-        <div className="Password-submit-buttons">
-          <Button
-            onClick={handleSubmitRequest}
-            type="submit"
-            aria-label="Submit"
-            className="square Register__submit"
-          >
-            Submit
-          </Button>
-        </div>
-      )}
-      {hasPasswordError && (
+      {showErrorMessage && (
         <div className="Password-recovery-claim__error-messages">
           <p className="Password-recovery-claim__error-messages-content shadow-text">
             {" "}
-            {requestErrorMessage}{" "}
+            {errorMessage}{" "}
           </p>
+          {showRecoveryRequestLink && (
+            <Link to="/request-password-reset">Submit a new request</Link>
+          )}
         </div>
       )}
       {claimSuccessful && (

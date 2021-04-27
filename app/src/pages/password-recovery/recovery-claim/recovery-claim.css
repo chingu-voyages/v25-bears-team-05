@@ -54,10 +54,17 @@
 
 .square back-to-login-center {
   text-align: center  ;
+  margin-left: 40%;
 }
 
 .shadow-text {
   text-shadow: black 0 -2px;  
+  color: white;
+  background-color: var(--error-color);
+}
+
+.back-to-login-link {
+  text-align: center;
 }
 
 @media only screen and (min-width: 720px) {

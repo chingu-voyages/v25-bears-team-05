@@ -9,6 +9,9 @@ export interface IThreadComment {
   content: string;
   updatedAt: string;
   createdAt: string;
+  parentThreadId: string;
+  parentThreadVisibility: ThreadVisibility;
+  parentThreadOriginatorId: string;
 }
 
 export enum ThreadLikeTypeTitle {

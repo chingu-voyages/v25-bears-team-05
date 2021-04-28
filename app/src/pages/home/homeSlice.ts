@@ -10,11 +10,15 @@ import {
   getThread,
   removeThreadReaction,
 } from "../../services/thread/thread";
-import { INewThreadData } from "../../services/thread/thread.type";
+import {
+  INewThreadData,
+  IThreadComment,
+} from "../../services/thread/thread.type";
 import stateStatus from "../../utils/stateStatus";
 
 const initialState = {
   threads: {},
+  comments: {},
   feed: {},
   status: {
     state: "idle",
@@ -221,6 +225,9 @@ export const homeSlice = createSlice({
           [action.payload.id]: action.payload,
         };
       })
+      .addCase(readThreadCommentsAsync.rejected, (state) => {
+        stateStatus.error(state, "unable to upload comment");
+      })
       .addCase(readThreadCommentsAsync.pending, (state) => {
         stateStatus.loading(state, "getting comments");
       })
@@ -234,6 +241,10 @@ export const homeSlice = createSlice({
             ] as Object),
             comments: action.payload.comments,
           },
+        };
+        state.comments = {
+          ...state.comments,
+          ...action.payload.comments,
         };
       })
       .addCase(readThreadCommentsAsync.rejected, (state) => {
@@ -316,3 +327,7 @@ export const selectLatestBucketDate = (state: any) =>
     .map((key) => key.substr(0, 24))
     .sort()
     .reverse()[0];
+
+export const selectCommentById = (commentId: string) => (
+  state: any
+): IThreadComment => state.home.comments[commentId];

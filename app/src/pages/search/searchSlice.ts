@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doSearch } from "../../services/search/search";
+import { ISearchResult } from "../../services/search/search.types";
 import stateStatus from "../../utils/stateStatus";
 
 const initialState = {
@@ -24,7 +25,11 @@ export const doSearchAsync = createAsyncThunk(
 export const searchSlice = createSlice({
   name: "search",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchQuery(state, action) {
+      state.query = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(doSearchAsync.pending, (state) => {
@@ -43,9 +48,11 @@ export const searchSlice = createSlice({
   },
 });
 
+export const { setSearchQuery } = searchSlice.actions;
+
 export const selectSearchStatus = (state: any) => state.search.status;
-export const selectQuery = (state: any) => state.search.query;
-export const selectResultByCurrentQuery = (state: any) =>
+export const selectSearchQuery = (state: any) => state.search.query;
+export const selectResultByCurrentQuery = (state: any): ISearchResult =>
   state.search.results[state.search.query];
 
 export default searchSlice.reducer;

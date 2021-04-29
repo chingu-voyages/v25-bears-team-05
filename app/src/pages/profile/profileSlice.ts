@@ -18,10 +18,14 @@ const initialState: {
   },
 };
 
+const pendingGetRequests: any = {};
 export const getUserAsync = createAsyncThunk(
   "profile/getUser",
   async (userId: string) => {
-    const response = await getUser({ userId });
+    if (!Object.keys(pendingGetRequests).includes(userId)) {
+      pendingGetRequests[userId] = getUser({ userId });
+    }
+    const response = await pendingGetRequests[userId];
     return {
       userData: response,
       isCurrentUser: userId === "me",

@@ -1,21 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import searchIcon from "../../images/searchicon.svg";
+import {
+  doSearchAsync,
+  selectSearchQuery,
+  setSearchQuery,
+} from "../../pages/search/searchSlice";
 import "./Search.css";
-import ISearchProps from "./search.types";
 
-function Search({ className, onSearchSubmit }: ISearchProps) {
-  const [query, setQuery] = useState("");
-  const [error, setError] = useState("");
-  useEffect(() => {
-    setError(query ? "Search not yet implemented" : "");
-  }, [query]);
+function Search({ className }: { className?: string }) {
+  const query = useSelector(selectSearchQuery);
+  const dispatch = useDispatch();
+  const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
+  const history = useHistory();
+
+  const triggerSearch = (query: string) => {
+    history.push(`/search/${encodeURI(query)}`);
+    dispatch(doSearchAsync(query));
+  };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
     const queryString = (e.target as HTMLInputElement).value;
     if (e.key === "Enter") {
-      onSearchSubmit(queryString);
+      triggerSearch(queryString);
     }
   };
+
   return (
     <div className={`Search ${className || ""}`}>
       <input
@@ -23,9 +36,9 @@ function Search({ className, onSearchSubmit }: ISearchProps) {
         id="SearchInput"
         type="text"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyPress={(e) => handleEnterKeyPress(e)}
-        onBlur={(e) => setQuery(e.target.value)}
+        onChange={handleSetQuery}
+        onKeyPress={handleEnterKeyPress}
+        onBlur={handleSetQuery}
       />
       <label className="Search__label" htmlFor="SearchInput">
         <img src={searchIcon} alt="" />

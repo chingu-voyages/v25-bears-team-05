@@ -24,7 +24,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createThreadCommentAsync,
   createThreadReactionAsync,
-  deleteThreadCommentAsync,
   deleteThreadReactionAsync,
   selectThreadById,
 } from "../../pages/home/homeSlice";
@@ -96,14 +95,6 @@ function Post({
     },
     className: "Home__comment-maker",
     fullView: false,
-  };
-  const handleDeleteComment = ({ commentId }: { commentId: string }) => {
-    dispatch(
-      deleteThreadCommentAsync({
-        threadId,
-        commentId,
-      })
-    );
   };
 
   const handleThreadReaction = (title: string) => {
@@ -222,13 +213,7 @@ function Post({
         <>
           {threadData?.comments &&
             Object.values(threadData.comments).map((commentData) => (
-              <Comment
-                key={commentData._id}
-                {...{ commentData }}
-                handleDeleteComment={() =>
-                  handleDeleteComment({ commentId: commentData._id! })
-                }
-              />
+              <Comment key={commentData._id} commentId={commentData._id} />
             ))}
           <div ref={commentMakerRef}></div>
           {commentEditorOpen && <PostMaker {...commentMakerOptions} />}

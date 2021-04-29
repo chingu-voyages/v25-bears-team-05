@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./Network.css";
 import backIcon from "../../images/backicon.svg";
 import Button from "../../components/button";
@@ -8,7 +8,6 @@ import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
-import Search from "../search";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserAsync,
@@ -30,9 +29,6 @@ function Network() {
   const currentUserId = useSelector(selectCurrentUserId);
   const isMe = userId.current === "me" || userId.current === currentUserId;
   const dispatch = useDispatch();
-
-  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
-  const [searchQueryString, setSearchQueryString] = useState<string>("");
 
   const RemoveOption = ({
     connectionData,
@@ -56,11 +52,6 @@ function Network() {
     );
   };
 
-  const onSearchSubmit = (queryString: string) => {
-    setSearchIsTriggered(!!queryString);
-    setSearchQueryString(queryString);
-  };
-
   useEffect(() => {
     !currentUserId && dispatch(getUserAsync("me"));
   });
@@ -74,34 +65,28 @@ function Network() {
         </Button>
         <h1 className="Network-page__title">Connections</h1>
       </header>
-      <TopBar
-        className="Network-page__top-bar--desktop"
-        onSearchSubmit={onSearchSubmit}
-      />
-      <Search query={searchQueryString} triggered={searchIsTriggered}>
-        <div />
-        <main className="Network-page__main">
-          <ul className="Network-page__connections-list">
-            {connections &&
-              (Object.values(connections) as IUserConnection[]).map(
-                (connectionData) => (
-                  <li key={connectionData.userId}>
-                    <Link
-                      className="connections-list__link"
-                      to={`/${connectionData.userId}/profile`}
-                    >
-                      <ProfileCard
-                        type="connection"
-                        {...{ userId: connectionData.userId, connectionData }}
-                      />
-                    </Link>
-                    {isMe && <RemoveOption {...{ connectionData }} />}
-                  </li>
-                )
-              )}
-          </ul>
-        </main>
-      </Search>
+      <TopBar className="Network-page__top-bar--desktop" />
+      <main className="Network-page__main">
+        <ul className="Network-page__connections-list">
+          {connections &&
+            (Object.values(connections) as IUserConnection[]).map(
+              (connectionData) => (
+                <li key={connectionData.userId}>
+                  <Link
+                    className="connections-list__link"
+                    to={`/${connectionData.userId}/profile`}
+                  >
+                    <ProfileCard
+                      type="connection"
+                      {...{ userId: connectionData.userId, connectionData }}
+                    />
+                  </Link>
+                  {isMe && <RemoveOption {...{ connectionData }} />}
+                </li>
+              )
+            )}
+        </ul>
+      </main>
       <Nav />
     </div>
   );

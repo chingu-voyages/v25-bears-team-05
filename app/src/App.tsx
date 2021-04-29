@@ -16,6 +16,7 @@ import {
   selectIsLoggedIn,
 } from "./appSlice";
 import PasswordRecovery from "./pages/password-recovery";
+import Search from "./pages/search";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -65,6 +66,12 @@ function App() {
           allowed={!isLoggedIn}
           component={Signup}
           redirectTo="/home"
+        />
+        <ProtectedRoute
+          path="/search/:query"
+          allowed={isLoggedIn}
+          component={Search}
+          redirectTo="/"
         />
         <ProtectedRoute
           path="/"

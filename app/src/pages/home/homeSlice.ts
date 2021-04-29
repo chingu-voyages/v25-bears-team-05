@@ -225,7 +225,7 @@ export const homeSlice = createSlice({
           [action.payload.id]: action.payload,
         };
       })
-      .addCase(readThreadCommentsAsync.rejected, (state) => {
+      .addCase(createThreadCommentAsync.rejected, (state) => {
         stateStatus.error(state, "unable to upload comment");
       })
       .addCase(readThreadCommentsAsync.pending, (state) => {

@@ -29,13 +29,15 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
 
   let info: any = "...";
   const getConnectionsInCommon = () =>
-    Object.keys(userData.connections)
-      .map((connectionId) =>
-        currentUserData.connections[connectionId]
-          ? currentUserData.connections[connectionId]
-          : null
-      )
-      .filter((notNull) => notNull);
+    userData
+      ? Object.keys(userData.connections)
+          .map((connectionId) =>
+            currentUserData?.connections[connectionId]
+              ? currentUserData.connections[connectionId]
+              : null
+          )
+          .filter((notNull) => notNull)
+      : [];
   switch (type) {
     case "profile":
       info = (
@@ -77,19 +79,28 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
       );
       break;
     case "search":
-      info = `Connected with ${getConnectionsInCommon().map(
-        ({ firstName, lastName, id }) => (
-          <Link to={`/${id}/profile`}>
-            {firstName} {lastName}
-          </Link>
-        )
-      )}`;
+      const connectedWith = getConnectionsInCommon();
+      info =
+        connectedWith.length > 0 ? (
+          `Connected with ${connectedWith.map(({ firstName, lastName, id }) => (
+            <Link to={`/${id}/profile`}>
+              {firstName} {lastName}
+            </Link>
+          ))}`
+        ) : (
+          <>
+            <span>Connections</span>{" "}
+            <span className="Profile-card__info__connections-number">
+              {nOfConnections || 0}
+            </span>
+          </>
+        );
       break;
   }
 
   useEffect(() => {
     !userData && dispatch(getUserAsync(userId));
-  }, [userId]);
+  }, []);
 
   return (
     <div

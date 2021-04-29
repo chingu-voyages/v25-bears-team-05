@@ -9,7 +9,6 @@ import ProfileCard from "../../components/profileCard";
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
-import Search from "../../pages/search";
 import {
   createThreadAsync,
   readHomeFeedLatestAsync,
@@ -23,9 +22,6 @@ import Status from "../../components/status";
 
 function Home() {
   const history = useHistory();
-
-  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
-  const [searchQueryString, setSearchQueryString] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -91,45 +87,37 @@ function Home() {
     }
   };
 
-  const onSearchSubmit = (queryString: string) => {
-    setSearchIsTriggered(!!queryString);
-    setSearchQueryString(queryString);
-  };
-
   return (
     <div className="Home-page">
       <Status status={status} />
-
-      <TopBar className="Home-page__top-bar" onSearchSubmit={onSearchSubmit} />
+      <TopBar className="Home-page__top-bar" />
       <ProfileCard
         type="home-page"
         userId="me"
         className="Home-page__profile"
       />
-      <Search query={searchQueryString} triggered={searchIsTriggered}>
-        <div className="Home-page__post-maker-start">
-          {!isPostMakerOpen ? (
-            <Button
-              onClick={() => setIsPostMakerOpen(true)}
-              className="Home-page__post-maker-start__button"
-            >
-              <img src={editIcon} alt="" />
-              <h1>Share your thoughts or photos</h1>
-            </Button>
-          ) : (
-            <PostMaker {...postMakerOptions} />
+      <div className="Home-page__post-maker-start">
+        {!isPostMakerOpen ? (
+          <Button
+            onClick={() => setIsPostMakerOpen(true)}
+            className="Home-page__post-maker-start__button"
+          >
+            <img src={editIcon} alt="" />
+            <h1>Share your thoughts or photos</h1>
+          </Button>
+        ) : (
+          <PostMaker {...postMakerOptions} />
+        )}
+      </div>
+      <div className="Home-page__feed">
+        <ul className="Home-page__feed__list">
+          {feed.map((item) =>
+            item?.documentId ? (
+              <FeedItem {...item} key={"feedItem" + item?.documentId} />
+            ) : null
           )}
-        </div>
-        <div className="Home-page__feed">
-          <ul className="Home-page__feed__list">
-            {feed.map((item) =>
-              item?.documentId ? (
-                <FeedItem {...item} key={"feedItem" + item?.documentId} />
-              ) : null
-            )}
-          </ul>
-        </div>
-      </Search>
+        </ul>
+      </div>
       <Nav />
     </div>
   );

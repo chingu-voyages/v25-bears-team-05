@@ -10,7 +10,6 @@ import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
-import Search from "../search";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserAsync,
@@ -57,75 +56,65 @@ function Profile() {
     handleToggleEditMode();
   };
 
-  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
-  const [searchQueryString, setSearchQueryString] = useState<string>("");
-  const onSearchSubmit = (queryString: string) => {
-    setSearchIsTriggered(!!queryString);
-    setSearchQueryString(queryString);
-  };
-
   return (
     <div className="Profile-page">
       <Status status={status} />
-      <TopBar onSearchSubmit={onSearchSubmit} />
-      <Search query={searchQueryString} triggered={searchIsTriggered}>
-        <div></div>
-        <main className="Profile-page__profile">
-          <div className="wrapper__Profile-page__wall-paper">
-            <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
-          </div>
-          <figure className="Profile-page__avatar">
-            <PhotoUploader
-              route={{
-                url: "/api/users/me",
-                method: "patch",
-                urlPropertyName: "avatar",
-              }}
-              onUpload={(url) => dispatch(updateAvatarURL(url))}
-            >
-              <Avatar
-                url={userInfo?.avatar?.[0]?.url || ""}
-                userName={
-                  `${userInfo?.firstName} ${userInfo?.lastName}`.trim() ||
-                  "user avatar"
-                }
-              />
-            </PhotoUploader>
-          </figure>
-          <div className="Profile-page__info">
-            {userId === "me" && (
-              <>
+      <TopBar />
+      <main className="Profile-page__profile">
+        <div className="wrapper__Profile-page__wall-paper">
+          <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
+        </div>
+        <figure className="Profile-page__avatar">
+          <PhotoUploader
+            route={{
+              url: "/api/users/me",
+              method: "patch",
+              urlPropertyName: "avatar",
+            }}
+            onUpload={(url) => dispatch(updateAvatarURL(url))}
+          >
+            <Avatar
+              url={userInfo?.avatar?.[0]?.url || ""}
+              userName={
+                `${userInfo?.firstName} ${userInfo?.lastName}`.trim() ||
+                "user avatar"
+              }
+            />
+          </PhotoUploader>
+        </figure>
+        <div className="Profile-page__info">
+          {userId === "me" && (
+            <>
+              <Button
+                onClick={handleToggleEditMode}
+                className="Profile-page__info__edit"
+              >
+                <img src={editIcon} alt="edit" />
+              </Button>
+              {isEditing && (
                 <Button
-                  onClick={handleToggleEditMode}
-                  className="Profile-page__info__edit"
+                  onClick={handleUpdateInfo}
+                  className="Profile-page__info__save square"
                 >
-                  <img src={editIcon} alt="edit" />
+                  Save
                 </Button>
-                {isEditing && (
-                  <Button
-                    onClick={handleUpdateInfo}
-                    className="Profile-page__info__save square"
-                  >
-                    Save
-                  </Button>
-                )}
-              </>
-            )}
-            {isEditing ? (
-              <ProfileEditor
-                {...{ inputs, setInputs }}
-                className="Profile-page__editor"
-              />
-            ) : (
-              <ProfileCard
-                type="profile"
-                userId={userId}
-                className="Profile-page__info__text"
-              />
-            )}
-          </div>
-        </main>
-      </Search>
+              )}
+            </>
+          )}
+          {isEditing ? (
+            <ProfileEditor
+              {...{ inputs, setInputs }}
+              className="Profile-page__editor"
+            />
+          ) : (
+            <ProfileCard
+              type="profile"
+              userId={userId}
+              className="Profile-page__info__text"
+            />
+          )}
+        </div>
+      </main>
       <Nav />
     </div>
   );

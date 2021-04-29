@@ -17,7 +17,8 @@
 }
 .Profile-card--connection,
 .Profile-card--thread,
-.Profile-card--comment {
+.Profile-card--comment,
+.Profile-card--search {
   grid-template-columns: 60px auto auto auto;
   grid-template-areas:
     "avatar . . ."

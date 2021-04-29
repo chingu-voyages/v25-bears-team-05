@@ -1,33 +1,32 @@
 import React, { useState } from "react";
-import { IThreadCommentWithParent } from "../../../../services/search/search.types";
 import Comment from "../../../../components/comment";
 import "./Search-thread-comments.css";
 import Post from "../../../post";
+import { useSelector } from "react-redux";
+import { selectCommentById } from "../../../../pages/home/homeSlice";
 
 function SearchThreadComment({
   className,
-  threadCommentData,
+  threadCommentId,
   queryString,
 }: {
   queryString: string;
-  threadCommentData: IThreadCommentWithParent;
+  threadCommentId: string;
   className?: string;
 }) {
+  const commentData = useSelector(selectCommentById(threadCommentId));
+
   const [
     expandedParentThreadVisible,
     setExpandedParentThreadVisible,
   ] = useState(false);
 
-  const onDeleteComment = () => {
-    // Not implemented for search
-  };
-
   const parentThreadDropDown = (visible: boolean) => {
-    if (threadCommentData?.parentThread && visible) {
+    if (commentData?.parentThreadId && visible) {
       return (
         <Post
           {...{
-            threadId: threadCommentData.parentThread.id!,
+            threadId: commentData.parentThreadId!,
             queryString: queryString,
           }}
           visibleExpanded={expandedParentThreadVisible}
@@ -42,15 +41,7 @@ function SearchThreadComment({
         <div className="SearchThreadComment__query-string">
           <p>"{queryString}"</p>
         </div>
-        <Comment
-          commentData={{
-            ...threadCommentData,
-            _id: threadCommentData.id!,
-            updatedAt: threadCommentData.updatedAt.toString(),
-            createdAt: threadCommentData.createdAt.toString(),
-          }}
-          handleDeleteComment={onDeleteComment}
-        />
+        <Comment commentId={threadCommentId} />
         <div
           className="SearchThreadComment__expand-parent-thread-button"
           onClick={() => setExpandedParentThreadVisible((show) => !show)}

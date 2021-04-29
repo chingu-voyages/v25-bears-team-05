@@ -1,41 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
+import Status from "../../components/status";
+import TopBar from "../../components/topBar";
 import { hasSearchResultContent } from "../../services/search/search";
-
 import "./Search.css";
-import { doSearchAsync, selectResultByCurrentQuery } from "./searchSlice";
+import {
+  selectSearchQuery,
+  selectResultByCurrentQuery,
+  selectSearchStatus,
+  setSearchQuery,
+} from "./searchSlice";
 
-function Search({
-  classNameInfo = "",
-  triggered,
-  query,
-  children,
-}: {
-  classNameInfo?: string;
-  triggered: boolean;
-  query: string;
-  children?: JSX.Element[];
-}) {
+function Search() {
+  const history = useHistory();
+  const match: any = useRouteMatch("/search/:query");
+  const urlQuery = decodeURI(match.params.query);
   const result = useSelector(selectResultByCurrentQuery);
+  const query = useSelector(selectSearchQuery);
+  const status = useSelector(selectSearchStatus);
   const dispatch = useDispatch();
-
-  const onSearchSubmit = (queryString: string) => {
-    dispatch(doSearchAsync(queryString));
-  };
+  const firstLoad = useRef(true);
 
   useEffect(() => {
-    if (triggered) {
-      onSearchSubmit(query);
+    if (query !== urlQuery) {
+      if (firstLoad.current) {
+        dispatch(setSearchQuery(urlQuery));
+      } else {
+        history.push(`/search/${encodeURI(query)}`);
+      }
     }
-  }, [triggered, query]);
+  }, [urlQuery]);
 
-  const searchSection = () => {
-    return (
-      <div className={`${classNameInfo || ""} Search-page-visible`}>
+  useEffect(() => {
+    firstLoad.current = false;
+  }, []);
+
+  return (
+    <div className="Search-page">
+      <Status status={status} />
+      <TopBar className="Home-page__top-bar" />
+      <div className="Search-page-visible">
         {!hasSearchResultContent(result) ? (
           <NoSearchResult />
         ) : (
@@ -60,7 +69,7 @@ function Search({
               result.privateThreadComments?.map((privateThreadComment) => (
                 <SearchThreadComment
                   queryString={query}
-                  threadCommentData={privateThreadComment}
+                  threadCommentId={privateThreadComment.id}
                 />
               ))}
             {result.publicThreads.length > 0 &&
@@ -79,19 +88,12 @@ function Search({
               result.publicThreadComments?.map((publicThreadComment) => (
                 <SearchThreadComment
                   queryString={query}
-                  threadCommentData={publicThreadComment}
+                  threadCommentId={publicThreadComment.id}
                 />
               ))}
           </>
         )}
       </div>
-    );
-  };
-
-  return (
-    <div className="Search-page__search-invisible-main-body">
-      {!triggered && children?.map((child) => child)}
-      {displaySearchResults && searchSection()}
     </div>
   );
 }

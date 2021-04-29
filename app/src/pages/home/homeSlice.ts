@@ -82,7 +82,7 @@ export const createThreadCommentAsync = createAsyncThunk(
 export const readThreadCommentsAsync = createAsyncThunk(
   "home/readThreadComment",
   async ({ threadId }: { threadId: string }) => {
-    const res = getComments({ threadId });
+    const res = await getComments({ threadId });
     return {
       threadId,
       comments: res,
@@ -100,7 +100,10 @@ export const deleteThreadCommentAsync = createAsyncThunk(
   "home/deleteThreadComment",
   async (data: { threadId: string; commentId: string }) => {
     const res = await deleteComment({ ...data });
-    return res;
+    return {
+      commentId: data.commentId,
+      threadData: res,
+    };
   }
 );
 
@@ -126,6 +129,17 @@ export const readHomeFeedNextAsync = createAsyncThunk(
     return res;
   }
 );
+
+const addToCommentStateHelper = (state: any, commentArray: any) => {
+  const comments: any = {};
+  commentArray.forEach(
+    (comment: IThreadComment) => (comments[comment._id] = comment)
+  );
+  state.comments = {
+    ...state.comments,
+    ...comments,
+  };
+};
 
 export const homeSlice = createSlice({
   name: "home",
@@ -156,6 +170,7 @@ export const homeSlice = createSlice({
           ...state.threads,
           [action.payload.id]: action.payload,
         };
+        addToCommentStateHelper(state, action.payload.comments);
       })
       .addCase(readThreadAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get thread");
@@ -224,6 +239,7 @@ export const homeSlice = createSlice({
           ...state.threads,
           [action.payload.id]: action.payload,
         };
+        addToCommentStateHelper(state, action.payload.comments);
       })
       .addCase(createThreadCommentAsync.rejected, (state) => {
         stateStatus.error(state, "unable to upload comment");
@@ -242,10 +258,7 @@ export const homeSlice = createSlice({
             comments: action.payload.comments,
           },
         };
-        state.comments = {
-          ...state.comments,
-          ...action.payload.comments,
-        };
+        addToCommentStateHelper(state, action.payload.comments);
       })
       .addCase(readThreadCommentsAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get comments");
@@ -270,7 +283,12 @@ export const homeSlice = createSlice({
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          [action.payload.id]: action.payload,
+          [action.payload.threadData.id]: action.payload.threadData,
+        };
+        const comments: any = { ...state.comments };
+        delete comments[action.payload.commentId];
+        state.comments = {
+          ...comments,
         };
       })
       .addCase(deleteThreadCommentAsync.rejected, (state) => {
@@ -290,6 +308,16 @@ export const homeSlice = createSlice({
         state.feed = {
           ...state.feed,
           ...action.payload.bucket,
+        };
+        const comments: any = {};
+        Object.values(action.payload.documents).forEach(
+          (document) =>
+            document.comments &&
+            addToCommentStateHelper(state, document.comments)
+        );
+        state.comments = {
+          ...state.comments,
+          ...comments,
         };
       })
       .addCase(readHomeFeedLatestAsync.rejected, (state) => {

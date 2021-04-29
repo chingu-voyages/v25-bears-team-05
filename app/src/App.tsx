@@ -15,8 +15,9 @@ import {
   selectAuthStatus,
   selectIsLoggedIn,
 } from "./appSlice";
-import PasswordRecovery from "./pages/password-recovery";
 import Search from "./pages/search";
+import PasswordRecovery from "./pages/password-recovery/recovery-request";
+import RecoveryClaim from "./pages/password-recovery/recovery-claim";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -43,6 +44,7 @@ function App() {
           path="/request-password-reset"
           component={PasswordRecovery}
         ></Route>
+        <Route path="/recover" component={RecoveryClaim} />
         <ProtectedRoute
           path="/:userId/network"
           allowed={isLoggedIn}

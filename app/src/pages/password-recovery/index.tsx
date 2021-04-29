@@ -1,2 +1,2 @@
-import PasswordRecovery from "./password-recovery";
-export default PasswordRecovery;
+export * from "./recovery-request";
+export * from "./recovery-claim";

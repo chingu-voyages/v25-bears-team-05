@@ -1,0 +1,88 @@
+.Password-recovery-request-page__header-bar{ 
+  box-sizing: border-box;
+  width: 100%;
+  display: grid;
+  padding: 12px 18px;
+  place-items: end center;
+}
+
+.black-header-text {
+  color: black;
+}
+
+.Password-recovery-claim__input-section {
+  margin: 5vh 0;
+  display: grid;
+  place-items: start center;
+}
+.Password-recovery-claim__page {
+  background: linear-gradient(
+    to right top,
+    var(--color-green-2),
+    var(--color-green-4)
+  );
+  height: 100vh;
+  font-family: "Roboto", sans-serif;
+}
+
+.Input {
+  background-color: var(--color-black);
+}
+
+.Password-submit-buttons {
+  display: grid;
+  place-items: start center;
+  margin-left: 15%;
+  margin-right: 15%
+}
+
+.Password-submit-buttons>.Button {
+  width: 100%;
+}
+
+.Password-recovery-claim__error-messages {
+  text-align: center;
+}
+
+.Password-recovery-claim__error-messages-content {
+  color: var(--error-color);  
+}
+
+.success-message {
+  text-align: center;
+}
+
+.square back-to-login-center {
+  text-align: center  ;
+  margin-left: 40%;
+}
+
+.shadow-text {
+  text-shadow: black 0 -2px;  
+  color: white;
+  background-color: var(--error-color);
+}
+
+.back-to-login-link {
+  text-align: center;
+}
+
+@media only screen and (min-width: 720px) {
+  .Password-recovery-claim__input-section {
+    margin-left: 20%;
+    margin-right: 20%;
+    background-color: var(--grey-background-color);
+    display: grid;
+    place-items: start center;
+    border-color: var(--color-white);
+    border-width: 1px;
+    border-style: solid;
+    padding: 2%;
+  }
+
+  .Password-submit-buttons>.Button {
+    width: 50%;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+}

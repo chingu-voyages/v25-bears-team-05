@@ -52,10 +52,6 @@ function Network() {
     );
   };
 
-  useEffect(() => {
-    !currentUserId && dispatch(getUserAsync("me"));
-  });
-
   return (
     <div className="Network-page">
       <Status status={status} />

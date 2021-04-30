@@ -18,6 +18,8 @@ import {
 import Search from "./pages/search";
 import PasswordRecovery from "./pages/password-recovery/recovery-request";
 import RecoveryClaim from "./pages/password-recovery/recovery-claim";
+import { getUserAsync } from "./pages/profile/profileSlice";
+import { getCookie } from "./utils/cookie";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -26,7 +28,13 @@ function App() {
 
   // On first load check if authed
   useEffect(() => {
-    dispatch(checkIsAuthedAsync());
+    getCookie("has-existing-auth-cookie") === "true" &&
+      dispatch(checkIsAuthedAsync());
+  }, [dispatch]);
+
+  // Once logged in get current user data
+  useEffect(() => {
+    isLoggedIn && dispatch(getUserAsync("me"));
   }, [dispatch, isLoggedIn]);
 
   return status !== "idle" ? (

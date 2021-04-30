@@ -5,7 +5,7 @@ import { getCookie } from "./utils/cookie";
 
 const initialState = {
   status: "idle",
-  isLoggedIn: getCookie("has-existing-auth-cookie") === "true" ? true : false,
+  isLoggedIn: false,
 };
 
 export const checkIsAuthedAsync = createAsyncThunk(

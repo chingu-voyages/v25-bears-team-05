@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import IProfileCard from "./profileCard.type";
 import convertDateStringToTimeAgo from "../../utils/convert-time-ago";
 import { Link } from "react-router-dom";
 import "./ProfileCard.css";
 import Avatar from "../avatar";
 import FollowButton from "../followButton";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUserById, getUserAsync } from "../../pages/profile/profileSlice";
+import { useSelector } from "react-redux";
+import { selectUserById } from "../../pages/profile/profileSlice";
 
 function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
   if (!userId) {
@@ -15,7 +15,6 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
   const userData = useSelector(selectUserById(userId));
   const currentUserData = useSelector(selectUserById("me"));
   const connectionData = currentUserData?.connections?.[userId];
-  const dispatch = useDispatch();
   const name = `${userData?.firstName ? userData?.firstName : ""} ${
     userData?.lastName ? userData?.lastName : ""
   }`.trim();
@@ -97,10 +96,6 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
         );
       break;
   }
-
-  useEffect(() => {
-    !userData && dispatch(getUserAsync(userId));
-  }, []);
 
   return (
     <div

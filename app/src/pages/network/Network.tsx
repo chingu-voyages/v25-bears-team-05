@@ -30,6 +30,9 @@ function Network() {
   const isMe = userId.current === "me" || userId.current === currentUserId;
   const dispatch = useDispatch();
 
+  // fetch user data for each connection
+  useEffect(() => {}, [connections]);
+
   const RemoveOption = ({
     connectionData,
   }: {

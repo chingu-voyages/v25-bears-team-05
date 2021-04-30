@@ -37,6 +37,9 @@ function Home() {
     );
   }, []);
 
+  // fetch user data for thread and comments
+  useEffect(() => {}, []);
+
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);
     history.location.hash.match("#newpost") && history.push("/home");

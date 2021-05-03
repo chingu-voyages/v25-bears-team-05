@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   IThreadReferral,
@@ -20,11 +20,13 @@ import folkButton from "../../images/folkbutton.svg";
 import Comment from "../comment";
 import PostMaker from "../postMaker";
 import { getStringExcerpt } from "../search/search.helpers";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   createThreadCommentAsync,
   createThreadReactionAsync,
   deleteThreadReactionAsync,
+  readThreadCommentsAsync,
+  readThreadsAsync,
   selectThreadById,
 } from "../../pages/home/homeSlice";
 const md = require("markdown-it")();
@@ -44,11 +46,13 @@ function Post({
   visibleExpanded?: boolean;
 }) {
   const threadData: IThreadDataProcessed = useSelector(
-    selectThreadById(threadId)
+    selectThreadById(threadId),
+    shallowEqual
   );
   const dispatch = useDispatch();
-  const nOfComments =
-    threadData?.comments && Object.keys(threadData.comments).length;
+  const nOfComments = threadData?.comments
+    ? Object.keys(threadData.comments).length
+    : 0;
 
   const articleRef = useRef<any>();
 
@@ -184,7 +188,10 @@ function Post({
             )
         )}
       </ul>
-      <div className="Post__bullet">•</div>
+      {!!nOfComments &&
+        Object.values(threadData.reactionsCount).some((v) => v > 0) && (
+          <div className="Post__bullet">•</div>
+        )}
       <Button
         onClick={() => setShowComments((show) => !show)}
         className="Post__n-of-comments"
@@ -205,6 +212,13 @@ function Post({
       </footer>
     </article>
   ) : null;
+
+  useEffect(() => {
+    if (!threadData) {
+      dispatch(readThreadsAsync([threadId]));
+      dispatch(readThreadCommentsAsync({ threadId }));
+    }
+  }, [dispatch, threadData]);
 
   return (
     <>

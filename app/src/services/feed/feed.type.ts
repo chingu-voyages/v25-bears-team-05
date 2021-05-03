@@ -11,6 +11,7 @@ export interface IFeedItem {
   documentId: string;
   documentType: TFeedDocumentType;
   documentUpdatedAt: Date;
+  postedByUserId: string;
 }
 
 export interface IFeedRawResponse {

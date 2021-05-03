@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
   checkIsAuthedAsync,
@@ -10,8 +10,8 @@ import Spinner from "../../components/spinner";
 
 function Login() {
   const dispatch = useDispatch();
-  const status = useSelector(selectAuthStatus);
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const status = useSelector(selectAuthStatus, shallowEqual);
+  const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
   useEffect(() => {
     dispatch(checkIsAuthedAsync());
   }, [dispatch]);

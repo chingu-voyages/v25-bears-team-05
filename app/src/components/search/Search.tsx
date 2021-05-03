@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import searchIcon from "../../images/searchicon.svg";
 import {
@@ -10,7 +10,7 @@ import {
 import "./Search.css";
 
 function Search({ className }: { className?: string }) {
-  const query = useSelector(selectSearchQuery);
+  const query = useSelector(selectSearchQuery, shallowEqual);
   const dispatch = useDispatch();
   const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchQuery(e.target.value));

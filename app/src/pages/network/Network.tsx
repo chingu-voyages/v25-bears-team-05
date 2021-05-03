@@ -8,9 +8,8 @@ import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
-  getUserAsync,
   removeConnectionAsync,
   selectCurrentUserId,
   selectProfileStatus,
@@ -24,9 +23,12 @@ function Network() {
   const history = useHistory();
   const handleGoBack = () => history.goBack();
 
-  const connections = useSelector(selectUserConnections(userId.current));
-  const status = useSelector(selectProfileStatus);
-  const currentUserId = useSelector(selectCurrentUserId);
+  const connections = useSelector(
+    selectUserConnections(userId.current),
+    shallowEqual
+  );
+  const status = useSelector(selectProfileStatus, shallowEqual);
+  const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = userId.current === "me" || userId.current === currentUserId;
   const dispatch = useDispatch();
 

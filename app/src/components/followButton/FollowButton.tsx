@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   addConnectionAsync,
   selectCurrentUserId,
@@ -18,8 +18,11 @@ function FollowButton({
   className?: string;
 }) {
   const dispatch = useDispatch();
-  const isAConnection = useSelector(selectIsAConnection(connectionId));
-  const currentUserId = useSelector(selectCurrentUserId);
+  const isAConnection = useSelector(
+    selectIsAConnection(connectionId),
+    shallowEqual
+  );
+  const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = connectionId === "me" || connectionId === currentUserId;
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
     dispatch(addConnectionAsync({ connectionId, isTeamMate }));

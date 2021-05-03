@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
@@ -20,9 +20,9 @@ function Search() {
   const history = useHistory();
   const match: any = useRouteMatch("/search/:query");
   const urlQuery = decodeURI(match.params.query);
-  const result = useSelector(selectResultByCurrentQuery);
-  const query = useSelector(selectSearchQuery);
-  const status = useSelector(selectSearchStatus);
+  const result = useSelector(selectResultByCurrentQuery, shallowEqual);
+  const query = useSelector(selectSearchQuery, shallowEqual);
+  const status = useSelector(selectSearchStatus, shallowEqual);
   const dispatch = useDispatch();
   const firstLoad = useRef(true);
 

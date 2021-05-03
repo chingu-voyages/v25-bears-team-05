@@ -56,12 +56,14 @@ const getFeed = async ({ query }: { query: string }) => {
               documentId: data.id,
               documentType: "thread",
               documentUpdatedAt: data.content.updatedAt,
+              postedByUserId: data.postedByUserId,
             })) as unknown) as Array<IFeedItem>) || [],
           10:
             ((processedPublicThreads.map((data) => ({
               documentId: data.id,
               documentType: "thread",
               documentUpdatedAt: data.content.updatedAt,
+              postedByUserId: data.postedByUserId,
             })) as unknown) as Array<IFeedItem>) || [],
         },
         latestUpdate: latestUpdate.toISOString(),

@@ -9,7 +9,7 @@ import Signup from "./pages/signup";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
 import Loading from "./pages/loading";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   checkIsAuthedAsync,
   selectAuthStatus,
@@ -18,12 +18,12 @@ import {
 import Search from "./pages/search";
 import PasswordRecovery from "./pages/password-recovery/recovery-request";
 import RecoveryClaim from "./pages/password-recovery/recovery-claim";
-import { getUserAsync } from "./pages/profile/profileSlice";
+import { getUsersAsync } from "./pages/profile/profileSlice";
 import { getCookie } from "./utils/cookie";
 
 function App() {
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const status = useSelector(selectAuthStatus);
+  const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
+  const status = useSelector(selectAuthStatus, shallowEqual);
   const dispatch = useDispatch();
 
   // On first load check if authed
@@ -34,7 +34,7 @@ function App() {
 
   // Once logged in get current user data
   useEffect(() => {
-    isLoggedIn && dispatch(getUserAsync("me"));
+    isLoggedIn && dispatch(getUsersAsync(["me"]));
   }, [dispatch, isLoggedIn]);
 
   return status !== "idle" ? (

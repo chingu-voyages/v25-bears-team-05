@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   deleteThreadCommentAsync,
   selectCommentById,
@@ -18,8 +18,8 @@ function Comment({
   commentId: string;
   className?: string;
 }) {
-  const commentData = useSelector(selectCommentById(commentId));
-  const currentUserId = useSelector(selectCurrentUserId);
+  const commentData = useSelector(selectCommentById(commentId), shallowEqual);
+  const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = commentData?.postedByUserId === currentUserId;
   const dispatch = useDispatch();
 

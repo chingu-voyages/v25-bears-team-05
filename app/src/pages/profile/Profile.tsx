@@ -10,9 +10,9 @@ import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
 import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
-  getUserAsync,
+  getUsersAsync,
   selectProfileStatus,
   selectUserById,
   updateAvatarURL,
@@ -21,15 +21,15 @@ import {
 import Status from "../../components/status";
 
 function Profile() {
-  const status = useSelector(selectProfileStatus);
+  const status = useSelector(selectProfileStatus, shallowEqual);
   const match: any = useRouteMatch("/:userId");
   const userId = match.params.userId.toLowerCase();
-  const userInfo = useSelector(selectUserById(userId));
+  const userInfo = useSelector(selectUserById(userId), shallowEqual);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !userInfo && dispatch(getUserAsync(match.params.userId.toLowerCase()));
+    dispatch(getUsersAsync([match.params.userId.toLowerCase()]));
   }, [match.params.userId]);
 
   const getUserDataForInputs = () => {

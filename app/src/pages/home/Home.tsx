@@ -16,29 +16,25 @@ import {
   selectHomeStatus,
   selectLatestBucketDate,
 } from "./homeSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IFeedItem } from "../../services/feed/feed.type";
 import Status from "../../components/status";
 
 function Home() {
   const history = useHistory();
-
   const dispatch = useDispatch();
+  const status = useSelector(selectHomeStatus, shallowEqual);
+  const feed = useSelector(selectHomeFeed, shallowEqual);
+  const lastestFeedItem = useSelector(selectLatestBucketDate, shallowEqual);
 
-  const status = useSelector(selectHomeStatus);
-  const feed = useSelector(selectHomeFeed);
-  const lastestFeedItem = useSelector(selectLatestBucketDate);
-
+  // fetch homefeed on first load
   useEffect(() => {
     dispatch(
       readHomeFeedLatestAsync({
         query: lastestFeedItem ? `newerThanDate=${lastestFeedItem}` : "",
       })
     );
-  }, []);
-
-  // fetch user data for thread and comments
-  useEffect(() => {}, []);
+  }, [dispatch]);
 
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);
@@ -81,7 +77,6 @@ function Home() {
       case "thread":
         return (
           <li className="Home-page__feed__list__item">
-            {/* TODO: edit Post componet to thread data from home slice */}
             <Post threadId={documentId} />
           </li>
         );

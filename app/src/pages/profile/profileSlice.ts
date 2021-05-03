@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addConnection,
-  getUser,
+  getUsers,
   removeConnection,
   updateUser,
 } from "../../services/user";
@@ -18,18 +18,11 @@ const initialState: {
   },
 };
 
-const pendingGetRequests: any = {};
-export const getUserAsync = createAsyncThunk(
-  "profile/getUser",
-  async (userId: string) => {
-    if (!Object.keys(pendingGetRequests).includes(userId)) {
-      pendingGetRequests[userId] = getUser({ userId });
-    }
-    const response = await pendingGetRequests[userId];
-    return {
-      userData: response,
-      isCurrentUser: userId === "me",
-    };
+export const getUsersAsync = createAsyncThunk(
+  "profile/getUsers",
+  async (userIds: string[]) => {
+    const response = await getUsers({ userIds });
+    return response;
   }
 );
 
@@ -86,20 +79,20 @@ export const profileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUserAsync.pending, (state) => {
+      .addCase(getUsersAsync.pending, (state) => {
         stateStatus.loading(state, "getting user info");
       })
-      .addCase(getUserAsync.fulfilled, (state, action) => {
+      .addCase(getUsersAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.users = {
           ...state.users,
-          [action.payload.userData.id]: action.payload.userData,
+          ...action.payload.users,
         };
-        if (action.payload.isCurrentUser) {
-          state.currentUserId = action.payload.userData.id;
+        if (action.payload.currentUserId) {
+          state.currentUserId = action.payload.currentUserId;
         }
       })
-      .addCase(getUserAsync.rejected, (state) => {
+      .addCase(getUsersAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get user");
       })
 

@@ -25,7 +25,6 @@ const getThreads = async ({ threadIds }: { threadIds: string[] }) => {
     threadIds.map((threadId) => getThread({ threadId }))
   );
   const threads: { [threadId: string]: IThreadDataProcessed } = {};
-  console.log({ res });
   res.forEach((thread: IThreadDataProcessed) => (threads[thread.id] = thread));
   return threads;
 };

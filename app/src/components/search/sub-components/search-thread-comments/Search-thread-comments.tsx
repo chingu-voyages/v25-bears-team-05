@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Comment from "../../../../components/comment";
 import "./Search-thread-comments.css";
 import Post from "../../../post";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import { selectCommentById } from "../../../../pages/home/homeSlice";
 
 function SearchThreadComment({
@@ -14,7 +14,10 @@ function SearchThreadComment({
   threadCommentId: string;
   className?: string;
 }) {
-  const commentData = useSelector(selectCommentById(threadCommentId));
+  const commentData = useSelector(
+    selectCommentById(threadCommentId),
+    shallowEqual
+  );
 
   const [
     expandedParentThreadVisible,

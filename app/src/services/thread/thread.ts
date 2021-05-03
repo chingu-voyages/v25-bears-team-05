@@ -11,7 +11,23 @@ const getThread = async ({ threadId }: { threadId: string }) => {
     method: "get",
     url: `/api/threads/${threadId}`,
   });
-  return res.data;
+  if (res.status === 200) {
+    const processedThreadData = await processThread(res.data);
+    return processedThreadData;
+  } else {
+    throw Error(res.statusText);
+  }
+};
+
+// TODO make more efficient route for getting multiple threads
+const getThreads = async ({ threadIds }: { threadIds: string[] }) => {
+  const res = await Promise.all(
+    threadIds.map((threadId) => getThread({ threadId }))
+  );
+  const threads: { [threadId: string]: IThreadDataProcessed } = {};
+  console.log({ res });
+  res.forEach((thread: IThreadDataProcessed) => (threads[thread.id] = thread));
+  return threads;
 };
 
 const addThread = async ({ data }: { data: INewThreadData }) => {
@@ -152,6 +168,7 @@ async function processThread(
 
 export {
   getThread,
+  getThreads,
   addThread,
   addThreadReaction,
   removeThreadReaction,

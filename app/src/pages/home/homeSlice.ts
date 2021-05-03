@@ -7,9 +7,9 @@ import {
   addThreadReaction,
   deleteComment,
   getComments,
-  getThread,
+  getThreads,
   removeThreadReaction,
-} from "../../services/thread/thread";
+} from "../../services/thread";
 import {
   INewThreadData,
   IThreadComment,
@@ -33,10 +33,10 @@ export const createThreadAsync = createAsyncThunk(
     return res;
   }
 );
-export const readThreadAsync = createAsyncThunk(
-  "home/readThread",
-  async ({ threadId }: { threadId: string }) => {
-    const res = await getThread({ threadId });
+export const readThreadsAsync = createAsyncThunk(
+  "home/readThreads",
+  async (threadIds: string[]) => {
+    const res = await getThreads({ threadIds });
     return res;
   }
 );
@@ -83,10 +83,7 @@ export const readThreadCommentsAsync = createAsyncThunk(
   "home/readThreadComment",
   async ({ threadId }: { threadId: string }) => {
     const res = await getComments({ threadId });
-    return {
-      threadId,
-      comments: res,
-    };
+    return res;
   }
 );
 // Updating comment not yet implemented
@@ -130,17 +127,6 @@ export const readHomeFeedNextAsync = createAsyncThunk(
   }
 );
 
-const addToCommentStateHelper = (state: any, commentArray: any) => {
-  const comments: any = {};
-  commentArray.forEach(
-    (comment: IThreadComment) => (comments[comment._id] = comment)
-  );
-  state.comments = {
-    ...state.comments,
-    ...comments,
-  };
-};
-
 export const homeSlice = createSlice({
   name: "home",
   initialState,
@@ -161,18 +147,17 @@ export const homeSlice = createSlice({
       .addCase(createThreadAsync.rejected, (state) => {
         stateStatus.error(state, "unable to upload thread");
       })
-      .addCase(readThreadAsync.pending, (state) => {
+      .addCase(readThreadsAsync.pending, (state) => {
         stateStatus.loading(state, "getting thread");
       })
-      .addCase(readThreadAsync.fulfilled, (state, action) => {
+      .addCase(readThreadsAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          [action.payload.id]: action.payload,
+          ...action.payload,
         };
-        addToCommentStateHelper(state, action.payload.comments);
       })
-      .addCase(readThreadAsync.rejected, (state) => {
+      .addCase(readThreadsAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get thread");
       })
       // .addCase(updateThreadAsync.pending, (state) => {
@@ -239,7 +224,6 @@ export const homeSlice = createSlice({
           ...state.threads,
           [action.payload.id]: action.payload,
         };
-        addToCommentStateHelper(state, action.payload.comments);
       })
       .addCase(createThreadCommentAsync.rejected, (state) => {
         stateStatus.error(state, "unable to upload comment");
@@ -249,16 +233,10 @@ export const homeSlice = createSlice({
       })
       .addCase(readThreadCommentsAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
-        state.threads = {
-          ...state.threads,
-          [action.payload.threadId]: {
-            ...(state.threads[
-              action.payload.threadId as keyof typeof state.threads
-            ] as Object),
-            comments: action.payload.comments,
-          },
+        state.comments = {
+          ...state.comments,
+          ...action.payload,
         };
-        addToCommentStateHelper(state, action.payload.comments);
       })
       .addCase(readThreadCommentsAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get comments");
@@ -301,23 +279,9 @@ export const homeSlice = createSlice({
       })
       .addCase(readHomeFeedLatestAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
-        state.threads = {
-          ...state.threads,
-          ...action.payload.documents,
-        };
         state.feed = {
           ...state.feed,
           ...action.payload.bucket,
-        };
-        const comments: any = {};
-        Object.values(action.payload.documents).forEach(
-          (document) =>
-            document.comments &&
-            addToCommentStateHelper(state, document.comments)
-        );
-        state.comments = {
-          ...state.comments,
-          ...comments,
         };
       })
       .addCase(readHomeFeedLatestAsync.rejected, (state) => {

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import checkIfAuthed from "./services/checkIfAuthed";
 import logout from "./services/logout";
-import { getCookie } from "./utils/cookie";
 
 const initialState = {
   status: "idle",

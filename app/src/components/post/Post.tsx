@@ -218,7 +218,7 @@ function Post({
       dispatch(readThreadsAsync([threadId]));
       dispatch(readThreadCommentsAsync({ threadId }));
     }
-  }, [dispatch, threadData]);
+  }, [dispatch, threadData, threadId]);
 
   return (
     <>

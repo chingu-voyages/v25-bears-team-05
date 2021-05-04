@@ -34,7 +34,7 @@ function Search() {
         history.push(`/search/${encodeURI(query)}`);
       }
     }
-  }, [urlQuery]);
+  }, [dispatch, history, urlQuery, query]);
 
   useEffect(() => {
     firstLoad.current = false;

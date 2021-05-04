@@ -103,7 +103,7 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
 
   useEffect(() => {
     !userData && dispatch(getUsersAsync([userId]));
-  }, [dispatch, userData]);
+  }, [dispatch, userData, userId]);
 
   return (
     <div

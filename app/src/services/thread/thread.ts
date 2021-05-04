@@ -136,8 +136,8 @@ async function processThread(
   const sortCommentsByDate = (arr: IThreadComment[]) =>
     arr.sort(
       (a, b) =>
-        parseInt(b.updatedAt.replace(/[-\.\:\D]/g, "")) -
-        parseInt(a.updatedAt.replace(/[-\.\:\D]/g, ""))
+        parseInt(b.updatedAt.replace(/[-.:\D]/g, "")) -
+        parseInt(a.updatedAt.replace(/[-.:\D]/g, ""))
     );
   const processedThreadData: IThreadDataProcessed = {
     id: threadId,

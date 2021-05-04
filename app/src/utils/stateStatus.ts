@@ -17,8 +17,10 @@ const setErrorStatus = (state: any, message: string = "") => {
   state.status.error = message;
 };
 
-export default {
+const setStatus = {
   idle: setIdleStatus,
   loading: setLoadingStatus,
   error: setErrorStatus,
 };
+
+export default setStatus;

@@ -30,7 +30,7 @@ function Profile() {
 
   useEffect(() => {
     dispatch(getUsersAsync([match.params.userId.toLowerCase()]));
-  }, [match.params.userId]);
+  }, [dispatch, match.params.userId]);
 
   const getUserDataForInputs = () => {
     return {

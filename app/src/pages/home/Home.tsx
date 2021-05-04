@@ -34,7 +34,7 @@ function Home() {
         query: lastestFeedItem ? `newerThanDate=${lastestFeedItem}` : "",
       })
     );
-  }, [dispatch]);
+  }, [dispatch, lastestFeedItem]);
 
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);

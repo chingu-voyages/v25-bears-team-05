@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { selectUserById } from "../../pages/profile/profileSlice";
@@ -9,17 +9,15 @@ import "./Nav.css";
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
   const pathname = history.location.pathname;
-  const [page, setPage] = useState(
-    pathname.match("network")
-      ? "network"
-      : history.location.hash.match("#newpost")
-      ? "post"
-      : pathname.match("home")
-      ? "home"
-      : pathname.match("me/profile")
-      ? "profile"
-      : ""
-  );
+  const page = pathname.match("network")
+    ? "network"
+    : history.location.hash.match("#newpost")
+    ? "post"
+    : pathname.match("home")
+    ? "home"
+    : pathname.match("me/profile")
+    ? "profile"
+    : "";
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
 

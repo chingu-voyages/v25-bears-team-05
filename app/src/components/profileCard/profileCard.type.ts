@@ -18,7 +18,13 @@ export interface ICardInfo extends IBasicCardInfo {
 }
 
 export default interface IProfileCard {
-  type: "profile" | "connection" | "thread" | "comment" | "home-page";
+  type:
+    | "profile"
+    | "connection"
+    | "thread"
+    | "comment"
+    | "home-page"
+    | "search";
   data?: ICardInfo;
   userId?: string;
   className?: string;

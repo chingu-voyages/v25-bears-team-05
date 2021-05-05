@@ -15,12 +15,12 @@ export interface IUserInfo {
 }
 
 export interface IUserRawResponse extends IUserInfo {
-  connections: { [keyof: string]: IUserConnection };
-  connectionOf: { [keyof: string]: IUserConnection };
+  connections: { [userId: string]: IUserConnection };
+  connectionOf: { [userId: string]: IUserConnection };
   threads: {
-    started?: { [keyof: string]: IThread };
-    commented?: { [keyof: string]: IThreadComment };
-    liked?: { [keyof: string]: IThreadLike };
+    started?: { [threadId: string]: IThread };
+    commented?: { [threadId: string]: { [commentId: string]: IThreadComment } };
+    liked?: { [threadId: string]: { [likeId: string]: IThreadLike } };
     shared?: { [keyof: string]: IThreadShare };
   };
 }
@@ -32,7 +32,7 @@ export interface IUserPatchRequest {
   avatar?: string | undefined;
 }
 
-export interface IUserProcessed extends IUserInfo {
+export interface IUserProcessed extends IUserRawResponse {
   nOfConnections?: number | null;
   isAConnection?: boolean;
 }
@@ -45,9 +45,14 @@ export interface IUserProfile {
   nOfConnections: number | null;
   isAConnection: boolean;
 }
-export interface IUserConnection extends IUserProcessed {
+export interface IUserConnection {
   dateTimeConnected: string;
   isTeamMate: boolean;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  avatar: Array<Avatar>;
+  userId: string;
 }
 export interface IUserThread extends IUserProcessed {
   dateTimePosted: string;

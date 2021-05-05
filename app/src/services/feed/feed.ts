@@ -1,136 +1,77 @@
 import axios from "axios";
-import {
-  IThread,
-  IThreadComment,
-  IThreadDataProcessed,
-} from "../thread/thread.type";
-import {
-  IFeedProcessedResponse,
-  IFeedRawResponse,
-  IProcessedSuggestionFeed,
-  IProcessedThreadFeed,
-} from "./feed.type";
-import { IUserConnection } from "../user/user.type";
-import { getComments } from "../thread";
-const currentUserId = sessionStorage.getItem("currentUserId");
+import { IThread, IThreadDataProcessed } from "../thread/thread.type";
+import { IFeedItem, IFeedRawResponse } from "./feed.type";
+import { processThread } from "../thread/thread";
 
-const getFeed = async ({
-  query,
-  onSuccess,
-  onError,
-}: {
-  query: string;
-  onSuccess: ({
-    connectionThreads,
-    connectionSuggestions,
-    publicThreads,
-  }: IFeedProcessedResponse) => void;
-  onError: (message: string) => void;
-}) => {
-  try {
-    const res = await axios(`/api/feed?${query}`);
-    const {
-      connectionThreads,
-      connectionSuggestions,
-      publicThreads,
-    }: IFeedRawResponse = res.data;
-    const processedConnectionThreads = connectionThreads
-      ? await Promise.all(
-          connectionThreads.map((threadData: IThread) =>
-            processThread(threadData)
-          )
-        )
-      : [];
-    const processedPublicThreads = publicThreads
-      ? await Promise.all(
-          publicThreads.map((threadData: IThread) => processThread(threadData))
-        )
-      : [];
-    const processedConnectionSuggestions = connectionSuggestions
-      ? connectionSuggestions.map((suggestionData: IUserConnection) =>
-          processSuggestion(suggestionData)
-        )
-      : [];
-    const processedData = {
-      connectionThreads:
-        ((processedConnectionThreads.map((data) => ({
-          thread: data,
-        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
-      connectionSuggestions:
-        ((processedConnectionSuggestions.map((data) => ({
-          suggestion: data,
-        })) as unknown) as Array<{ suggestion: IProcessedSuggestionFeed }>) ||
-        [],
-      publicThreads:
-        ((processedPublicThreads.map((data) => ({
-          thread: data,
-        })) as unknown) as Array<{ thread: IProcessedThreadFeed }>) || [],
-    };
-    onSuccess(processedData);
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError("Unable to get info from server, please try again later");
-  }
+const getFeed = async ({ query }: { query: string }) => {
+  const res = await axios(`/api/feed?${query}`);
+  const { connectionThreads, publicThreads }: IFeedRawResponse = res.data;
+  let latestUpdate: Date;
+  let oldestUpdate: Date;
+  const checkIfLatestThread = (threadData: IThread) => {
+    const threadDate = new Date(threadData.updatedAt);
+    // First time called
+    if (!latestUpdate && !oldestUpdate) {
+      latestUpdate = threadDate;
+      oldestUpdate = threadDate;
+    } else {
+      if (threadDate.valueOf() > latestUpdate.valueOf()) {
+        latestUpdate = threadDate;
+      }
+      if (threadDate.valueOf() < oldestUpdate.valueOf()) {
+        oldestUpdate = threadDate;
+      }
+    }
+  };
+  const processedConnectionThreads = connectionThreads
+    ? await Promise.all(
+        connectionThreads.map((threadData: IThread) => {
+          checkIfLatestThread(threadData);
+          return processThread(threadData);
+        })
+      )
+    : [];
+  const processedPublicThreads = publicThreads
+    ? await Promise.all(
+        publicThreads.map((threadData: IThread) => {
+          checkIfLatestThread(threadData);
+          return processThread(threadData);
+        })
+      )
+    : [];
+  const documents: {
+    [documentId: string]: IThreadDataProcessed;
+  } = {};
+  [...processedConnectionThreads, ...processedPublicThreads].forEach(
+    (doc) => (documents[doc.id] = doc)
+  );
+  const processedData = () => ({
+    // should add uuid to end of key but this process will be moved to the backend later
+    documents,
+    bucket: {
+      [latestUpdate.toISOString().replace(/\D/g, "") + "_uuid_"]: {
+        collection: {
+          50:
+            ((processedConnectionThreads.map((data) => ({
+              documentId: data.id,
+              documentType: "thread",
+              documentUpdatedAt: data.content.updatedAt,
+              postedByUserId: data.postedByUserId,
+            })) as unknown) as Array<IFeedItem>) || [],
+          10:
+            ((processedPublicThreads.map((data) => ({
+              documentId: data.id,
+              documentType: "thread",
+              documentUpdatedAt: data.content.updatedAt,
+              postedByUserId: data.postedByUserId,
+            })) as unknown) as Array<IFeedItem>) || [],
+        },
+        latestUpdate: latestUpdate.toISOString(),
+        oldestUpdate: oldestUpdate.toISOString(),
+      },
+    },
+  });
+  return processedData();
 };
 
-function processSuggestion(userData: IUserConnection) {
-  const { firstName, lastName, jobTitle, avatar, id, isAConnection } = userData;
-  const data = {
-    profileData: {
-      firstName,
-      lastName,
-      jobTitle,
-      avatar,
-      id,
-      isAConnection: isAConnection || false,
-    },
-    referral: {
-      reason: `Want to add ${firstName} ${lastName} as a connection?`,
-    },
-  };
-  return data;
-}
-
-async function processThread(
-  threadData: IThread
-): Promise<IProcessedThreadFeed> {
-  const threadId = threadData._id || threadData.id!;
-
-  const comments = await getComments({ threadId: threadId });
-  const sortCommentsByDate = (arr: IThreadComment[]) =>
-    arr.sort(
-      (a, b) =>
-        parseInt(b.updatedAt.replace(/[-\.\:\D]/g, "")) -
-        parseInt(a.updatedAt.replace(/[-\.\:\D]/g, ""))
-    );
-  const processedThreadData: IThreadDataProcessed = {
-    id: threadId,
-    content: threadData.content,
-    postedByUserId: threadData.postedByUserId,
-    threadType: threadData.threadType,
-    visibility: threadData.visibility,
-    reactionsCount: {},
-    currentUserReactions: {},
-    comments:
-      comments?.threadComments &&
-      sortCommentsByDate(Object.values(comments.threadComments)),
-    updatedAt: threadData.content.updatedAt,
-    createdAt: threadData.content.createdAt,
-  };
-  threadData.likes &&
-    Object.entries(threadData.likes)?.forEach(([id, reaction]) => {
-      const type = reaction.title;
-      processedThreadData.reactionsCount[type] =
-        (processedThreadData.reactionsCount[type] || 0) + 1;
-      if (currentUserId === reaction.postedByUserId) {
-        processedThreadData.currentUserReactions[type] = id;
-      }
-    });
-  const data = {
-    threadData: processedThreadData,
-  };
-  return data;
-}
-
-export { getFeed, processThread };
+export { getFeed };

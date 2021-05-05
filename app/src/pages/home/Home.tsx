@@ -4,97 +4,58 @@ import PostMaker from "../../components/postMaker";
 import "./Home.css";
 import editIcon from "../../images/editicon.svg";
 import { IPostMakerProps } from "../../components/postMaker/PostMaker.type";
-import { addThread } from "../../services/thread";
-import Spinner from "../../components/spinner";
 import Post from "../../components/post";
 import ProfileCard from "../../components/profileCard";
-import { getFeed } from "../../services/feed/feed";
-import {
-  IFeedItemsProps,
-  IFeedProcessedResponse,
-  IProcessedThreadFeed,
-} from "../../services/feed/feed.type";
 import TopBar from "../../components/topBar";
 import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
-import Search from "../../pages/search";
+import {
+  createThreadAsync,
+  readHomeFeedLatestAsync,
+  selectHomeFeed,
+  selectHomeStatus,
+  selectLatestBucketDate,
+} from "./homeSlice";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { IFeedItem } from "../../services/feed/feed.type";
+import Status from "../../components/status";
 
 function Home() {
   const history = useHistory();
-  const [feed, setFeed] = useState<any[]>([]);
-  const [inProgress, setInProgress] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [searchIsTriggered, setSearchIsTriggered] = useState<boolean>(false);
-  const [searchQueryString, setSearchQueryString] = useState<string>("");
+  const dispatch = useDispatch();
+  const status = useSelector(selectHomeStatus, shallowEqual);
+  const feed = useSelector(selectHomeFeed, shallowEqual);
+  const lastestFeedItem = useSelector(selectLatestBucketDate, shallowEqual);
 
+  // fetch homefeed on first load
   useEffect(() => {
-    const onSuccess = ({
-      connectionThreads,
-      connectionSuggestions,
-      publicThreads,
-    }: IFeedProcessedResponse) => {
-      const threads = [...connectionThreads, ...publicThreads];
-      const putNSuggestions = Math.ceil(
-        connectionSuggestions.length / threads.length
-      );
-      const everyNThreads = Math.ceil(
-        threads.length / connectionSuggestions.length
-      );
-      let suggestionsQueue = connectionSuggestions.slice();
-      const feed = threads
-        .map((thread, index) => {
-          if (!(index % everyNThreads)) {
-            return [thread, ...suggestionsQueue.splice(0, putNSuggestions)];
-          }
-          return thread;
-        })
-        .flat();
-      setFeed(feed);
-      setInProgress(false);
-    };
-    setInProgress(true);
-    getFeed({
-      query: "",
-      onSuccess,
-      onError: (msg) => {
-        setErrorMessage(msg);
-      },
-    });
-  }, []);
+    dispatch(
+      readHomeFeedLatestAsync({
+        query: lastestFeedItem ? `newerThanDate=${lastestFeedItem}` : "",
+      })
+    );
+  }, [dispatch, lastestFeedItem]);
 
-  const [makePostError, setMakePostError] = useState("");
   const resetPostMaker = () => {
     setIsPostMakerOpen(false);
-    setMakePostError("");
     history.location.hash.match("#newpost") && history.push("/home");
   };
   const postMakerOptions: IPostMakerProps = {
     title: "Share",
     placeholder: "Share your thoughts. Add photos or hashtags.",
     onSubmit: ({ content, threadVisibility }) => {
-      setInProgress(true);
-      const onSuccess = (data: IProcessedThreadFeed) => {
-        setInProgress(false);
-        setFeed((feed) => [{ thread: data }, ...feed]);
-        resetPostMaker();
+      const data = {
+        htmlContent: content,
+        threadType: 0,
+        visibility: threadVisibility,
+        hashTags: [],
       };
-      addThread({
-        data: {
-          htmlContent: content,
-          threadType: 0,
-          visibility: threadVisibility,
-          hashTags: [],
-        },
-        onSuccess,
-        onError: (msg) => {
-          setMakePostError(msg);
-        },
-      });
+      dispatch(createThreadAsync(data));
+      resetPostMaker();
     },
     handleCancel: () => {
       resetPostMaker();
     },
-    errorMessage: makePostError,
     className: "Home__post-maker",
     fullView: true,
   };
@@ -107,64 +68,55 @@ function Home() {
     }
   }, [history.location.hash]);
 
-  const FeedItem = ({ thread, suggestion }: IFeedItemsProps) => {
-    if (!thread?.threadData.id) {
-      return <li className="Home-page__invisible-item"></li>;
+  const FeedItem = ({
+    documentId,
+    documentType,
+    documentUpdatedAt,
+  }: IFeedItem) => {
+    switch (documentType) {
+      case "thread":
+        return (
+          <li className="Home-page__feed__list__item">
+            <Post threadId={documentId} />
+          </li>
+        );
+      default:
+        return <li className="Home-page__invisible-item"></li>;
     }
-    return (
-      <li className="Home-page__feed__list__item">
-        {thread && <Post {...thread} />}
-        {suggestion && <ProfileCard type="thread" data={suggestion} />}
-      </li>
-    );
   };
-
-  const onSearchSubmit = (queryString: string) => {
-    setSearchIsTriggered(!!queryString)
-    setSearchQueryString(queryString)
-  }
 
   return (
     <div className="Home-page">
-      <TopBar className="Home-page__top-bar" onSearchSubmit={onSearchSubmit} />
+      <Status status={status} />
+      <TopBar className="Home-page__top-bar" />
       <ProfileCard
         type="home-page"
         userId="me"
         className="Home-page__profile"
       />
-      <Search query={searchQueryString} triggered={searchIsTriggered}>
-        <div className="Home-page__post-maker-start">
-          {!isPostMakerOpen ? (
-            <Button
-              onClick={() => setIsPostMakerOpen(true)}
-              className="Home-page__post-maker-start__button"
-            >
-              <img src={editIcon} alt="" />
-              <h1>Share your thoughts or photos</h1>
-            </Button>
-          ) : (
-            <PostMaker {...postMakerOptions} />
+      <div className="Home-page__post-maker-start">
+        {!isPostMakerOpen ? (
+          <Button
+            onClick={() => setIsPostMakerOpen(true)}
+            className="Home-page__post-maker-start__button"
+          >
+            <img src={editIcon} alt="" />
+            <h1>Share your thoughts or photos</h1>
+          </Button>
+        ) : (
+          <PostMaker {...postMakerOptions} />
+        )}
+      </div>
+      <div className="Home-page__feed">
+        <ul className="Home-page__feed__list">
+          {feed.map((item) =>
+            item?.documentId ? (
+              <FeedItem {...item} key={"feedItem" + item?.documentId} />
+            ) : null
           )}
-        </div>
-        <div className="Home-page__feed">
-          {errorMessage && (
-            <div className="Home-page__error">{errorMessage}</div>
-          )}
-          <ul className="Home-page__feed__list">
-            {feed.map(({ suggestion, thread }: IFeedItemsProps, index) => (
-              <FeedItem
-                {...{ suggestion, thread }}
-                key={
-                  "feedItem" +
-                  (thread?.threadData?.id || suggestion?.id || index)
-                }
-              />
-            ))}
-          </ul>
-        </div>
-      </Search>
+        </ul>
+      </div>
       <Nav />
-      {inProgress && <Spinner className="Home-page__spinner" />}
     </div>
   );
 }

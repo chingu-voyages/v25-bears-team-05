@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { deleteComment } from "../../services/thread";
-import { IThreadComment } from "../../services/thread/thread.type";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import React from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import {
+  deleteThreadCommentAsync,
+  selectCommentById,
+} from "../../pages/home/homeSlice";
+import { selectCurrentUserId } from "../../pages/profile/profileSlice";
 import ContentClipper from "../contentClipper";
 import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";
@@ -9,21 +12,17 @@ import "./Comment.css";
 const md = require("markdown-it")();
 
 function Comment({
-  commentData,
-  handleDeleteComment,
+  commentId,
   className,
 }: {
-  commentData: IThreadComment;
-  handleDeleteComment: () => void;
+  commentId: string;
   className?: string;
 }) {
-  const [isMe, setIsMe] = useState(false);
-  useEffect(() => {
-    (async () => {
-      const currentUserInfo = await getCurrentUserInfo();
-      setIsMe(currentUserInfo.id === commentData.postedByUserId);
-    })();
-  }, []);
+  const commentData = useSelector(selectCommentById(commentId), shallowEqual);
+  const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
+  const isMe = commentData?.postedByUserId === currentUserId;
+  const dispatch = useDispatch();
+
   return commentData ? (
     <div className={`${className || ""} Comment`}>
       <div className="Comment__header">
@@ -36,7 +35,13 @@ function Comment({
           <OptionsMenu
             buttons={{
               "delete comment": {
-                action: handleDeleteComment,
+                action: () =>
+                  dispatch(
+                    deleteThreadCommentAsync({
+                      threadId: commentData.parentThreadId,
+                      commentId,
+                    })
+                  ),
                 confirm: true,
               },
             }}

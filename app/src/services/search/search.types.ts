@@ -1,17 +1,11 @@
-import {
-  IThread,
-  IThreadComment,
-  ThreadType,
-  ThreadVisibility,
-} from "../thread/thread.type";
+import { IThread, IThreadComment } from "../thread/thread.type";
 
 export interface ISearchResults {
-  query_string: string;
-  users?: Array<IPublicUserDetails>;
-  public_threads?: Array<IThread>;
-  private_threads?: Array<IThread>;
-  public_thread_comments?: Array<IThreadCommentWithParent>;
-  private_thread_comments?: Array<IThreadCommentWithParent>;
+  [query: string]: ISearchResult;
+}
+
+export interface ISearchResult {
+  [keyof: string]: Array<{ id: string }>;
 }
 
 export interface IPublicUserDetails {

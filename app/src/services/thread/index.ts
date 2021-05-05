@@ -1,4 +1,6 @@
 import {
+  getThread,
+  getThreads,
   addThread,
   addThreadReaction,
   removeThreadReaction,
@@ -8,6 +10,8 @@ import {
 } from "./thread";
 
 export {
+  getThread,
+  getThreads,
   addThread,
   addThreadReaction,
   removeThreadReaction,

@@ -7,9 +7,6 @@
   color: var(--primary-text-color);
   background-color: var(--black-background-color);
   display: grid;
-
-  grid-template-areas:
-    ". avatar profile-details";
   margin-left: 10%;
   margin-right: 10%;
   margin-bottom: 2%;

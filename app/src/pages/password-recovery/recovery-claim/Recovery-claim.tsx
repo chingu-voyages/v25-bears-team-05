@@ -26,7 +26,10 @@ function RecoveryClaim() {
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);
   const [showUpdateUI, setShowUpdateUI] = useState<boolean>(false);
-  const [showRecoveryRequestLink, setShowRecoverRequestLink] = useState<boolean>(false);
+  const [
+    showRecoveryRequestLink,
+    setShowRecoverRequestLink,
+  ] = useState<boolean>(false);
 
   assert(id === parseResult, "id parameter query string mismatch"); // POIJ: Need a more graceful fail
 

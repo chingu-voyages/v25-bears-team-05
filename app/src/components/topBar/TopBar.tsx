@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { selectUserById } from "../../pages/profile/profileSlice";
 import Avatar from "../avatar";
 import Logo from "../logo";
 import Nav from "../nav";
@@ -8,18 +9,9 @@ import OptionsMenu from "../optionsMenu";
 import Search from "../search";
 import "./TopBar.css";
 
-function TopBar({ className, onSearchSubmit } : { onSearchSubmit: (queryString: string) => void; className?:string;}) {
-  const [userInfo, setUserInfo] = useState<{
-    url: string;
-    firstName: string;
-    lastName: string;
-    id: string;
-  }>();
-  useEffect(() => {
-    getCurrentUserInfo().then((userInfo) => {
-      setUserInfo(userInfo);
-    });
-  }, []);
+function TopBar({ className }: { className?: string }) {
+  const userInfo = useSelector(selectUserById("me"), shallowEqual);
+
   const history = useHistory();
   return (
     <nav className={`Top-bar ${className || ""}`}>
@@ -45,7 +37,7 @@ function TopBar({ className, onSearchSubmit } : { onSearchSubmit: (queryString: 
           }
         />
       </OptionsMenu>
-      <Search className="Top-bar__search" onSearchSubmit={ onSearchSubmit } />
+      <Search className="Top-bar__search" />
       <Nav className="Top-bar__nav" />
     </nav>
   );

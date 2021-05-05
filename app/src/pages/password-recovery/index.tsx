@@ -1,2 +1,2 @@
-export * from "./recovery-request"
-export * from "./recovery-claim"
+export * from "./recovery-request";
+export * from "./recovery-claim";

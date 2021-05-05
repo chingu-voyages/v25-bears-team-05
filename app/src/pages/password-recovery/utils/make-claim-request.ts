@@ -17,7 +17,7 @@ export async function makeClaimRequest({
       id: hashedEmail,
       data: authToken,
       first_password: updatedPasswords.first_password,
-      second_password: updatedPasswords.second_password
+      second_password: updatedPasswords.second_password,
     });
     result.status === 200 && onSuccess(result);
   } catch (exception) {

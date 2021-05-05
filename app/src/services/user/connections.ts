@@ -29,59 +29,27 @@ const getConnections = async ({
   }
 };
 
-const removeConnection = async ({
-  connectionId,
-  onSuccess,
-  onError,
-}: {
-  connectionId: string;
-  onSuccess: () => void;
-  onError: (message: string) => void;
-}) => {
-  try {
-    const req = await axios({
-      method: "delete",
-      url: `/api/users/connections/${connectionId}`,
-    });
-    if (req.status === 200) {
-      onSuccess();
-    } else {
-      onError(req.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError("Connection not removed, please try again later");
-  }
+const removeConnection = async ({ connectionId }: { connectionId: string }) => {
+  const res = await axios({
+    method: "delete",
+    url: `/api/users/connections/${connectionId}`,
+  });
+  return res?.data;
 };
 
 const addConnection = async ({
   connectionId,
   isTeamMate,
-  onSuccess,
-  onError,
 }: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess: () => void;
-  onError: (message: string) => void;
 }) => {
-  try {
-    const req = await axios({
-      method: "put",
-      url: `/api/users/connections/${connectionId}`,
-      data: { isTeamMate },
-    });
-    if (req.status === 200) {
-      onSuccess();
-    } else {
-      onError(req.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError("Connection not added, please try again later");
-  }
+  const req = await axios({
+    method: "put",
+    url: `/api/users/connections/${connectionId}`,
+    data: { isTeamMate },
+  });
+  return req?.data;
 };
 
 export { getConnections, removeConnection, addConnection };

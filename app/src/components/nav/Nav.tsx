@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { getCurrentUserInfo } from "../../services/user/currentUserInfo";
+import { selectUserById } from "../../pages/profile/profileSlice";
 import Avatar from "../avatar";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
@@ -8,32 +9,18 @@ import "./Nav.css";
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
   const pathname = history.location.pathname;
-  const [page, setPage] = useState(
-    pathname.match("network")
-      ? "network"
-      : history.location.hash.match("#newpost")
-      ? "post"
-      : pathname.match("home")
-      ? "home"
-      : pathname.match("me/profile")
-      ? "profile"
-      : ""
-  );
+  const page = pathname.match("network")
+    ? "network"
+    : history.location.hash.match("#newpost")
+    ? "post"
+    : pathname.match("home")
+    ? "home"
+    : pathname.match("me/profile")
+    ? "profile"
+    : "";
 
-  const [userInfo, setUserInfo] = useState<{
-    url: string;
-    firstName: string;
-    lastName: string;
-    id: string;
-  }>();
-  useEffect(() => {
-    getCurrentUserInfo().then((userInfo) => {
-      setUserInfo(userInfo);
-      if (pathname.match(`${userInfo.id}/profile`)) {
-        setPage("profile");
-      }
-    });
-  }, []);
+  const userInfo = useSelector(selectUserById("me"), shallowEqual);
+
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>

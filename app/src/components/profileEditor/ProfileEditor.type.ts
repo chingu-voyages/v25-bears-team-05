@@ -10,6 +10,5 @@ export default interface IProfileEditor {
       jobTitle: string;
     }>
   >;
-  errorMessage: string;
   className: string;
 }

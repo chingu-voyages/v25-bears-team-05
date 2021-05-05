@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
@@ -6,34 +6,47 @@ import Landing from "./pages/landing";
 import Network from "./pages/network";
 import Profile from "./pages/profile";
 import Signup from "./pages/signup";
-import checkIfAuthed from "./services/checkIfAuthed";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
 import Loading from "./pages/loading";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import {
+  checkIsAuthedAsync,
+  selectAuthStatus,
+  selectIsLoggedIn,
+} from "./appSlice";
+import Search from "./pages/search";
 import PasswordRecovery from "./pages/password-recovery/recovery-request";
 import RecoveryClaim from "./pages/password-recovery/recovery-claim";
+import { getUsersAsync } from "./pages/profile/profileSlice";
+import { getCookie } from "./utils/cookie";
 
 function App() {
-  const [authChecked, setAuthChecked] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
+  const status = useSelector(selectAuthStatus, shallowEqual);
+  const dispatch = useDispatch();
+
+  // On first load check if authed
   useEffect(() => {
-    checkIfAuthed({
-      setDone: (authed: boolean) => {
-        setIsLoggedIn(authed);
-        setAuthChecked(true);
-      },
-    });
-  }, []);
-  return !authChecked ? (
-    <Loading message="Checking auth" />
+    getCookie("has-existing-auth-cookie") === "true" &&
+      dispatch(checkIsAuthedAsync());
+  }, [dispatch]);
+
+  // Once logged in get current user data
+  useEffect(() => {
+    isLoggedIn && dispatch(getUsersAsync(["me"]));
+  }, [dispatch, isLoggedIn]);
+
+  return status !== "idle" ? (
+    <Loading message={status} />
   ) : (
     <Router>
       <Switch>
         <Route path="/logout">
-          <Logout onLogout={() => setIsLoggedIn(false)} />
+          <Logout />
         </Route>
         <Route path="/login">
-          <Login setIsLoggedIn={setIsLoggedIn} />
+          <Login />
         </Route>
         <Route
           path="/request-password-reset"
@@ -63,6 +76,12 @@ function App() {
           allowed={!isLoggedIn}
           component={Signup}
           redirectTo="/home"
+        />
+        <ProtectedRoute
+          path="/search/:query"
+          allowed={isLoggedIn}
+          component={Search}
+          redirectTo="/"
         />
         <ProtectedRoute
           path="/"

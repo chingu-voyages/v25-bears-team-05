@@ -16,7 +16,7 @@ function ContentClipper({
     setIsClipping(
       containerRef.current.scrollHeight > containerRef.current.clientHeight
     );
-  }, [containerRef.current]);
+  }, [containerRef.current?.scrollHeight, containerRef.current?.clientHeight]);
   return (
     <div className={`Content-clipper`}>
       <div

@@ -76,7 +76,6 @@ const updateUser = async ({ data }: { data: IUserPatchRequest }) => {
     return data;
   } else {
     throw new Error(req.statusText);
-``` ?
   }
 };
 

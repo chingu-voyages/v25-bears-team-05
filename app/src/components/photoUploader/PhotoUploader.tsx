@@ -10,16 +10,19 @@ function PhotoUploader({
   className,
   route,
   onUpload,
+  isAvailable,
 }: {
   children: JSX.Element;
   className?: string;
   route: { url: string; method: Method; urlPropertyName?: string };
+  isAvailable: boolean;
   onUpload?: (url: string) => void;
 }) {
   const [inProgress, setInProgress] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const handleFileInputClick = () => {
+    if (!isAvailable) return;
     setError("");
     ref.current?.click?.();
   };

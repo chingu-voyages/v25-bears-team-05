@@ -13,6 +13,7 @@ import TopBar from "../../components/topBar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   getUsersAsync,
+  selectCurrentUserId,
   selectProfileStatus,
   selectUserById,
   updateAvatarURL,
@@ -25,7 +26,7 @@ function Profile() {
   const match: any = useRouteMatch("/:userId");
   const userId = match.params.userId.toLowerCase();
   const userInfo = useSelector(selectUserById(userId), shallowEqual);
-
+  const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -72,6 +73,7 @@ function Profile() {
               urlPropertyName: "avatar",
             }}
             onUpload={(url) => dispatch(updateAvatarURL(url))}
+            isAvailable={userId === "me" || userId === currentUserId}
           >
             <Avatar
               url={userInfo?.avatar?.[0]?.url || ""}

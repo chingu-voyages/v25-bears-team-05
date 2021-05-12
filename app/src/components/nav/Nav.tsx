@@ -3,6 +3,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { selectUserById } from "../../pages/profile/profileSlice";
 import Avatar from "../avatar";
+import NotificationIcon from "../notification-icon";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
@@ -15,6 +16,8 @@ function Nav({ className }: { className?: string }) {
     ? "post"
     : pathname.match("home")
     ? "home"
+    : pathname.match("notifications")
+    ? "notifications"
     : pathname.match("me/profile")
     ? "profile"
     : "";
@@ -55,6 +58,9 @@ function Nav({ className }: { className?: string }) {
           />
         </svg>
         My Network
+      </Link>
+      <Link to="/notifications" className="something">
+        <NotificationIcon />
       </Link>
       <OptionsMenu
         className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}

@@ -1,9 +1,10 @@
 import React from "react";
-import { alertIcon } from "./alert-icon";
+import { normalIcon } from "./normal-icon";
+ // import { alertIcon } from "./alert-icon";
 function NotificationIcon() {
   return (
     <div>
-      {alertIcon}
+      {normalIcon}
       Notifications
     </div>
   );

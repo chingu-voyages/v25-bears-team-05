@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { selectUserById } from "../../pages/profile/profileSlice";
@@ -6,6 +6,10 @@ import Avatar from "../avatar";
 import NotificationIcon from "../notification-icon";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
+
+import { io } from "socket.io-client";
+const socket = io("http://localhost:7000");
+
 
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
@@ -23,6 +27,19 @@ function Nav({ className }: { className?: string }) {
     : "";
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
+  socket.on("notification", (data) => {
+    console.log("Received data from server!", data);
+  });
+  
+  useEffect(() => {
+    socket.on("connect", ()=> {
+      if (userInfo) {
+        socket.emit("myId", userInfo.id);
+        console.log("sending my info", userInfo.id)
+      }
+    });
+
+  })
 
   return (
     <nav className={`Nav ${className || ""}`}>

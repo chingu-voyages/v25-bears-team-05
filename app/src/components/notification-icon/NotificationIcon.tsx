@@ -9,7 +9,7 @@ function NotificationIcon({
 }) {
   return (
     <div>
-      {notificationIndicatorOn ? alertIcon : normalIcon}
+      {notificationIndicatorOn === true ? alertIcon : normalIcon}
       Notifications
     </div>
   );

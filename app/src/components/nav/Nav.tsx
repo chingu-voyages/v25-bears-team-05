@@ -51,6 +51,8 @@ function Nav({ className }: { className?: string }) {
   useEffect(() => {
     if (notifications && notifications.length > 0) {
       setHasNotifications(true);
+    } else {
+      setHasNotifications(false);
     }
   }, [notifications]);
 

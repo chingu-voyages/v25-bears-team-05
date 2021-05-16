@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { selectUserById } from "../../pages/profile/profileSlice";
 import Avatar from "../avatar";
@@ -8,8 +8,11 @@ import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
 import { io } from "socket.io-client";
+import {
+  getNotificationsAsync,
+  selectNotifications,
+} from "../../pages/notifications/notificationSlice";
 const socket = io("http://localhost:7000");
-
 
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
@@ -27,20 +30,33 @@ function Nav({ className }: { className?: string }) {
     : "";
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
+  const dispatch = useDispatch();
+  const notifications = useSelector(selectNotifications, shallowEqual);
+  const [hasNotifications, setHasNotifications] = useState(false);
+
   socket.on("notification", (data) => {
-    console.log("Received data from server!", data);
+    console.log("*** NOTIFICATION FROM SERVER ***", data);
+    dispatch(getNotificationsAsync());
   });
-  
+
   useEffect(() => {
-    socket.on("connect", ()=> {
+    socket.on("connect", () => {
       if (userInfo) {
         socket.emit("myId", userInfo.id);
-        console.log("sending my info", userInfo.id)
+        console.log("sending my info", userInfo.id);
       }
     });
+  });
 
-  })
+  useEffect(() => {
+    if (notifications && notifications.length > 0) {
+      setHasNotifications(true);
+    }
+  }, [notifications]);
 
+  useEffect(() => {
+    dispatch(getNotificationsAsync());
+  }, []);
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>
@@ -77,7 +93,7 @@ function Nav({ className }: { className?: string }) {
         My Network
       </Link>
       <Link to="/notifications" className="something">
-        <NotificationIcon />
+        <NotificationIcon notificationIndicatorOn={hasNotifications} />
       </Link>
       <OptionsMenu
         className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}

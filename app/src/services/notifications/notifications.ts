@@ -1,10 +1,10 @@
 import axios from "axios";
-export const getNotifications = async() => {
+import { INotification } from "../../pages/notifications/notificationSlice";
+export const getNotifications = async () => {
   const request = await axios({
     method: "get",
     url: `api/users/me/notifications`,
   });
 
-  // Do something
-  console.log(request.data);
-}
+  return request.data as INotification[];
+};

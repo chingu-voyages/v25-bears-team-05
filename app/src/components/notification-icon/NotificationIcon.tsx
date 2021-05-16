@@ -1,10 +1,15 @@
 import React from "react";
 import { normalIcon } from "./normal-icon";
- // import { alertIcon } from "./alert-icon";
-function NotificationIcon() {
+import { alertIcon } from "./alert-icon";
+// import { alertIcon } from "./alert-icon";
+function NotificationIcon({
+  notificationIndicatorOn,
+}: {
+  notificationIndicatorOn: boolean;
+}) {
   return (
     <div>
-      {normalIcon}
+      {notificationIndicatorOn ? alertIcon : normalIcon}
       Notifications
     </div>
   );

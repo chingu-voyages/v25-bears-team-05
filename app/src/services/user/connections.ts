@@ -52,4 +52,24 @@ const addConnection = async ({
   return req?.data;
 };
 
-export { getConnections, removeConnection, addConnection };
+const requestAddConnection = async ({
+  connectionId,
+  isTeamMate,
+}: {
+  connectionId: string;
+  isTeamMate: boolean;
+}) => {
+  const req = await axios({
+    method: "post",
+    url: `/api/request/connection/${connectionId}`,
+    data: { isTeamMate },
+  });
+  return req?.data;
+};
+
+export {
+  getConnections,
+  removeConnection,
+  addConnection,
+  requestAddConnection,
+};

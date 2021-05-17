@@ -1,7 +1,8 @@
 import React from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
-  addConnectionAsync,
+  // addConnectionAsync,
+  requestAddConnectionAsync,
   selectCurrentUserId,
   selectIsAConnection,
 } from "../../pages/profile/profileSlice";
@@ -25,7 +26,7 @@ function FollowButton({
   const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = connectionId === "me" || connectionId === currentUserId;
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
-    dispatch(addConnectionAsync({ connectionId, isTeamMate }));
+    dispatch(requestAddConnectionAsync({ connectionId, isTeamMate }));
   };
   return !isAConnection && !isMe ? (
     <div className={`Follow-button ${className || ""}`}>

@@ -85,16 +85,16 @@ function App() {
           redirectTo="/"
         />
         <ProtectedRoute
-          path="/"
-          allowed={!isLoggedIn}
-          component={Landing}
-          redirectTo="/home"
-        />
-        <ProtectedRoute
           path="/notifications"
           allowed={isLoggedIn}
           component={Notifications}
           redirectTo="/"
+        />
+        <ProtectedRoute
+          path="/"
+          allowed={!isLoggedIn}
+          component={Landing}
+          redirectTo="/home"
         />
       </Switch>
     </Router>

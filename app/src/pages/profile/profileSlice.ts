@@ -5,6 +5,7 @@ import {
   removeConnection,
   updateUser,
 } from "../../services/user";
+import { requestAddConnection } from "../../services/user/connections";
 import { IUserPatchRequest } from "../../services/user/user.type";
 import stateStatus from "../../utils/stateStatus";
 
@@ -44,6 +45,20 @@ export const addConnectionAsync = createAsyncThunk(
     isTeamMate: boolean;
   }) => {
     const response = await addConnection({ connectionId, isTeamMate });
+    return response;
+  }
+);
+
+export const requestAddConnectionAsync = createAsyncThunk(
+  "profile/requestAddConnection",
+  async ({
+    connectionId,
+    isTeamMate,
+  }: {
+    connectionId: string;
+    isTeamMate: boolean;
+  }) => {
+    const response = await requestAddConnection({ connectionId, isTeamMate });
     return response;
   }
 );
@@ -161,6 +176,15 @@ export const profileSlice = createSlice({
       })
       .addCase(removeConnectionAsync.rejected, (state) => {
         stateStatus.error(state, "unable to remove connection");
+      })
+      .addCase(requestAddConnectionAsync.pending, (state) => {
+        stateStatus.loading(state, "connection request started");
+      })
+      .addCase(requestAddConnectionAsync.fulfilled, (state) => {
+        stateStatus.idle(state);
+      })
+      .addCase(requestAddConnectionAsync.rejected, (state) => {
+        stateStatus.error(state, "unable to request add connection");
       });
   },
 });

@@ -25,7 +25,6 @@ import {
   createThreadCommentAsync,
   createThreadReactionAsync,
   deleteThreadReactionAsync,
-  readThreadCommentsAsync,
   readThreadsAsync,
   selectThreadById,
 } from "../../pages/home/homeSlice";
@@ -216,7 +215,6 @@ function Post({
   useEffect(() => {
     if (!threadData) {
       dispatch(readThreadsAsync([threadId]));
-      dispatch(readThreadCommentsAsync({ threadId }));
     }
   }, [dispatch, threadData, threadId]);
 

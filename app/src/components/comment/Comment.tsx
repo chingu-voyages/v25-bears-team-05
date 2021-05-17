@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   deleteThreadCommentAsync,
+  readThreadCommentsAsync,
   selectCommentById,
 } from "../../pages/home/homeSlice";
 import { selectCurrentUserId } from "../../pages/profile/profileSlice";
@@ -23,6 +24,12 @@ function Comment({
   const isMe = commentData?.postedByUserId === currentUserId;
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!commentData) {
+      dispatch(readThreadCommentsAsync([commentId]));
+    }
+  }, [dispatch, commentData, commentId]);
+
   return commentData ? (
     <div className={`${className || ""} Comment`}>
       <div className="Comment__header">
@@ -35,13 +42,7 @@ function Comment({
           <OptionsMenu
             buttons={{
               "delete comment": {
-                action: () =>
-                  dispatch(
-                    deleteThreadCommentAsync({
-                      threadId: commentData.parentThreadId,
-                      commentId,
-                    })
-                  ),
+                action: () => dispatch(deleteThreadCommentAsync({ commentId })),
                 confirm: true,
               },
             }}

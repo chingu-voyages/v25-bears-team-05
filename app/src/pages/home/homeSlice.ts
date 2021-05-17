@@ -3,13 +3,15 @@ import { getFeed } from "../../services/feed/feed";
 import { IFeed, IFeedItem } from "../../services/feed/feed.type";
 import { addThread } from "../../services/thread";
 import {
-  addComment,
   addThreadReaction,
-  deleteComment,
-  getComments,
   getThreads,
   removeThreadReaction,
 } from "../../services/thread";
+import {
+  addComment,
+  deleteComment,
+  getComments,
+} from "../../services/thread/comment";
 import {
   INewThreadData,
   IThreadComment,
@@ -81,8 +83,8 @@ export const createThreadCommentAsync = createAsyncThunk(
 );
 export const readThreadCommentsAsync = createAsyncThunk(
   "home/readThreadComment",
-  async ({ threadId }: { threadId: string }) => {
-    const res = await getComments({ threadId });
+  async (commentIds: string[]) => {
+    const res = await getComments({ commentIds });
     return res;
   }
 );
@@ -95,12 +97,9 @@ export const readThreadCommentsAsync = createAsyncThunk(
 // );
 export const deleteThreadCommentAsync = createAsyncThunk(
   "home/deleteThreadComment",
-  async (data: { threadId: string; commentId: string }) => {
-    const res = await deleteComment({ ...data });
-    return {
-      commentId: data.commentId,
-      threadData: res,
-    };
+  async ({ commentId }: { commentId: string }) => {
+    const res = await deleteComment({ commentId });
+    return res;
   }
 );
 
@@ -222,7 +221,11 @@ export const homeSlice = createSlice({
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          [action.payload.id]: action.payload,
+          [action.payload.updatedThread.id]: action.payload.updatedThread,
+        };
+        state.comments = {
+          ...state.comments,
+          [action.payload.newComment.id]: action.payload.newComment,
         };
       })
       .addCase(createThreadCommentAsync.rejected, (state) => {
@@ -233,9 +236,13 @@ export const homeSlice = createSlice({
       })
       .addCase(readThreadCommentsAsync.fulfilled, (state, action) => {
         stateStatus.idle(state);
+        const comments: any = {};
+        action.payload?.forEach(
+          (comment: IThreadComment) => (comments[comment._id] = comment)
+        );
         state.comments = {
           ...state.comments,
-          ...action.payload,
+          ...comments,
         };
       })
       .addCase(readThreadCommentsAsync.rejected, (state) => {
@@ -261,7 +268,7 @@ export const homeSlice = createSlice({
         stateStatus.idle(state);
         state.threads = {
           ...state.threads,
-          [action.payload.threadData.id]: action.payload.threadData,
+          [action.payload.updatedThread.id]: action.payload.updatedThread,
         };
         const comments: any = { ...state.comments };
         delete comments[action.payload.commentId];

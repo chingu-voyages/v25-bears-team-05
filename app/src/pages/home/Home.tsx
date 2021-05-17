@@ -23,7 +23,7 @@ import Status from "../../components/status";
 function Home() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const status = useSelector(selectHomeStatus, shallowEqual);
+  // const status = useSelector(selectHomeStatus, shallowEqual);
   const feed = useSelector(selectHomeFeed, shallowEqual);
   const lastestFeedItem = useSelector(selectLatestBucketDate, shallowEqual);
 
@@ -87,7 +87,7 @@ function Home() {
 
   return (
     <div className="Home-page">
-      <Status status={status} />
+      {/* {<Status status={status} />} */}
       <TopBar className="Home-page__top-bar" />
       <ProfileCard
         type="home-page"

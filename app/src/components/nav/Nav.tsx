@@ -94,7 +94,10 @@ function Nav({ className }: { className?: string }) {
         </svg>
         My Network
       </Link>
-      <Link to="/notifications" className="something">
+      <Link
+        to="/notifications"
+        className={page === "notifications" ? "active" : ""}
+      >
         <NotificationIcon notificationIndicatorOn={hasNotifications} />
       </Link>
       <OptionsMenu

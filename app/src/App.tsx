@@ -20,6 +20,7 @@ import PasswordRecovery from "./pages/password-recovery/recovery-request";
 import RecoveryClaim from "./pages/password-recovery/recovery-claim";
 import { getUsersAsync } from "./pages/profile/profileSlice";
 import { getCookie } from "./utils/cookie";
+import Notifications from "./pages/notifications";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
@@ -88,6 +89,12 @@ function App() {
           allowed={!isLoggedIn}
           component={Landing}
           redirectTo="/home"
+        />
+        <ProtectedRoute
+          path="/notifications"
+          allowed={isLoggedIn}
+          component={Notifications}
+          redirectTo="/"
         />
       </Switch>
     </Router>

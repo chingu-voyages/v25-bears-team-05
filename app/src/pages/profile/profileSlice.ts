@@ -180,7 +180,22 @@ export const profileSlice = createSlice({
       .addCase(requestAddConnectionAsync.pending, (state) => {
         stateStatus.loading(state, "connection request started");
       })
-      .addCase(requestAddConnectionAsync.fulfilled, (state) => {
+      .addCase(requestAddConnectionAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
         stateStatus.idle(state);
       })
       .addCase(requestAddConnectionAsync.rejected, (state) => {
@@ -199,6 +214,18 @@ export const selectIsAConnection = (userId: string) => (state: any) => {
   const connections =
     state.profile.users[state.profile.currentUserId]?.connections;
   if (connections && Object.keys(connections).includes(userId)) {
+    return true;
+  }
+  return false;
+};
+
+export const selectIsAPendingConnectionRequest = (userId: string) => (
+  state: any
+) => {
+  const pendingConnections =
+    state.profile.users[state.profile.currentUserId]?.connectionRequests;
+
+  if (pendingConnections && Object.keys(pendingConnections).includes(userId)) {
     return true;
   }
   return false;

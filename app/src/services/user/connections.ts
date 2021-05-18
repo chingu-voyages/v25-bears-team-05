@@ -67,9 +67,18 @@ const requestAddConnection = async ({
   return req?.data;
 };
 
+const cancelAddConnectionRequest = async ({
+  connectionId,
+}: {
+  connectionId: string;
+}) => {
+  throw new Error("not implemented yet");
+};
+
 export {
   getConnections,
   removeConnection,
   addConnection,
   requestAddConnection,
+  cancelAddConnectionRequest,
 };

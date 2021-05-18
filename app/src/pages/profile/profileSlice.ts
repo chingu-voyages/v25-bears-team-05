@@ -224,7 +224,6 @@ export const selectIsAPendingConnectionRequest = (userId: string) => (
 ) => {
   const pendingConnections =
     state.profile.users[state.profile.currentUserId]?.connectionRequests;
-
   if (pendingConnections && Object.keys(pendingConnections).includes(userId)) {
     return true;
   }

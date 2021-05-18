@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute";
 import Home from "./pages/home";
@@ -18,14 +18,18 @@ import {
 import Search from "./pages/search";
 import PasswordRecovery from "./pages/password-recovery/recovery-request";
 import RecoveryClaim from "./pages/password-recovery/recovery-claim";
-import { getUsersAsync } from "./pages/profile/profileSlice";
+import { getUsersAsync, selectUserById } from "./pages/profile/profileSlice";
 import { getCookie } from "./utils/cookie";
 import Notifications from "./pages/notifications";
+import { getNotificationsAsync } from "./pages/notifications/notificationSlice";
+import { io } from "socket.io-client";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
   const status = useSelector(selectAuthStatus, shallowEqual);
   const dispatch = useDispatch();
+  const socket: any = useRef();
+  const userInfo = useSelector(selectUserById("me"), shallowEqual);
 
   // On first load check if authed
   useEffect(() => {
@@ -33,10 +37,29 @@ function App() {
       dispatch(checkIsAuthedAsync());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (userInfo) {
+      socket.current = io("http://localhost:7000");
+    }
+  }, [userInfo]);
   // Once logged in get current user data
   useEffect(() => {
     isLoggedIn && dispatch(getUsersAsync(["me"]));
   }, [dispatch, isLoggedIn]);
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("connect", () => {
+        console.log("IO connected!");
+        socket.current.emit("myId", userInfo.id);
+        console.log("sending my info", userInfo.id);
+      });
+      socket.current.on("notification", (data: any) => {
+        console.log("*** NOTIFICATION FROM SERVER ***", data);
+        dispatch(getNotificationsAsync());
+      });
+    }
+  }, [socket.current]);
 
   return status !== "idle" ? (
     <Loading message={status} />

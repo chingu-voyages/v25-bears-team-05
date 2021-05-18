@@ -7,12 +7,10 @@ import NotificationIcon from "../notification-icon";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
 
-import { io } from "socket.io-client";
 import {
   getNotificationsAsync,
   selectNotifications,
 } from "../../pages/notifications/notificationSlice";
-const socket = io("http://localhost:7000");
 
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
@@ -34,20 +32,6 @@ function Nav({ className }: { className?: string }) {
   const notifications = useSelector(selectNotifications, shallowEqual);
   const [hasNotifications, setHasNotifications] = useState(false);
 
-  socket.on("notification", (data) => {
-    console.log("*** NOTIFICATION FROM SERVER ***", data);
-    dispatch(getNotificationsAsync());
-  });
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      if (userInfo) {
-        socket.emit("myId", userInfo.id);
-        console.log("sending my info", userInfo.id);
-      }
-    });
-  });
-
   useEffect(() => {
     if (notifications && notifications.length > 0) {
       setHasNotifications(true);
@@ -58,7 +42,7 @@ function Nav({ className }: { className?: string }) {
 
   useEffect(() => {
     dispatch(getNotificationsAsync());
-  }, []);
+  }, [dispatch]);
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>

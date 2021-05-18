@@ -31,6 +31,7 @@ function FollowButton({
 
   const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = connectionId === "me" || connectionId === currentUserId;
+
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
     dispatch(requestAddConnectionAsync({ connectionId, isTeamMate }));
   };

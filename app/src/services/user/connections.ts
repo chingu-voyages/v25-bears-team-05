@@ -72,7 +72,11 @@ const cancelAddConnectionRequest = async ({
 }: {
   connectionId: string;
 }) => {
-  throw new Error("not implemented yet");
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${connectionId}`,
+  });
+  return req?.data;
 };
 
 export {

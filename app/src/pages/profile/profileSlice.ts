@@ -5,7 +5,10 @@ import {
   removeConnection,
   updateUser,
 } from "../../services/user";
-import { requestAddConnection } from "../../services/user/connections";
+import {
+  cancelAddConnectionRequest,
+  requestAddConnection,
+} from "../../services/user/connections";
 import { IUserPatchRequest } from "../../services/user/user.type";
 import stateStatus from "../../utils/stateStatus";
 
@@ -67,6 +70,14 @@ export const removeConnectionAsync = createAsyncThunk(
   "profile/removeConnection",
   async ({ connectionId }: { connectionId: string }) => {
     const response = await removeConnection({ connectionId });
+    return response;
+  }
+);
+
+export const cancelAddConnectionRequestAsync = createAsyncThunk(
+  "profile/cancelConnectionRequest",
+  async ({ connectionId }: { connectionId: string }) => {
+    const response = await cancelAddConnectionRequest({ connectionId });
     return response;
   }
 );
@@ -200,6 +211,36 @@ export const profileSlice = createSlice({
       })
       .addCase(requestAddConnectionAsync.rejected, (state) => {
         stateStatus.error(state, "unable to request add connection");
+      })
+      .addCase(cancelAddConnectionRequestAsync.pending, (state) => {
+        stateStatus.loading(
+          state,
+          "requesting cancellation of connection request"
+        );
+      })
+      .addCase(cancelAddConnectionRequestAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
+        stateStatus.idle(state);
+      })
+      .addCase(cancelAddConnectionRequestAsync.rejected, (state, _action) => {
+        stateStatus.error(
+          state,
+          "unable to complete connection request cancellation"
+        );
       });
   },
 });

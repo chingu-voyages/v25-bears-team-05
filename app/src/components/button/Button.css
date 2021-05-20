@@ -42,3 +42,10 @@
   background-color: var(--color-green-3);
   background-color: var(--grey-background-color);
 }
+
+.Button.plain {
+  background-color: var(--color-black);
+  border-style: none;
+  color: var(--color-red);
+  font-weight: lighter;
+}

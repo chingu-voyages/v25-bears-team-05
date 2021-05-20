@@ -5,7 +5,10 @@ import {
   requestAddConnectionAsync,
   selectCurrentUserId,
   selectIsAConnection,
+  selectIsAPendingConnectionRequest,
 } from "../../pages/profile/profileSlice";
+import { cancelAddConnectionRequest } from "../../services/user/connections";
+import Button from "../button";
 import OptionsMenu from "../optionsMenu";
 import "./FollowButton.css";
 
@@ -26,30 +29,51 @@ function FollowButton({
 
   const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const isMe = connectionId === "me" || connectionId === currentUserId;
+  const isPendingConnection = useSelector(
+    selectIsAPendingConnectionRequest(connectionId),
+    shallowEqual
+  );
 
   const handleAddConnection = ({ isTeamMate }: { isTeamMate: boolean }) => {
     dispatch(requestAddConnectionAsync({ connectionId, isTeamMate }));
   };
 
+  const handleCancelPendingConnectionRequest = () => {
+    // Do something
+    dispatch(cancelAddConnectionRequest({ connectionId }));
+  };
+
   return !isAConnection && !isMe ? (
     <div className={`Follow-button ${className || ""}`}>
-      <OptionsMenu
-        className="Follow-button__options-menu"
-        buttons={{
-          [`Add ${connectionName} as a connection`]: {
-            action: () => {
-              handleAddConnection({ isTeamMate: false });
+      {!isPendingConnection && (
+        <OptionsMenu
+          className="Follow-button__options-menu"
+          buttons={{
+            [`Add ${connectionName} as a connection`]: {
+              action: () => {
+                handleAddConnection({ isTeamMate: false });
+              },
             },
-          },
-          [`Add ${connectionName} as a team mate`]: {
-            action: () => {
-              handleAddConnection({ isTeamMate: true });
+            [`Add ${connectionName} as a team mate`]: {
+              action: () => {
+                handleAddConnection({ isTeamMate: true });
+              },
             },
-          },
-        }}
-      >
-        <span className="Follow-button__text">+ Follow</span>
-      </OptionsMenu>
+          }}
+        >
+          <span className="Follow-button__text">+ Follow</span>
+        </OptionsMenu>
+      )}
+      {isPendingConnection && (
+        <Button
+          onClick={handleCancelPendingConnectionRequest}
+          type="submit"
+          aria-label="Cancel Connection Request"
+          className="plain"
+        >
+          Cancel Connection Request
+        </Button>
+      )}
     </div>
   ) : null;
 }

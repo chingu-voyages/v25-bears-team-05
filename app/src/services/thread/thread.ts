@@ -83,50 +83,6 @@ const removeThreadReaction = async ({
   }
 };
 
-const addComment = async ({
-  threadId,
-  data,
-}: {
-  threadId: string;
-  data: { content: string };
-}) => {
-  const res = await axios({
-    method: "post",
-    url: `/api/threads/${threadId}/comments`,
-    data,
-  });
-  if (res?.data?.updatedThread) {
-    const processedThreadData = await processThread(res.data.updatedThread);
-    return processedThreadData;
-  } else {
-    throw Error(res.statusText);
-  }
-};
-
-const getComments = async ({ threadId }: { threadId: string }) => {
-  const res = await axios(`/api/threads/${threadId}/comments`);
-  return res.data.threadComments;
-};
-
-const deleteComment = async ({
-  threadId,
-  commentId,
-}: {
-  threadId: string;
-  commentId: string;
-}) => {
-  const res = await axios({
-    method: "delete",
-    url: `/api/threads/${threadId}/comments/${commentId}`,
-  });
-  if (res?.data?.updatedThread) {
-    const processedThreadData = await processThread(res.data.updatedThread);
-    return processedThreadData;
-  } else {
-    throw Error(res.statusText);
-  }
-};
-
 const currentUserId = sessionStorage.getItem("currentUserId");
 
 async function processThread(
@@ -171,8 +127,5 @@ export {
   addThread,
   addThreadReaction,
   removeThreadReaction,
-  addComment,
-  getComments,
-  deleteComment,
   processThread,
 };

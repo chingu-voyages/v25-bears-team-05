@@ -80,12 +80,16 @@ function Nav({ className }: { className?: string }) {
       </Link>
       <Link
         to="/notifications"
-        className={page === "notifications" ? "active" : ""}
+        className={`Nav__avatar-menu ${
+          page === "notifications" ? "active" : ""
+        }`}
       >
         <NotificationIcon notificationIndicatorOn={hasNotifications} />
       </Link>
       <OptionsMenu
-        className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}
+        className={`Nav__notification_icon ${
+          page === "profile" ? "active" : ""
+        }`}
         buttons={{
           "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },

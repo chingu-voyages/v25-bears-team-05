@@ -20,12 +20,18 @@
 }
 .Nav a,
 .Nav__avatar-menu,
-.Nav__avatar-menu button {
+.Nav__avatar-menu, button {
   display: grid;
   place-items: center center;
   color: var(--secondary-text-color);
   text-decoration: none;
 }
+
+.Nav__notification_icon div {
+  display: grid;
+  place-items: center center;
+}
+
 .Nav__avatar-menu {
   display: none;
 }

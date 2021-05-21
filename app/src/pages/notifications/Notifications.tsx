@@ -10,7 +10,9 @@ function Notifications() {
     <div className="Notifications-page">
       <Status status={status} />
       <TopBar />
-      <main className="Notifications-page__main"></main>
+      <main className="Notifications-page__main">
+        <section className="Notifications-container"></section>
+      </main>
     </div>
   );
 }

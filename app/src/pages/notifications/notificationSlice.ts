@@ -49,6 +49,11 @@ export const notificationSlice = createSlice({
         stateStatus.idle(state);
         state.unreadNotificationCount = action.payload.length;
         state.notifications = action.payload;
+        if (state.unreadNotificationCount > 0) {
+          document.title = `(${state.unreadNotificationCount}) Notifications | Synced Up`;
+        } else {
+          document.title = "Synced Up";
+        }
       })
       .addCase(getNotificationsAsync.rejected, (state) => {
         stateStatus.error(state, "unable to get notifications");

@@ -1,13 +1,12 @@
 import React from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
-  // addConnectionAsync,
+  cancelAddConnectionRequestAsync,
   requestAddConnectionAsync,
   selectCurrentUserId,
   selectIsAConnection,
   selectIsAPendingConnectionRequest,
 } from "../../pages/profile/profileSlice";
-import { cancelAddConnectionRequest } from "../../services/user/connections";
 import Button from "../button";
 import OptionsMenu from "../optionsMenu";
 import "./FollowButton.css";
@@ -39,8 +38,7 @@ function FollowButton({
   };
 
   const handleCancelPendingConnectionRequest = () => {
-    // Do something
-    dispatch(cancelAddConnectionRequest({ connectionId }));
+    dispatch(cancelAddConnectionRequestAsync({ connectionId }));
   };
 
   return !isAConnection && !isMe ? (

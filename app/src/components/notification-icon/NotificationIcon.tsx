@@ -1,7 +1,7 @@
 import React from "react";
 import { normalIcon } from "./normal-icon";
 import { alertIcon } from "./alert-icon";
-
+import "./notificationIcon.css";
 function NotificationIcon({
   notificationIndicatorOn,
 }: {

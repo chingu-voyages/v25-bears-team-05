@@ -236,7 +236,7 @@ export const profileSlice = createSlice({
         };
         stateStatus.idle(state);
       })
-      .addCase(cancelAddConnectionRequestAsync.rejected, (state, _action) => {
+      .addCase(cancelAddConnectionRequestAsync.rejected, (state) => {
         stateStatus.error(
           state,
           "unable to complete connection request cancellation"

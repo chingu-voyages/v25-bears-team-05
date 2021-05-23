@@ -32,6 +32,7 @@ export const getNotificationsAsync = createAsyncThunk(
   "notifications/getNotificationsAsync",
   async () => {
     const response = await getNotifications();
+    console.log(response);
     return response;
   }
 );

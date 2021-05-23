@@ -2,3 +2,22 @@
   padding-bottom: 60px;
   box-sizing: border-box;
 }
+
+.Notifications-container {
+  width: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .Notifications-page__main {
+    display: grid;
+    grid-template-columns: 20vw auto auto;
+    grid-template-areas: ". notifications-section .";
+  }
+  .Notifications-container {
+    background-color: var(--color-black);
+    border: solid 1px var(--color-white);
+    border-radius: 5px;
+    padding: 2px;
+    grid-area: notifications-section;
+  }
+}

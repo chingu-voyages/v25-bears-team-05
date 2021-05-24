@@ -19,5 +19,6 @@
     border-radius: 5px;
     padding: 2px;
     grid-area: notifications-section;
+    margin-top: 30px;
   }
 }

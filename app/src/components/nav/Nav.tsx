@@ -9,6 +9,7 @@ import "./Nav.css";
 
 import {
   getNotificationsAsync,
+  INotification,
   selectNotifications,
 } from "../../pages/notifications/notificationSlice";
 
@@ -29,14 +30,17 @@ function Nav({ className }: { className?: string }) {
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
   const dispatch = useDispatch();
-  const notifications = useSelector(selectNotifications, shallowEqual);
+  const notifications: INotification[] = useSelector(
+    selectNotifications,
+    shallowEqual
+  );
   const [hasNotifications, setHasNotifications] = useState(false);
 
   useEffect(() => {
     if (notifications && notifications.length > 0) {
-      setHasNotifications(true);
-    } else {
-      setHasNotifications(false);
+      setHasNotifications(
+        notifications.some((notification) => notification.read === false)
+      );
     }
   }, [notifications]);
 

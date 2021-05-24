@@ -50,9 +50,7 @@ function App() {
   useEffect(() => {
     if (socket.current) {
       socket.current.on("connect", () => {
-        console.log("IO connected!");
         socket.current.emit("myId", userInfo.id);
-        console.log("sending my info", userInfo.id);
       });
       socket.current.on("notification", (data: any) => {
         console.log("*** NOTIFICATION FROM SERVER ***", data);

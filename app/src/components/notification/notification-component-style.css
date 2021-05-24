@@ -28,12 +28,13 @@
   grid-area: notification-text;
 }
 
-.Message-style-unread {
+.unread {
   font-weight: bold;
 }
 
-.Message-style-read {
-  font-weight: lighter;
+.read {
+  font-weight: 50;
+  color: var(--color-grey-1);
 }
 
 .Notification__Time-ago-style {
@@ -41,6 +42,10 @@
   font-size: 10px;
 }
 
+.Notification__link {
+  text-decoration: none;
+  color: var(--color-grey-3);
+}
 .context-menu {
   grid-area: menu-button;
   align-self: center;

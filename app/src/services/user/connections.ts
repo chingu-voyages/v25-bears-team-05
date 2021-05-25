@@ -39,15 +39,15 @@ const removeConnection = async ({ connectionId }: { connectionId: string }) => {
 
 const addConnection = async ({
   connectionId,
-  isTeamMate,
+  connectionRequestDocumentId,
 }: {
   connectionId: string;
-  isTeamMate: boolean;
+  connectionRequestDocumentId: string;
 }) => {
   const req = await axios({
     method: "put",
     url: `/api/users/connections/${connectionId}`,
-    data: { isTeamMate },
+    data: { connectionRequestDocumentId },
   });
   return req?.data;
 };

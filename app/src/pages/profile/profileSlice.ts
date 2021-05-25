@@ -42,12 +42,15 @@ export const addConnectionAsync = createAsyncThunk(
   "profile/addConnection",
   async ({
     connectionId,
-    isTeamMate,
+    connectionRequestDocumentId,
   }: {
     connectionId: string;
-    isTeamMate: boolean;
+    connectionRequestDocumentId: string;
   }) => {
-    const response = await addConnection({ connectionId, isTeamMate });
+    const response = await addConnection({
+      connectionId,
+      connectionRequestDocumentId,
+    });
     return response;
   }
 );

@@ -12,6 +12,7 @@ import Nav from "../../components/nav";
 import TopBar from "../../components/topBar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
+  addConnectionAsync,
   getUsersAsync,
   selectCurrentUserId,
   selectProfileStatus,
@@ -20,6 +21,7 @@ import {
   updateProfileAsync,
 } from "./profileSlice";
 import Status from "../../components/status";
+import ApproveDenyPrompt from "../../components/connection-request/approve-deny-prompt";
 
 function Profile() {
   const status = useSelector(selectProfileStatus, shallowEqual);
@@ -28,10 +30,29 @@ function Profile() {
   const userInfo = useSelector(selectUserById(userId), shallowEqual);
   const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
   const dispatch = useDispatch();
+  const [
+    connectionApprovalButtonsVisible,
+    setConnectionApprovalButtonsVisible,
+  ] = useState<boolean>(false);
+  const [
+    connectionRequestDocumentId,
+    setConnectionRequestDocumentId,
+  ] = useState<string>("");
 
   useEffect(() => {
     dispatch(getUsersAsync([match.params.userId.toLowerCase()]));
   }, [dispatch, match.params.userId]);
+
+  useEffect(() => {
+    if (Object.keys(userInfo.connectionRequests).includes(currentUserId)) {
+      setConnectionApprovalButtonsVisible(true);
+      setConnectionRequestDocumentId(
+        userInfo.connectionRequests[currentUserId]
+      );
+    } else {
+      setConnectionApprovalButtonsVisible(false);
+    }
+  }, [userInfo.connectionRequests, currentUserId]);
 
   const getUserDataForInputs = () => {
     return {
@@ -55,6 +76,19 @@ function Profile() {
     );
     inputsHaveChanged && dispatch(updateProfileAsync(inputs));
     handleToggleEditMode();
+  };
+
+  const handleConnectionRequestApproved = () => {
+    dispatch(
+      addConnectionAsync({
+        connectionRequestDocumentId,
+        connectionId: userInfo.id,
+      })
+    );
+  };
+
+  const handleConnectionRequestDeclined = () => {
+    console.log("Request declined clicked");
   };
 
   return (
@@ -116,6 +150,12 @@ function Profile() {
             />
           )}
         </div>
+        {connectionApprovalButtonsVisible &&
+          ApproveDenyPrompt({
+            connectionUserName: userInfo.firstName,
+            approveButtonClicked: handleConnectionRequestApproved,
+            declineButtonClicked: handleConnectionRequestDeclined,
+          })}
       </main>
       <Nav />
     </div>

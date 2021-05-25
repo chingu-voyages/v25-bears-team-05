@@ -77,9 +77,69 @@
   padding: 24px 0;
 }
 
+.ConnectionRequestMenu__main-body {
+  display: grid;
+  grid-template-areas: "header header"
+                       "approve decline";
+  border-radius: 2%;
+  margin-top: -45px;
+}
+
+.ConnectionRequestMenu__options-body {
+  display: contents;
+}
+.approve-option {
+  grid-area: approve;
+  margin: 2px;
+  background-color: var(--color-grey-3);
+  color: var(--color-black);
+  text-align: center;
+}
+
+.decline-option {
+  grid-area: decline;
+  margin: 2px;
+  background-color: var(--color-grey-3);
+  color: var(--color-black);
+  text-align: center;
+}
+
+.approve-option:hover {
+  cursor: pointer;
+  background-color: var(--primary-green-color);
+}
+
+.decline-option:hover {
+  cursor: pointer;
+  background-color: var(--color-red);
+}
+
+.ConnectionRequestMenu__header {
+  grid-area: header;
+  margin: 0px;
+  border: 0.5px solid white;
+  display: flex;
+}
+
+.ConnectionRequest__message {
+  margin: 2px;
+  text-align: center;
+}
+
+.connection-icon {
+  margin: 4px;
+}
+
 @media (orientation: landscape) {
   .Profile-page__wall-paper {
     width: 100%;
     margin-left: 0;
+  }
+}
+
+@media only screen and (min-width: 500px) {
+  .ConnectionRequestMenu__main-body {
+    margin-left: 50%;
+    margin-right: 10px;
   }
 }

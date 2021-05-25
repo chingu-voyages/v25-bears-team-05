@@ -25,7 +25,7 @@
     "avatar name . follow"
     "avatar title . follow"
     "avatar info . follow"
-    "avatar . . .";
+    "avatar . . connection-request";
 }
 .Profile-card--comment {
   grid-template-columns: 38px auto auto auto;

@@ -29,10 +29,10 @@ const getConnections = async ({
   }
 };
 
-const removeConnection = async ({ connectionId }: { connectionId: string }) => {
+const removeConnection = async ({ targetUserId }: { targetUserId: string }) => {
   const res = await axios({
     method: "delete",
-    url: `/api/users/connections/${connectionId}`,
+    url: `/api/users/me/connections/${targetUserId}`,
   });
   return res?.data;
 };
@@ -46,7 +46,7 @@ const addConnection = async ({
 }) => {
   const req = await axios({
     method: "put",
-    url: `/api/users/connections/${connectionId}`,
+    url: `/api/users/${connectionId}/connections`,
     data: { connectionRequestDocumentId },
   });
   return req?.data;
@@ -75,6 +75,20 @@ const cancelAddConnectionRequest = async ({
   const req = await axios({
     method: "delete",
     url: `/api/request/connection/${connectionId}`,
+    data: { origin: "requestor" },
+  });
+  return req?.data;
+};
+
+const declineConnectionRequest = async ({
+  requestorId,
+}: {
+  requestorId: string;
+}) => {
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${requestorId}`,
+    data: { origin: "approver" },
   });
   return req?.data;
 };
@@ -85,4 +99,5 @@ export {
   addConnection,
   requestAddConnection,
   cancelAddConnectionRequest,
+  declineConnectionRequest,
 };

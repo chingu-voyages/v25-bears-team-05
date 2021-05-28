@@ -31,6 +31,11 @@ function Notifications() {
                 key={notification._id}
               />
             ))}
+          {notifications && notifications.length === 0 && (
+            <div className="Notifications-empty-list">
+              <h4>No notifications.</h4>
+            </div>
+          )}
         </section>
       </main>
     </div>

@@ -13,6 +13,7 @@ import TopBar from "../../components/topBar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   addConnectionAsync,
+  declineConnectionRequestAsync,
   getUsersAsync,
   selectCurrentUserId,
   selectProfileStatus,
@@ -44,7 +45,10 @@ function Profile() {
   }, [dispatch, match.params.userId]);
 
   useEffect(() => {
-    if (Object.keys(userInfo.connectionRequests).includes(currentUserId)) {
+    if (
+      userInfo &&
+      Object.keys(userInfo.connectionRequests).includes(currentUserId)
+    ) {
       setConnectionApprovalButtonsVisible(true);
       setConnectionRequestDocumentId(
         userInfo.connectionRequests[currentUserId]
@@ -52,7 +56,7 @@ function Profile() {
     } else {
       setConnectionApprovalButtonsVisible(false);
     }
-  }, [userInfo.connectionRequests, currentUserId]);
+  }, [userInfo, currentUserId]);
 
   const getUserDataForInputs = () => {
     return {
@@ -85,10 +89,12 @@ function Profile() {
         connectionId: userInfo.id,
       })
     );
+    setConnectionApprovalButtonsVisible(false);
   };
 
   const handleConnectionRequestDeclined = () => {
-    console.log("Request declined clicked");
+    dispatch(declineConnectionRequestAsync({ requestorId: userInfo.id }));
+    setConnectionApprovalButtonsVisible(false);
   };
 
   return (

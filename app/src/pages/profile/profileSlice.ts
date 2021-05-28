@@ -7,6 +7,7 @@ import {
 } from "../../services/user";
 import {
   cancelAddConnectionRequest,
+  declineConnectionRequest,
   requestAddConnection,
 } from "../../services/user/connections";
 import { IUserPatchRequest } from "../../services/user/user.type";
@@ -72,7 +73,7 @@ export const requestAddConnectionAsync = createAsyncThunk(
 export const removeConnectionAsync = createAsyncThunk(
   "profile/removeConnection",
   async ({ connectionId }: { connectionId: string }) => {
-    const response = await removeConnection({ connectionId });
+    const response = await removeConnection({ targetUserId: connectionId });
     return response;
   }
 );
@@ -81,6 +82,14 @@ export const cancelAddConnectionRequestAsync = createAsyncThunk(
   "profile/cancelConnectionRequest",
   async ({ connectionId }: { connectionId: string }) => {
     const response = await cancelAddConnectionRequest({ connectionId });
+    return response;
+  }
+);
+
+export const declineConnectionRequestAsync = createAsyncThunk(
+  "profile/declineConnectionRequest",
+  async ({ requestorId }: { requestorId: string }) => {
+    const response = await declineConnectionRequest({ requestorId });
     return response;
   }
 );
@@ -243,6 +252,33 @@ export const profileSlice = createSlice({
         stateStatus.error(
           state,
           "unable to complete connection request cancellation"
+        );
+      })
+      .addCase(declineConnectionRequestAsync.pending, (state) => {
+        stateStatus.loading(state, "Processing decline connection request");
+      })
+      .addCase(declineConnectionRequestAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
+        stateStatus.idle(state);
+      })
+      .addCase(declineConnectionRequestAsync.rejected, (state) => {
+        stateStatus.error(
+          state,
+          "There was a problem completing this operation"
         );
       });
   },

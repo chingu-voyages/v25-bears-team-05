@@ -5,7 +5,13 @@ export const getNotifications = async () => {
     method: "get",
     url: "/api/users/me/notifications",
   });
-  return request.data as INotification[];
+  const notifications = request.data as INotification[];
+  const sortedNotifications = notifications.sort(
+    (a, b) =>
+      parseInt(b.createdAt.replace(/[-.:\D]/g, "")) -
+      parseInt(a.createdAt.replace(/[-.:\D]/g, ""))
+  );
+  return sortedNotifications;
 };
 
 export const markNotificationAsRead = async (notificationId: string) => {

@@ -1,0 +1,19 @@
+.one-dot {
+  border-radius: 50%;
+  height: 4px;
+  width: 4px;
+  background-color: var(--color-white);
+  margin: 3px;
+}
+
+.Context-menu-button__main {
+  display: grid;
+  grid-template-rows: fit-content(40%) fit-content(40%) fit-content(40%);
+}
+
+@media only screen and (min-width: 800px) {
+  .one-dot {
+    height: 5px;
+    width: 5px;
+  }
+}

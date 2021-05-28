@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./page-error.css";
 function PageError({
   error,
   className,

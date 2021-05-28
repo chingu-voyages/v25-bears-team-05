@@ -1,0 +1,4 @@
+.Notification__icon {
+  display: grid;
+  place-items: center center;
+}

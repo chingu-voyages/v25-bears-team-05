@@ -5,6 +5,11 @@ import {
   removeConnection,
   updateUser,
 } from "../../services/user";
+import {
+  cancelAddConnectionRequest,
+  declineConnectionRequest,
+  requestAddConnection,
+} from "../../services/user/connections";
 import { IUserPatchRequest } from "../../services/user/user.type";
 import stateStatus from "../../utils/stateStatus";
 
@@ -38,12 +43,29 @@ export const addConnectionAsync = createAsyncThunk(
   "profile/addConnection",
   async ({
     connectionId,
+    connectionRequestDocumentId,
+  }: {
+    connectionId: string;
+    connectionRequestDocumentId: string;
+  }) => {
+    const response = await addConnection({
+      connectionId,
+      connectionRequestDocumentId,
+    });
+    return response;
+  }
+);
+
+export const requestAddConnectionAsync = createAsyncThunk(
+  "profile/requestAddConnection",
+  async ({
+    connectionId,
     isTeamMate,
   }: {
     connectionId: string;
     isTeamMate: boolean;
   }) => {
-    const response = await addConnection({ connectionId, isTeamMate });
+    const response = await requestAddConnection({ connectionId, isTeamMate });
     return response;
   }
 );
@@ -51,7 +73,23 @@ export const addConnectionAsync = createAsyncThunk(
 export const removeConnectionAsync = createAsyncThunk(
   "profile/removeConnection",
   async ({ connectionId }: { connectionId: string }) => {
-    const response = await removeConnection({ connectionId });
+    const response = await removeConnection({ targetUserId: connectionId });
+    return response;
+  }
+);
+
+export const cancelAddConnectionRequestAsync = createAsyncThunk(
+  "profile/cancelConnectionRequest",
+  async ({ connectionId }: { connectionId: string }) => {
+    const response = await cancelAddConnectionRequest({ connectionId });
+    return response;
+  }
+);
+
+export const declineConnectionRequestAsync = createAsyncThunk(
+  "profile/declineConnectionRequest",
+  async ({ requestorId }: { requestorId: string }) => {
+    const response = await declineConnectionRequest({ requestorId });
     return response;
   }
 );
@@ -161,6 +199,87 @@ export const profileSlice = createSlice({
       })
       .addCase(removeConnectionAsync.rejected, (state) => {
         stateStatus.error(state, "unable to remove connection");
+      })
+      .addCase(requestAddConnectionAsync.pending, (state) => {
+        stateStatus.loading(state, "connection request started");
+      })
+      .addCase(requestAddConnectionAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
+        stateStatus.idle(state);
+      })
+      .addCase(requestAddConnectionAsync.rejected, (state) => {
+        stateStatus.error(state, "unable to request add connection");
+      })
+      .addCase(cancelAddConnectionRequestAsync.pending, (state) => {
+        stateStatus.loading(
+          state,
+          "requesting cancellation of connection request"
+        );
+      })
+      .addCase(cancelAddConnectionRequestAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
+        stateStatus.idle(state);
+      })
+      .addCase(cancelAddConnectionRequestAsync.rejected, (state) => {
+        stateStatus.error(
+          state,
+          "unable to complete connection request cancellation"
+        );
+      })
+      .addCase(declineConnectionRequestAsync.pending, (state) => {
+        stateStatus.loading(state, "Processing decline connection request");
+      })
+      .addCase(declineConnectionRequestAsync.fulfilled, (state, action) => {
+        const [
+          connections,
+          connectionRequests,
+        ] = (action.payload as unknown) as Object[];
+        stateStatus.idle(state);
+        state.users = {
+          ...state.users,
+          [state.currentUserId]: {
+            ...state.users[
+              state.currentUserId as keyof typeof initialState.users
+            ],
+            connections,
+            connectionRequests,
+          },
+        };
+        stateStatus.idle(state);
+      })
+      .addCase(declineConnectionRequestAsync.rejected, (state) => {
+        stateStatus.error(
+          state,
+          "There was a problem completing this operation"
+        );
       });
   },
 });
@@ -175,6 +294,17 @@ export const selectIsAConnection = (userId: string) => (state: any) => {
   const connections =
     state.profile.users[state.profile.currentUserId]?.connections;
   if (connections && Object.keys(connections).includes(userId)) {
+    return true;
+  }
+  return false;
+};
+
+export const selectIsAPendingConnectionRequest = (userId: string) => (
+  state: any
+) => {
+  const pendingConnections =
+    state.profile.users[state.profile.currentUserId]?.connectionRequests;
+  if (pendingConnections && Object.keys(pendingConnections).includes(userId)) {
     return true;
   }
   return false;

@@ -17,6 +17,7 @@ export interface IUserInfo {
 export interface IUserRawResponse extends IUserInfo {
   connections: { [userId: string]: IUserConnection };
   connectionOf: { [userId: string]: IUserConnection };
+  connectionRequests?: { [userId: string]: string };
   threads: {
     started?: { [threadId: string]: IThread };
     commented?: { [threadId: string]: { [commentId: string]: IThreadComment } };

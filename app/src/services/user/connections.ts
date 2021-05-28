@@ -29,15 +29,30 @@ const getConnections = async ({
   }
 };
 
-const removeConnection = async ({ connectionId }: { connectionId: string }) => {
+const removeConnection = async ({ targetUserId }: { targetUserId: string }) => {
   const res = await axios({
     method: "delete",
-    url: `/api/users/connections/${connectionId}`,
+    url: `/api/users/me/connections/${targetUserId}`,
   });
   return res?.data;
 };
 
 const addConnection = async ({
+  connectionId,
+  connectionRequestDocumentId,
+}: {
+  connectionId: string;
+  connectionRequestDocumentId: string;
+}) => {
+  const req = await axios({
+    method: "put",
+    url: `/api/users/${connectionId}/connections`,
+    data: { connectionRequestDocumentId },
+  });
+  return req?.data;
+};
+
+const requestAddConnection = async ({
   connectionId,
   isTeamMate,
 }: {
@@ -45,11 +60,44 @@ const addConnection = async ({
   isTeamMate: boolean;
 }) => {
   const req = await axios({
-    method: "put",
-    url: `/api/users/connections/${connectionId}`,
+    method: "post",
+    url: `/api/request/connection/${connectionId}`,
     data: { isTeamMate },
   });
   return req?.data;
 };
 
-export { getConnections, removeConnection, addConnection };
+const cancelAddConnectionRequest = async ({
+  connectionId,
+}: {
+  connectionId: string;
+}) => {
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${connectionId}`,
+    data: { origin: "requestor" },
+  });
+  return req?.data;
+};
+
+const declineConnectionRequest = async ({
+  requestorId,
+}: {
+  requestorId: string;
+}) => {
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${requestorId}`,
+    data: { origin: "approver" },
+  });
+  return req?.data;
+};
+
+export {
+  getConnections,
+  removeConnection,
+  addConnection,
+  requestAddConnection,
+  cancelAddConnectionRequest,
+  declineConnectionRequest,
+};

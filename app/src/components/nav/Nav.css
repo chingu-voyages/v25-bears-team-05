@@ -1,6 +1,6 @@
 .Nav {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   height: 48px;
   padding: 6px 0;
   position: fixed;
@@ -20,12 +20,18 @@
 }
 .Nav a,
 .Nav__avatar-menu,
-.Nav__avatar-menu button {
+.Nav__avatar-menu, button {
   display: grid;
   place-items: center center;
   color: var(--secondary-text-color);
   text-decoration: none;
 }
+
+.Nav__notification_icon div {
+  display: grid;
+  place-items: center center;
+}
+
 .Nav__avatar-menu {
   display: none;
 }

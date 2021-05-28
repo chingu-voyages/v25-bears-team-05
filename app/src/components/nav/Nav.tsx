@@ -1,10 +1,17 @@
-import React from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { selectUserById } from "../../pages/profile/profileSlice";
 import Avatar from "../avatar";
+import NotificationIcon from "../notification-icon";
 import OptionsMenu from "../optionsMenu";
 import "./Nav.css";
+
+import {
+  getNotificationsAsync,
+  INotification,
+  selectNotifications,
+} from "../../pages/notifications/notificationSlice";
 
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
@@ -15,12 +22,31 @@ function Nav({ className }: { className?: string }) {
     ? "post"
     : pathname.match("home")
     ? "home"
+    : pathname.match("notifications")
+    ? "notifications"
     : pathname.match("me/profile")
     ? "profile"
     : "";
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
+  const dispatch = useDispatch();
+  const notifications: INotification[] = useSelector(
+    selectNotifications,
+    shallowEqual
+  );
+  const [hasNotifications, setHasNotifications] = useState(false);
 
+  useEffect(() => {
+    if (notifications && notifications.length > 0) {
+      setHasNotifications(
+        notifications.some((notification) => notification.read === false)
+      );
+    }
+  }, [notifications]);
+
+  useEffect(() => {
+    dispatch(getNotificationsAsync());
+  }, [dispatch]);
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link to="/home" className={page === "home" ? "active" : ""}>
@@ -56,8 +82,18 @@ function Nav({ className }: { className?: string }) {
         </svg>
         My Network
       </Link>
+      <Link
+        to="/notifications"
+        className={`Nav__avatar-menu ${
+          page === "notifications" ? "active" : ""
+        }`}
+      >
+        <NotificationIcon notificationIndicatorOn={hasNotifications} />
+      </Link>
       <OptionsMenu
-        className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}
+        className={`Nav__notification_icon ${
+          page === "profile" ? "active" : ""
+        }`}
         buttons={{
           "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },

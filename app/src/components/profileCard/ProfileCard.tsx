@@ -31,6 +31,7 @@ function ProfileCard({ type, userId, className, threadData }: IProfileCard) {
       : "Posted";
 
   let info: any = "...";
+
   const getConnectionsInCommon = () =>
     userData
       ? Object.keys(userData.connections)

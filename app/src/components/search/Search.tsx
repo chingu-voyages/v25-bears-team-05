@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import searchIcon from "../../images/searchicon.svg";
+import cancelIconLight from "../../images/canceliconlight.svg";
 import {
   doSearchAsync,
   selectSearchQuery,
@@ -12,7 +13,13 @@ import "./Search.css";
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);
   const dispatch = useDispatch();
+  const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(false);
   const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 0) {
+      setCancelQueryVisible(true);
+    } else {
+      setCancelQueryVisible(false);
+    }
     dispatch(setSearchQuery(e.target.value));
   };
   const history = useHistory();
@@ -43,6 +50,9 @@ function Search({ className }: { className?: string }) {
       <label className="Search__label" htmlFor="SearchInput">
         <img src={searchIcon} alt="" />
         Search
+        {cancelQueryVisible && (
+          <img className="search-cancel-icon" src={cancelIconLight} alt="" />
+        )}
       </label>
     </div>
   );

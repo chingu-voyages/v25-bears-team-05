@@ -18,14 +18,23 @@
 .Search__label {
   display: grid;
   place-items: center center;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 20px 1fr 28fr;
   gap: 8px;
   font-size: 18px;
   position: absolute;
   top: 10px;
   left: 8px;
 }
+
+
 .Search__input:focus ~ .Search__label,
 .Search__input:not([value=""]) ~ .Search__label {
-  display: none;
+  visibility: hidden;
 }
+
+.search-cancel-icon {
+  position: absolute;
+  justify-self: right;
+  margin-right: 10px;
+  visibility: visible;
+} 

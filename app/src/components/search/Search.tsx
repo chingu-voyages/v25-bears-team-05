@@ -36,6 +36,10 @@ function Search({ className }: { className?: string }) {
     }
   };
 
+  const handleClearSearchQuery = () => {
+    dispatch(setSearchQuery(""));
+  };
+
   return (
     <div className={`Search ${className || ""}`}>
       <input
@@ -51,7 +55,12 @@ function Search({ className }: { className?: string }) {
         <img src={searchIcon} alt="" />
         Search
         {cancelQueryVisible && (
-          <img className="search-cancel-icon" src={cancelIconLight} alt="" />
+          <img
+            className="search-cancel-icon"
+            src={cancelIconLight}
+            alt=""
+            onClick={handleClearSearchQuery}
+          />
         )}
       </label>
     </div>

@@ -38,3 +38,7 @@
   margin-right: 10px;
   visibility: visible;
 } 
+
+.search-cancel-icon:hover {
+  cursor: pointer;
+}

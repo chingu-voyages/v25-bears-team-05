@@ -321,6 +321,8 @@ export const selectHomeStatus = (state: any) => state.home.status;
 export const selectThreadById = (threadId: string) => (state: any) =>
   state.home.threads[threadId];
 
+export const selectThreads = (state: any) => state.home.threads;
+
 export const selectLatestBucketDate = (state: any) =>
   Object.keys(state.home.feed)
     .map((key) => key.substr(0, 24))

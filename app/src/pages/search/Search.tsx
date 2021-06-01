@@ -23,6 +23,7 @@ function Search() {
   const result = useSelector(selectResultByCurrentQuery, shallowEqual);
   const query = useSelector(selectSearchQuery, shallowEqual);
   const status = useSelector(selectSearchStatus, shallowEqual);
+
   const dispatch = useDispatch();
   const firstLoad = useRef(true);
 

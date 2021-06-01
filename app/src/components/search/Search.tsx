@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import searchIcon from "../../images/searchicon.svg";
@@ -10,12 +10,14 @@ import {
 } from "../../pages/search/searchSlice";
 import "./Search.css";
 import { selectUserConnections } from "../../pages/profile/profileSlice";
+import { selectThreads } from "../../pages/home/homeSlice";
 
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);
   const dispatch = useDispatch();
   const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(false);
   const connections = useSelector(selectUserConnections("me"), shallowEqual);
+  const threads = useSelector(selectThreads, shallowEqual);
 
   const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 0) {
@@ -23,7 +25,8 @@ function Search({ className }: { className?: string }) {
     } else {
       setCancelQueryVisible(false);
     }
-    console.log("26", connections);
+    console.log("28", connections);
+    console.log("29", threads);
     dispatch(setSearchQuery(e.target.value));
   };
   const history = useHistory();

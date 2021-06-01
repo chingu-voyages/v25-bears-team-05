@@ -12,7 +12,11 @@ export function doLocalSearch({
 }: {
   queryString: string;
   connections: { [keyof: string]: any };
-}) {}
+}) {
+  return {
+    connections: queryConnections({ connections, queryString }),
+  };
+}
 
 function queryConnections({
   connections,
@@ -23,7 +27,7 @@ function queryConnections({
 }): IConnectionsSearchMatch[] {
   assert(queryString.trim() !== "", "invalid query string");
   const connectionsCollection = Object.values(connections);
-  const regExp = new RegExp(queryString);
+  const regExp = new RegExp(queryString, "i");
 
   const mingoSearchTerm = {
     $or: [{ firstName: regExp }, { lastName: regExp }, { jobTitle: regExp }],

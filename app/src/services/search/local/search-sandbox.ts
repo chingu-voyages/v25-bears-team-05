@@ -13,7 +13,7 @@ export const userObject = {
     dateTimeConnected: "2021-05-26T10:53:20.792Z",
     firstName: "Mary",
     isTeamMate: false,
-    jobTitle: "Software Developer",
+    jobTitle: "Dave Developer",
     lastName: "Acosta",
     userId: "60afee4f605e4156dd1a5245",
   },
@@ -22,12 +22,12 @@ export const userObject = {
     firstName: "John",
     isTeamMate: false,
     jobTitle: "HR consultant",
-    lastName: "Doe",
+    lastName: "Dave",
     userId: "60ae33fbf650624e4d0f34e5",
   },
   "60ae33fbf650624e4d0f34f5": {
     dateTimeConnected: "2021-05-26T09:01:20.792Z",
-    firstName: "John",
+    firstName: "Dave",
     isTeamMate: false,
     jobTitle: "HR consultant",
     lastName: "Carson-Daley",
@@ -36,9 +36,12 @@ export const userObject = {
 };
 
 function run() {
-  const expr = new RegExp(`hn`);
+  const ex = "dave";
+  const expr = new RegExp(ex, "i");
   const collection = Object.values(userObject);
-  let searchTerm = { firstName: expr };
+  let searchTerm = {
+    $or: [{ firstName: expr }, { lastName: expr }, { jobTitle: expr }],
+  };
   let query = new mingo.Query(searchTerm);
   let cursor = query.find(collection);
   const results = cursor.all();

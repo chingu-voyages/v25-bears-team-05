@@ -7,6 +7,7 @@ import Logo from "../logo";
 import Nav from "../nav";
 import OptionsMenu from "../optionsMenu";
 import Search from "../search";
+
 import "./TopBar.css";
 
 function TopBar({ className }: { className?: string }) {
@@ -38,6 +39,7 @@ function TopBar({ className }: { className?: string }) {
         />
       </OptionsMenu>
       <Search className="Top-bar__search" />
+
       <Nav className="Top-bar__nav" />
     </nav>
   );

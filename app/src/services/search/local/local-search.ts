@@ -23,6 +23,11 @@ export type ThreadsSearchMatch = {
   } | null;
 };
 
+export interface IAggregatedLocalSearchResults {
+  connections: ConnectionsSearchMatch[];
+  threads: ThreadsSearchMatch[];
+}
+
 export function doLocalSearch({
   queryString,
   connections,
@@ -31,7 +36,7 @@ export function doLocalSearch({
   queryString: string;
   connections: { [keyof: string]: any };
   threads: { [keyof: string]: any };
-}) {
+}): IAggregatedLocalSearchResults {
   return {
     connections: queryConnections({ connections, queryString }),
     threads: queryThreads({ threads, queryString }),
@@ -45,7 +50,11 @@ function queryConnections({
   connections: { [keyof: string]: ConnectionsSearchMatch };
   queryString: string;
 }): ConnectionsSearchMatch[] {
-  assert(queryString.trim() !== "", "invalid query string");
+  if (queryString?.trim() === "") {
+    return [];
+  }
+
+  if (!connections) return [];
   const connectionsCollection = Object.values(connections);
   const regExp = new RegExp(queryString, "i");
 
@@ -65,7 +74,10 @@ function queryThreads({
   threads: { [keyof: string]: ThreadsSearchMatch };
   queryString: string;
 }) {
-  assert(queryString.trim() !== "", "invalid query string");
+  if (queryString?.trim() === "") {
+    return [];
+  }
+
   const threadsCollection = Object.values(threads);
   const regExp = new RegExp(queryString, "i");
   const mingoSearchTerm = {

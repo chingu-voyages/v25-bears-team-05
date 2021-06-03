@@ -5,12 +5,14 @@ import searchIcon from "../../images/searchicon.svg";
 import cancelIconLight from "../../images/canceliconlight.svg";
 import {
   doSearchAsync,
+  selectLocalResults,
   selectSearchQuery,
   setSearchQuery,
 } from "../../pages/search/searchSlice";
 import "./Search.css";
 import { selectUserConnections } from "../../pages/profile/profileSlice";
 import { selectThreads } from "../../pages/home/homeSlice";
+import { LocalSearchResults } from "./sub-components/local-search-results";
 
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);
@@ -18,6 +20,7 @@ function Search({ className }: { className?: string }) {
   const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(false);
   const connections = useSelector(selectUserConnections("me"), shallowEqual);
   const threads = useSelector(selectThreads, shallowEqual);
+  const localResults = useSelector(selectLocalResults, shallowEqual);
 
   const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 0) {
@@ -25,15 +28,13 @@ function Search({ className }: { className?: string }) {
     } else {
       setCancelQueryVisible(false);
     }
-    console.log("28", connections);
-    console.log("29", threads);
-    dispatch(setSearchQuery(e.target.value));
+    dispatch(setSearchQuery({ threads, connections, query: e.target.value }));
   };
   const history = useHistory();
 
-  const triggerSearch = (query: string) => {
-    history.push(`/search/${encodeURI(query)}`);
-    dispatch(doSearchAsync(query));
+  const triggerSearch = (typedQuery: string) => {
+    history.push(`/search/${encodeURI(typedQuery)}`);
+    dispatch(doSearchAsync(typedQuery));
   };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
@@ -44,7 +45,8 @@ function Search({ className }: { className?: string }) {
   };
 
   const handleClearSearchQuery = () => {
-    dispatch(setSearchQuery(""));
+    setCancelQueryVisible(false);
+    dispatch(setSearchQuery({ threads, connections, query: "" }));
   };
 
   return (
@@ -70,6 +72,9 @@ function Search({ className }: { className?: string }) {
           />
         )}
       </label>
+      {cancelQueryVisible && (
+        <LocalSearchResults results={localResults} queryString={query} />
+      )}
     </div>
   );
 }

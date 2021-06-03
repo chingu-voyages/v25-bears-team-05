@@ -3,9 +3,12 @@ const excerpt = require("excerpt");
 export function getStringExcerpt({
   queryString,
   threadContent,
+  length,
 }: {
   queryString: string;
   threadContent: string;
+  length?: number;
 }): string {
-  return excerpt(threadContent, queryString, 25);
+  if (!length) length = 25;
+  return excerpt(threadContent, queryString, length);
 }

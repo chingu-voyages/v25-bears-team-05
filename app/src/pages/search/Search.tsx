@@ -66,7 +66,7 @@ function Search() {
                   key={privateThread.id}
                 />
               ))}
-            {result.privateThreadComments?.length! > 0 &&
+            {result.privateThreadComments.length > 0 &&
               result.privateThreadComments?.map((privateThreadComment) => (
                 <SearchThreadComment
                   queryString={query}
@@ -85,7 +85,7 @@ function Search() {
                   key={publicThread.id}
                 />
               ))}
-            {result.publicThreadComments?.length! > 0 &&
+            {result.publicThreadComments.length > 0 &&
               result.publicThreadComments?.map((publicThreadComment) => (
                 <SearchThreadComment
                   queryString={query}

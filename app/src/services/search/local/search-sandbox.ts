@@ -80,7 +80,6 @@ function searchUsers() {
   let query = new mingo.Query(searchTerm);
   let cursor = query.find(collection);
   const results = cursor.all();
-  console.log(results);
 }
 
 function searchThreads() {
@@ -96,7 +95,7 @@ function searchThreads() {
   console.log(results);
 }
 function run() {
-  // searchUsers();
+  searchUsers();
   searchThreads();
 }
 

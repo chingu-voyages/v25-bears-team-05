@@ -69,6 +69,10 @@
   margin-left: 2em;
 }
 
+.link__User-profile {
+  text-decoration: none;
+}
+
 @media only screen and (min-width: 800px) {
   .Local-search-results__main-body {
     top: 64px;

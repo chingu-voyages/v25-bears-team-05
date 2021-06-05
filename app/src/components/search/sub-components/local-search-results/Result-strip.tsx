@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./local-search-results.css";
 import MiniProfileIcon from "../../../../images/miniprofile.svg";
-import ThreadIcon from "../../../../images/comment-icon.svg";
-import ThreadCommentIcon from "../../../../images/thread-comment.svg";
 import {
   IConnectionsSearchMatch,
   IThreadsCommentSearchMatch,
   IThreadsSearchMatch,
 } from "../../../../services/search/local";
-import { getStringExcerpt } from "../../search.helpers";
 import { shallowEqual, useSelector } from "react-redux";
 import { selectUserById } from "../../../../pages/profile/profileSlice";
-import { Link } from "react-router-dom";
+import ProfileResultStrip from "./Profile-result-strip";
+import ThreadResultStrip from "./Thread-result-strip";
+import ThreadCommentResultStrip from "./Thread-comment-result-strip";
+import DefaultResultStrip from "./Default-result-strip";
 
 export enum StripType {
   Profile = "profile",
@@ -57,95 +57,23 @@ function ResultStrip({
 
   switch (stripType) {
     case StripType.Profile:
-      return (
-        <div
-          className={`ResultStrip__Main-body Profile-strip ${
-            classNameInfo ? classNameInfo : ""
-          }`}
-        >
-          <div className="encircling-oval">
-            {(data as IConnectionsSearchMatch).avatar && (
-              <img
-                className="mini-profile-icon"
-                src={
-                  (data as IConnectionsSearchMatch).avatar[0].url ||
-                  MiniProfileIcon
-                }
-                alt="mini"
-              />
-            )}
-          </div>
-          <div className="ResultStrip__ProfileInfoSection">
-            <p className="Profile-first-last-name">{`${
-              (data as IConnectionsSearchMatch).firstName || ""
-            } ${(data as IConnectionsSearchMatch).lastName || ""}`}</p>
-            <p className="Profile-job-title">{`${
-              (data as IConnectionsSearchMatch).jobTitle || "Testing job title"
-            }`}</p>
-          </div>
-        </div>
-      );
+      return <ProfileResultStrip data={data as IConnectionsSearchMatch} />;
     case StripType.Thread:
       return (
-        <div
-          className={`ResultStrip__Main-body Thread-strip ${
-            classNameInfo ? classNameInfo : ""
-          }`}
-        >
-          <div className="encircling-oval small">
-            <img
-              src={threadPosterAvatar || MiniProfileIcon}
-              alt="thread-poster-avatar"
-            />
-          </div>
-          <img className="comment-icon" src={ThreadIcon} alt="thread" />
-          <div className="ResultStrip__ThreadInfo-section">
-            <p className="ThreadInfo-text">{`${getStringExcerpt({
-              queryString: queryString,
-              threadContent: (data as IThreadsSearchMatch).content.html,
-            })}`}</p>
-          </div>
-        </div>
+        <ThreadResultStrip
+          data={data as IThreadsSearchMatch}
+          {...{ queryString, threadPosterAvatar }}
+        />
       );
     case StripType.ThreadComment:
       return (
-        <div
-          className={`ResultStrip__Main-body ThreadComment-strip ${
-            classNameInfo ? classNameInfo : ""
-          }`}
-        >
-          <div className="encircling-oval small">
-            <img
-              src={threadPosterAvatar || MiniProfileIcon}
-              alt="thread-poster-avatar"
-            />
-          </div>
-          <img
-            className="comment-icon"
-            src={ThreadCommentIcon}
-            alt="thread comment"
-          />
-          <div className="ResultStrip__ThreadCommentInfo-section">
-            <p className="ThreadCommentInfo-text">{`${getStringExcerpt({
-              queryString: queryString,
-              threadContent: (data as IThreadsCommentSearchMatch).content,
-            })}`}</p>
-          </div>
-        </div>
+        <ThreadCommentResultStrip
+          data={data as IThreadsCommentSearchMatch}
+          {...{ queryString, threadPosterAvatar }}
+        />
       );
     default:
-      return (
-        <div
-          className={`ResultStrip__Main-body Profile-strip ${
-            classNameInfo ? classNameInfo : ""
-          }`}
-        >
-          <div className="encircling-oval">
-            <h4>Some unknown data</h4>
-          </div>
-          <div className="ResultStrip__name-section"></div>
-        </div>
-      );
+      return <DefaultResultStrip />;
   }
 }
 

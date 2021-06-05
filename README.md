@@ -4,11 +4,16 @@ A LinkedIn style app for developers | Voyage-25 | https://chingu.io/
 
 ## Tech Stack
 
-- React | create-react-app
-- Typescript
-- axios
+- react, react-redux, react-router-dom
+- socketio
+- typescript
 
 ## Features
+- Notification system
+   - notifications are sent to target user upon connection request.
+- Search
+   - search the service for users, posts and post comments
+   - local search with drop-down list
 
 - Local and google login/registration
 - User profile
@@ -16,12 +21,12 @@ A LinkedIn style app for developers | Voyage-25 | https://chingu.io/
   - Edit first and last names
   - Edit job title
 - Network
-  - Add/remove connections
+  - Add/remove | approve/decline connections using connection request system
   - View users connections
 - Home Page
   - Create new thread (post)
-  - View feed of user threads, sorted by connections, connection suggestions, and then all public threads
-  - React to a thread with a star, heart, or processing icon
+  - View feed of user posts, sorted by connections, connection suggestions, and then all public posts
+  - React to a user's post with a star, heart, or processing icon
 
 ## API Repo
 

@@ -11,6 +11,7 @@ import {
 import { getStringExcerpt } from "../../search.helpers";
 import { shallowEqual, useSelector } from "react-redux";
 import { selectUserById } from "../../../../pages/profile/profileSlice";
+import { Link } from "react-router-dom";
 
 export enum StripType {
   Profile = "profile",
@@ -42,6 +43,7 @@ function ResultStrip({
   } else if (stripType === StripType.ThreadComment) {
     constId = (data as IThreadsCommentSearchMatch).postedByUserId;
   }
+
   const user = useSelector(
     selectUserById(constId || MiniProfileIcon),
     shallowEqual

@@ -53,12 +53,12 @@ function LocalSearchResults({
           />
         ))}
       <div className="Go-to-search__main-body">
-        <p
+        <h4
           className="Search__link"
           onClick={() => triggerSearch(queryString.trim())}
         >
           Go to search
-        </p>
+        </h4>
       </div>
     </div>
   );

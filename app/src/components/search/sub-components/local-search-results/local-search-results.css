@@ -65,9 +65,14 @@
   cursor: pointer;
 }
 
+.Go-back__button {
+  margin-left: 2em;
+}
+
 @media only screen and (min-width: 800px) {
   .Local-search-results__main-body {
     top: 64px;
+    z-index: 1;
   }
 }
 
@@ -79,6 +84,7 @@
 .Search__link {
   color: var(--color-grey-1);
   justify-content: center;
+  margin: 5px;
 }
 
 .Search__link:hover {

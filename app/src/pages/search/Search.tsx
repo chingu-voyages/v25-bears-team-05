@@ -41,11 +41,20 @@ function Search() {
     firstLoad.current = false;
   }, []);
 
+  const handleNavigateBack = () => {
+    history.goBack();
+  };
+
   return (
     <div className="Search-page">
       <Status status={status} />
       <TopBar className="Home-page__top-bar" />
       <div className="Search-page-visible">
+        <div className="Search__go-back-section">
+          <h4 className="Go-back__button" onClick={handleNavigateBack}>
+            Go Back
+          </h4>
+        </div>
         {!hasSearchResultContent(result) ? (
           <NoSearchResult />
         ) : (

@@ -40,8 +40,9 @@ function Search({ className }: { className?: string }) {
   const history = useHistory();
 
   const triggerSearch = (typedQuery: string) => {
-    history.push(`/search/${encodeURI(typedQuery.trim())}`);
-    dispatch(doSearchAsync(typedQuery.trim()));
+    typedQuery = typedQuery.trim();
+    history.push(`/search/${encodeURI(typedQuery)}`);
+    dispatch(doSearchAsync(typedQuery));
   };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
@@ -56,6 +57,7 @@ function Search({ className }: { className?: string }) {
     setLocalSearchMenuVisible(false);
     dispatch(setSearchQuery({ threads, connections, query: "" }));
   };
+
   const clickedInMenuRef = useRef(false);
   useEffect(() => {
     const handleClose = () => {

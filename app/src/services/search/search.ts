@@ -36,8 +36,8 @@ export const doSearch = async (data: { queryString: string }) => {
  */
 export function hasSearchResultContent(result?: ISearchResult): boolean {
   if (result) {
-    for (let value of Object.values(result)) {
-      if (value.length > 0) {
+    for (let [key, value] of Object.entries(result)) {
+      if (value.length > 0 && key !== "queryString") {
         return true;
       }
     }

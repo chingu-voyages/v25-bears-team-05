@@ -21,6 +21,10 @@
   padding-bottom: 2%;
 }
 
+.Go-back__button {
+  cursor: pointer;
+}
+
 @media only screen and (min-width: 800px) {
   .Search-page-visible {
     width: 50vw;

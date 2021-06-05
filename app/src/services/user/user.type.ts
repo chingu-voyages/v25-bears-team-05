@@ -30,7 +30,7 @@ export interface IUserPatchRequest {
   firstName?: string;
   lastName?: string;
   jobTitle?: string;
-  avatar?: string | undefined;
+  avatar?: string;
 }
 
 export interface IUserProcessed extends IUserRawResponse {

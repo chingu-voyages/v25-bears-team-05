@@ -1,33 +1,82 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import searchIcon from "../../images/searchicon.svg";
+import cancelIconLight from "../../images/canceliconlight.svg";
 import {
   doSearchAsync,
+  selectLocalResults,
   selectSearchQuery,
   setSearchQuery,
 } from "../../pages/search/searchSlice";
 import "./Search.css";
+import { selectUserConnections } from "../../pages/profile/profileSlice";
+import { selectThreads } from "../../pages/home/homeSlice";
+import { LocalSearchResults } from "./sub-components/local-search-results";
 
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);
   const dispatch = useDispatch();
+  const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(
+    query.length > 0
+  );
+  const [localSearchMenuVisible, setLocalSearchMenuVisible] = useState<boolean>(
+    false
+  );
+  const connections = useSelector(selectUserConnections("me"), shallowEqual);
+  const threads = useSelector(selectThreads, shallowEqual);
+  const localResults = useSelector(selectLocalResults, shallowEqual);
+
   const handleSetQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(e.target.value));
+    if (e.target.value.trim().length > 0) {
+      setCancelQueryVisible(true);
+      setLocalSearchMenuVisible(true);
+    } else {
+      setCancelQueryVisible(false);
+      setLocalSearchMenuVisible(false);
+    }
+    dispatch(
+      setSearchQuery({ threads, connections, query: e.target.value.trim() })
+    );
   };
   const history = useHistory();
 
-  const triggerSearch = (query: string) => {
-    history.push(`/search/${encodeURI(query)}`);
-    dispatch(doSearchAsync(query));
+  const triggerSearch = (typedQuery: string) => {
+    typedQuery = typedQuery.trim();
+    history.push(`/search/${encodeURI(typedQuery)}`);
+    dispatch(doSearchAsync(typedQuery));
   };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent) => {
-    const queryString = (e.target as HTMLInputElement).value;
+    const queryString = (e.target as HTMLInputElement).value.trim();
     if (e.key === "Enter") {
       triggerSearch(queryString);
     }
   };
+
+  const handleClearSearchQuery = () => {
+    setCancelQueryVisible(false);
+    setLocalSearchMenuVisible(false);
+    dispatch(setSearchQuery({ threads, connections, query: "" }));
+  };
+
+  const clickedInMenuRef = useRef(false);
+  useEffect(() => {
+    const handleClose = () => {
+      if (!clickedInMenuRef.current) {
+        setLocalSearchMenuVisible(false);
+      } else {
+        clickedInMenuRef.current = false;
+        window?.addEventListener("click", handleClose, { once: true });
+      }
+    };
+    if (localSearchMenuVisible) {
+      window?.addEventListener("click", handleClose, { once: true });
+    }
+    return () => {
+      window?.removeEventListener("click", handleClose);
+    };
+  }, [localSearchMenuVisible]);
 
   return (
     <div className={`Search ${className || ""}`}>
@@ -43,7 +92,22 @@ function Search({ className }: { className?: string }) {
       <label className="Search__label" htmlFor="SearchInput">
         <img src={searchIcon} alt="" />
         Search
+        {cancelQueryVisible && (
+          <img
+            className="search-cancel-icon"
+            src={cancelIconLight}
+            alt=""
+            onClick={handleClearSearchQuery}
+          />
+        )}
       </label>
+      {localSearchMenuVisible && (
+        <LocalSearchResults
+          results={localResults}
+          queryString={query}
+          onClick={() => (clickedInMenuRef.current = true)}
+        />
+      )}
     </div>
   );
 }

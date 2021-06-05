@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { doLocalSearch } from "../../services/search/local";
 import { doSearch } from "../../services/search/search";
 import { ISearchResult } from "../../services/search/search.types";
 import stateStatus from "../../utils/stateStatus";
@@ -6,6 +7,7 @@ import stateStatus from "../../utils/stateStatus";
 const initialState = {
   query: "",
   results: {},
+  localResults: {},
   status: {
     state: "idle",
   },
@@ -27,7 +29,13 @@ export const searchSlice = createSlice({
   initialState,
   reducers: {
     setSearchQuery(state, action) {
-      state.query = action.payload;
+      state.query = action.payload.query;
+      const results = doLocalSearch({
+        queryString: action.payload.query,
+        connections: action.payload.connections,
+        threads: action.payload.threads,
+      });
+      state.localResults = results;
     },
   },
   extraReducers: (builder) => {
@@ -55,4 +63,5 @@ export const selectSearchQuery = (state: any) => state.search.query;
 export const selectResultByCurrentQuery = (state: any): ISearchResult =>
   state.search.results[state.search.query];
 
+export const selectLocalResults = (state: any) => state.search.localResults;
 export default searchSlice.reducer;

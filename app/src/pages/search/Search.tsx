@@ -23,6 +23,7 @@ function Search() {
   const result = useSelector(selectResultByCurrentQuery, shallowEqual);
   const query = useSelector(selectSearchQuery, shallowEqual);
   const status = useSelector(selectSearchStatus, shallowEqual);
+
   const dispatch = useDispatch();
   const firstLoad = useRef(true);
 
@@ -40,11 +41,20 @@ function Search() {
     firstLoad.current = false;
   }, []);
 
+  const handleNavigateBack = () => {
+    history.goBack();
+  };
+
   return (
     <div className="Search-page">
       <Status status={status} />
       <TopBar className="Home-page__top-bar" />
       <div className="Search-page-visible">
+        <div className="Search__go-back-section">
+          <h4 className="Go-back__button" onClick={handleNavigateBack}>
+            Go Back
+          </h4>
+        </div>
         {!hasSearchResultContent(result) ? (
           <NoSearchResult />
         ) : (
@@ -65,7 +75,7 @@ function Search() {
                   key={privateThread.id}
                 />
               ))}
-            {result.privateThreadComments?.length! > 0 &&
+            {result.privateThreadComments.length > 0 &&
               result.privateThreadComments?.map((privateThreadComment) => (
                 <SearchThreadComment
                   queryString={query}
@@ -84,7 +94,7 @@ function Search() {
                   key={publicThread.id}
                 />
               ))}
-            {result.publicThreadComments?.length! > 0 &&
+            {result.publicThreadComments.length > 0 &&
               result.publicThreadComments?.map((publicThreadComment) => (
                 <SearchThreadComment
                   queryString={query}

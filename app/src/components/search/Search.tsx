@@ -17,7 +17,9 @@ import { LocalSearchResults } from "./sub-components/local-search-results";
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);
   const dispatch = useDispatch();
-  const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(false);
+  const [cancelQueryVisible, setCancelQueryVisible] = useState<boolean>(
+    query.length > 0
+  );
   const [localSearchMenuVisible, setLocalSearchMenuVisible] = useState<boolean>(
     false
   );

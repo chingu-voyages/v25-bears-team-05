@@ -53,11 +53,19 @@ function App() {
         socket.current.emit("myId", userInfo.id);
       });
       socket.current.on("notification", (data: any) => {
-        console.log("*** NOTIFICATION FROM SERVER ***", data);
+        handleNotificationData(data);
         dispatch(getNotificationsAsync());
       });
     }
   }, [socket.current]);
+
+  const handleNotificationData = (data: any) => {
+    // NOTIFICATION FROM SERVER
+    console.log("App.tsx line 64", data); // Leave here for debugging purposes
+    if (data.type === "connection_request_approved") {
+      dispatch(getUsersAsync(["me"]));
+    }
+  };
 
   return status !== "idle" ? (
     <Loading message={status} />

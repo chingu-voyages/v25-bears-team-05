@@ -157,10 +157,7 @@ export const profileSlice = createSlice({
         stateStatus.loading(state, "adding connection");
       })
       .addCase(addConnectionAsync.fulfilled, (state, action) => {
-        const [
-          connections,
-          connectionOf,
-        ] = (action.payload as unknown) as Object[];
+        const [connections] = (action.payload as unknown) as Object[];
         stateStatus.idle(state);
         state.users = {
           ...state.users,
@@ -169,7 +166,6 @@ export const profileSlice = createSlice({
               state.currentUserId as keyof typeof initialState.users
             ],
             connections,
-            connectionOf,
           },
         };
       })
@@ -181,10 +177,7 @@ export const profileSlice = createSlice({
         stateStatus.loading(state, "removing connection");
       })
       .addCase(removeConnectionAsync.fulfilled, (state, action) => {
-        const [
-          connections,
-          connectionOf,
-        ] = (action.payload as unknown) as Object[];
+        const [connections] = (action.payload as unknown) as Object[];
         stateStatus.idle(state);
         state.users = {
           ...state.users,
@@ -193,7 +186,6 @@ export const profileSlice = createSlice({
               state.currentUserId as keyof typeof initialState.users
             ],
             connections,
-            connectionOf,
           },
         };
       })

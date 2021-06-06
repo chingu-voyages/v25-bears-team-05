@@ -7,7 +7,6 @@ const User404 = {
   jobTitle: "",
   avatar: [],
   connections: {},
-  connectionOf: {},
   threads: {},
 };
 

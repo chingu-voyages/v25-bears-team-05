@@ -24,6 +24,7 @@ import Notifications from "./pages/notifications";
 import { getNotificationsAsync } from "./pages/notifications/notificationSlice";
 import { io } from "socket.io-client";
 import Thread from "./pages/thread";
+import Comment from "./pages/comment";
 import NotFound404 from "./pages/NotFound404";
 
 function App() {
@@ -101,6 +102,12 @@ function App() {
           path="/:userId/profile"
           allowed={isLoggedIn}
           component={Profile}
+          redirectTo="/"
+        />
+        <ProtectedRoute
+          path="/thread/:threadId/comment/:commentId"
+          allowed={isLoggedIn}
+          component={Comment}
           redirectTo="/"
         />
         <ProtectedRoute

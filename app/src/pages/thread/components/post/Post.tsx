@@ -17,7 +17,7 @@ import smallProcessingIcon from "../../../../images/smallprocessingicon.svg";
 import reactButton from "../../../../images/reactbutton.svg";
 import commentButton from "../../../../images/commentbutton.svg";
 import folkButton from "../../../../images/folkbutton.svg";
-import Comment from "../../../../components/comment";
+import Comment from "../../../comment/components/comment";
 import PostMaker from "../../../../components/postMaker";
 import { getStringExcerpt } from "../../../../components/search/search.helpers";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";

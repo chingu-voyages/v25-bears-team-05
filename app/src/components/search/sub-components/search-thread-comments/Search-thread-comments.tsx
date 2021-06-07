@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Comment from "../../../../components/comment";
+import Comment from "../../../../pages/comment/components/comment";
 import "./Search-thread-comments.css";
 import Post from "../../../../pages/thread/components/post";
 import { shallowEqual, useSelector } from "react-redux";

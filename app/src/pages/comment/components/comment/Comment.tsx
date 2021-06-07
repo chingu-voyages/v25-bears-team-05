@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { selectCurrentUserId } from "../../pages/profile/profileSlice";
+import { selectCurrentUserId } from "../../../profile/profileSlice";
 import {
   selectCommentById,
   readThreadCommentsAsync,
   deleteThreadCommentAsync,
-} from "../../pages/thread/threadSlice";
-import ContentClipper from "../contentClipper";
-import OptionsMenu from "../optionsMenu";
-import ProfileCard from "../profileCard";
+} from "../../../thread/threadSlice";
+import ContentClipper from "../../../../components/contentClipper";
+import OptionsMenu from "../../../../components/optionsMenu";
+import ProfileCard from "../../../../components/profileCard";
 import "./Comment.css";
 const md = require("markdown-it")();
 

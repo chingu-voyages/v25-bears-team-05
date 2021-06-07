@@ -33,8 +33,9 @@ function App() {
   const socket: any = useRef();
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
   const onLoadPath = useRef(
-    !["/", "/signup"].includes(window?.location?.pathname)
-      ? window?.location?.pathname
+    window?.location?.pathname &&
+      !["/", "/signup"].includes(window.location.pathname)
+      ? window.location.pathname
       : "/home"
   );
 

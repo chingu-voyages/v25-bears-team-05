@@ -1,0 +1,12 @@
+.Comment-page__content {
+  display: grid;
+  place-items: start center;
+}
+
+@media only screen and (min-width: 920px) {
+  .Comment-page__content {
+    justify-self: center;
+    margin-top: 24px;
+    width: 80%;
+  }
+}

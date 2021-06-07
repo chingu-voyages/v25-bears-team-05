@@ -24,6 +24,7 @@ import Notifications from "./pages/notifications";
 import { getNotificationsAsync } from "./pages/notifications/notificationSlice";
 import { io } from "socket.io-client";
 import Thread from "./pages/thread";
+import Comment from "./pages/comment";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
@@ -101,6 +102,12 @@ function App() {
           path="/thread/:threadId"
           allowed={isLoggedIn}
           component={Thread}
+          redirectTo="/"
+        />
+        <ProtectedRoute
+          path="/comment/:commentId"
+          allowed={isLoggedIn}
+          component={Comment}
           redirectTo="/"
         />
         <ProtectedRoute

@@ -23,6 +23,7 @@ import { getCookie } from "./utils/cookie";
 import Notifications from "./pages/notifications";
 import { getNotificationsAsync } from "./pages/notifications/notificationSlice";
 import { io } from "socket.io-client";
+import Thread from "./pages/thread";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
@@ -30,6 +31,7 @@ function App() {
   const dispatch = useDispatch();
   const socket: any = useRef();
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
+  const onLoadPath = useRef(window?.location?.pathname || "/home");
 
   // On first load check if authed
   useEffect(() => {
@@ -96,6 +98,12 @@ function App() {
           redirectTo="/"
         />
         <ProtectedRoute
+          path="/thread/:threadId"
+          allowed={isLoggedIn}
+          component={Thread}
+          redirectTo="/"
+        />
+        <ProtectedRoute
           path="/home"
           allowed={isLoggedIn}
           component={Home}
@@ -105,7 +113,7 @@ function App() {
           path="/signup"
           allowed={!isLoggedIn}
           component={Signup}
-          redirectTo="/home"
+          redirectTo={onLoadPath.current}
         />
         <ProtectedRoute
           path="/search/:query"
@@ -123,7 +131,7 @@ function App() {
           path="/"
           allowed={!isLoggedIn}
           component={Landing}
-          redirectTo="/home"
+          redirectTo={onLoadPath.current}
         />
       </Switch>
     </Router>

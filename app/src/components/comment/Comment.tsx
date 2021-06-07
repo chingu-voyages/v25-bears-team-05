@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import {
-  deleteThreadCommentAsync,
-  readThreadCommentsAsync,
-  selectCommentById,
-} from "../../pages/home/homeSlice";
 import { selectCurrentUserId } from "../../pages/profile/profileSlice";
+import {
+  selectCommentById,
+  readThreadCommentsAsync,
+  deleteThreadCommentAsync,
+} from "../../pages/thread/threadSlice";
 import ContentClipper from "../contentClipper";
 import OptionsMenu from "../optionsMenu";
 import ProfileCard from "../profileCard";

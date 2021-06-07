@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Page from "../../components/page";
-import Post from "../../components/post";
+import Post from "../thread/components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";

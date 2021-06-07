@@ -4,11 +4,10 @@ import PostMaker from "../../components/postMaker";
 import "./Home.css";
 import editIcon from "../../images/editicon.svg";
 import { IPostMakerProps } from "../../components/postMaker/PostMaker.type";
-import Post from "../../components/post";
+import Post from "../thread/components/post";
 import ProfileCard from "../../components/profileCard";
 import { useHistory } from "react-router-dom";
 import {
-  createThreadAsync,
   readHomeFeedLatestAsync,
   selectHomeFeed,
   selectHomeStatus,
@@ -18,6 +17,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IFeedItem } from "../../services/feed/feed.type";
 import Status from "../../components/status";
 import Page from "../../components/page";
+import { createThreadAsync } from "../thread/threadSlice";
 
 function Home() {
   const history = useHistory();

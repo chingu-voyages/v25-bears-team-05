@@ -11,8 +11,8 @@ import {
 } from "../../pages/search/searchSlice";
 import "./Search.css";
 import { selectUserConnections } from "../../pages/profile/profileSlice";
-import { selectThreads } from "../../pages/home/homeSlice";
 import { LocalSearchResults } from "./sub-components/local-search-results";
+import { selectThreads } from "../../pages/thread/threadSlice";
 
 function Search({ className }: { className?: string }) {
   const query = useSelector(selectSearchQuery, shallowEqual);

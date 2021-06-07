@@ -3,31 +3,31 @@ import { Link } from "react-router-dom";
 import {
   IThreadReferral,
   IThreadDataProcessed,
-} from "../../services/thread/thread.type";
-import Button from "../button";
-import OptionsMenu from "../optionsMenu";
-import ProfileCard from "../profileCard";
+} from "../../../../services/thread/thread.type";
+import Button from "../../../../components/button";
+import OptionsMenu from "../../../../components/optionsMenu";
+import ProfileCard from "../../../../components/profileCard";
 import "./Post.css";
-import starIcon from "../../images/staricon.svg";
-import heartIcon from "../../images/hearticon.svg";
-import processingIcon from "../../images/processingicon.svg";
-import smallStarIcon from "../../images/smallstaricon.svg";
-import smallHeartIcon from "../../images/smallhearticon.svg";
-import smallProcessingIcon from "../../images/smallprocessingicon.svg";
-import reactButton from "../../images/reactbutton.svg";
-import commentButton from "../../images/commentbutton.svg";
-import folkButton from "../../images/folkbutton.svg";
-import Comment from "../comment";
-import PostMaker from "../postMaker";
-import { getStringExcerpt } from "../search/search.helpers";
+import starIcon from "../../../../images/staricon.svg";
+import heartIcon from "../../../../images/hearticon.svg";
+import processingIcon from "../../../../images/processingicon.svg";
+import smallStarIcon from "../../../../images/smallstaricon.svg";
+import smallHeartIcon from "../../../../images/smallhearticon.svg";
+import smallProcessingIcon from "../../../../images/smallprocessingicon.svg";
+import reactButton from "../../../../images/reactbutton.svg";
+import commentButton from "../../../../images/commentbutton.svg";
+import folkButton from "../../../../images/folkbutton.svg";
+import Comment from "../../../../components/comment";
+import PostMaker from "../../../../components/postMaker";
+import { getStringExcerpt } from "../../../../components/search/search.helpers";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
-  createThreadCommentAsync,
-  createThreadReactionAsync,
-  deleteThreadReactionAsync,
-  readThreadsAsync,
   selectThreadById,
-} from "../../pages/home/homeSlice";
+  createThreadCommentAsync,
+  deleteThreadReactionAsync,
+  createThreadReactionAsync,
+  readThreadsAsync,
+} from "../../threadSlice";
 const md = require("markdown-it")();
 
 function Post({

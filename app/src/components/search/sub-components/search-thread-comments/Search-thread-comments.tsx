@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Comment from "../../../../components/comment";
 import "./Search-thread-comments.css";
-import Post from "../../../post";
+import Post from "../../../../pages/thread/components/post";
 import { shallowEqual, useSelector } from "react-redux";
-import { selectCommentById } from "../../../../pages/home/homeSlice";
+import { selectCommentById } from "../../../../pages/thread/threadSlice";
 
 function SearchThreadComment({
   className,

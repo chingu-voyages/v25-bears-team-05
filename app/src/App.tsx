@@ -105,15 +105,15 @@ function App() {
           redirectTo="/"
         />
         <ProtectedRoute
-          path="/thread/:threadId"
+          path="/thread/:threadId/comment/:commentId"
           allowed={isLoggedIn}
-          component={Thread}
+          component={Comment}
           redirectTo="/"
         />
         <ProtectedRoute
-          path="/comment/:commentId"
+          path="/thread/:threadId"
           allowed={isLoggedIn}
-          component={Comment}
+          component={Thread}
           redirectTo="/"
         />
         <ProtectedRoute

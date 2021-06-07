@@ -1,6 +1,22 @@
 .Comment-page__content {
   display: grid;
   place-items: start center;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.Comment-page__back-link {
+  justify-self: start;
+  margin: 12px;
+  text-decoration: none;
+  color: var(--secondary-text-color);
+  display: grid;
+  place-items: center center;
+  grid-template-columns: 40px auto;
+  column-gap: 12px;
+}
+.Comment-page__back-link img {
+  width: 30px;
 }
 
 @media only screen and (min-width: 920px) {

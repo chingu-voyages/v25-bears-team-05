@@ -1,8 +1,8 @@
 import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import NotificationElement from "../../components/notification";
+import Page from "../../components/page";
 import Status from "../../components/status";
-import TopBar from "../../components/topBar";
 import convertDateStringToTimeAgo from "../../utils/convert-time-ago";
 import { selectProfileStatus } from "../profile/profileSlice";
 import "./notifications-style.css";
@@ -11,9 +11,8 @@ function Notifications() {
   const status = useSelector(selectProfileStatus, shallowEqual);
   const notifications = useSelector(selectNotifications, shallowEqual);
   return (
-    <div className="Notifications-page">
+    <Page className="Notifications-page">
       <Status status={status} />
-      <TopBar />
       <main className="Notifications-page__main">
         <section className="Notifications-container">
           {notifications &&
@@ -38,7 +37,7 @@ function Notifications() {
           )}
         </section>
       </main>
-    </div>
+    </Page>
   );
 }
 

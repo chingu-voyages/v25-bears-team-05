@@ -11,7 +11,7 @@
   grid-template-rows: fit-content(40%) fit-content(40%) fit-content(40%);
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .one-dot {
     height: 5px;
     width: 5px;

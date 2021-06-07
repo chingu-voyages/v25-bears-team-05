@@ -20,13 +20,13 @@
   grid-area: search;
   justify-self: stretch;
 }
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Top-bar {
     background: var(--color-black);
     grid-template-areas: "logo . search . nav";
-    grid-template-columns: auto 18px 1fr auto 280px;
+    grid-template-columns: auto 18px 1fr auto auto;
     justify-content: space-between;
-    padding: 12px 10% 0 10%;
+    padding: 12px 2% 0 6%;
   }
   .Top-bar__logo {
     display: block;
@@ -53,9 +53,6 @@
     row-gap: 6px;
     place-items: center center;
   }
-  .Top-bar__nav a.Nav__post {
-    display: none;
-  }
   .Top-bar__nav svg,
   .Top-bar__nav .Nav__avatar-menu.active button div {
     height: 30px;
@@ -78,4 +75,10 @@
 .Nav__avatar-menu button {
   color: var(--secondary-text-color);
   font-weight: 400;
+}
+
+@media only screen and (min-width: 1200px) {
+  .Top-bar {
+    padding: 12px 2% 0 10%;
+  }
 }

@@ -1,31 +1,5 @@
 .Network-page {
   background: var(--color-black);
-  min-height: 100vh;
-  padding-bottom: 60px;
-  box-sizing: border-box;
-}
-.Network-page__top-bar--mobile {
-  display: grid;
-  grid-template-columns: 1fr 9fr;
-  width: 100%;
-  place-items: center start;
-  background: var(--primary-green-color);
-  color: var(--color-black);
-}
-.Network-page__top-bar--desktop {
-  display: none;
-}
-
-.Network-page__title {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: 24px;
-}
-
-.Network-page__back-icon {
-  width: 20px;
-  padding: 16px;
-  fill: var(--color-black);
 }
 
 .Network-page__connections-list {
@@ -38,11 +12,10 @@
   display: grid;
   place-items: center stretch;
   grid-template-columns: 1fr auto;
-  width: 100%;
+
 }
 .Network-page__connections-list li:after {
   content: "";
-  width: 100%;
   margin-left: 50px;
   margin-top: 4px;
   border-bottom: 1px solid var(--color-grey-2);
@@ -53,34 +26,20 @@
   text-decoration: none;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Network-page {
-    display: grid;
-    place-items: start center;
-    grid-template-areas:
-      "topBar"
-      "."
-      "main";
-    grid-template-rows: 80px 48px auto;
     background: var(--grey-background-color);
   }
-  .Network-page__top-bar--mobile {
-    display: none;
-  }
-  .Network-page__top-bar--desktop {
-    grid-area: topBar;
-    display: grid;
-    justify-self: stretch;
-  }
   .Network-page__main {
-    grid-area: main;
     display: grid;
     place-items: center stretch;
     overflow: hidden;
     padding: 18px;
     box-sizing: border-box;
     max-width: 860px;
-    width: 90%;
+    justify-self: center;
+    width: 80%;
+    margin-top: 20px;
     background: var(--color-black);
     border: solid 1px var(--active-icon-color);
     border-radius: 18px;

@@ -75,7 +75,7 @@
   display: none;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Home-page__post-maker-start__button {
     border-radius: 16px;
   }

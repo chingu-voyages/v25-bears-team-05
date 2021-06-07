@@ -51,7 +51,7 @@
 .Input--error ~ .Input__label--floating {
   color: var(--error-color);
 }
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .wrapper__Input.breakout-on-large-view {
     border: none;
     display: flex;

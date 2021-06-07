@@ -73,7 +73,7 @@
   text-decoration: none;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Local-search-results__main-body {
     top: 64px;
     z-index: 1;

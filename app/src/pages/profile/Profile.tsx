@@ -8,8 +8,6 @@ import Button from "../../components/button";
 import ProfileCard from "../../components/profileCard";
 import ProfileEditor from "../../components/profileEditor";
 import PhotoUploader from "../../components/photoUploader";
-import Nav from "../../components/nav";
-import TopBar from "../../components/topBar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   addConnectionAsync,
@@ -23,6 +21,7 @@ import {
 } from "./profileSlice";
 import Status from "../../components/status";
 import ApproveDenyPrompt from "../../components/connection-request/approve-deny-prompt";
+import Page from "../../components/page";
 
 function Profile() {
   const status = useSelector(selectProfileStatus, shallowEqual);
@@ -98,9 +97,8 @@ function Profile() {
   };
 
   return (
-    <div className="Profile-page">
+    <Page className="Profile-page">
       <Status status={status} />
-      <TopBar />
       <main className="Profile-page__profile">
         <div className="wrapper__Profile-page__wall-paper">
           <img className="Profile-page__wall-paper" src={wallpaper} alt="" />
@@ -163,8 +161,7 @@ function Profile() {
             declineButtonClicked: handleConnectionRequestDeclined,
           })}
       </main>
-      <Nav />
-    </div>
+    </Page>
   );
 }
 

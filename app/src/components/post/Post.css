@@ -88,7 +88,7 @@
 .Post__error {
   color: var(--error-color);
 }
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Post {
     border-radius: 16px;
     padding: 8px 36px 4px 36px;

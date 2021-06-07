@@ -24,6 +24,7 @@ import Notifications from "./pages/notifications";
 import { getNotificationsAsync } from "./pages/notifications/notificationSlice";
 import { io } from "socket.io-client";
 import Thread from "./pages/thread";
+import NotFound404 from "./pages/NotFound404";
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn, shallowEqual);
@@ -31,7 +32,11 @@ function App() {
   const dispatch = useDispatch();
   const socket: any = useRef();
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
-  const onLoadPath = useRef(window?.location?.pathname || "/home");
+  const onLoadPath = useRef(
+    !["/", "/signup"].includes(window?.location?.pathname)
+      ? window?.location?.pathname
+      : "/home"
+  );
 
   // On first load check if authed
   useEffect(() => {
@@ -132,7 +137,9 @@ function App() {
           allowed={!isLoggedIn}
           component={Landing}
           redirectTo={onLoadPath.current}
+          exact
         />
+        <Route path="/" component={NotFound404} />
       </Switch>
     </Router>
   );

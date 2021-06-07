@@ -26,14 +26,14 @@ const initialState = {
 
 // Thread thunks
 export const createThreadAsync = createAsyncThunk(
-  "home/createThread",
+  "thread/createThread",
   async (data: INewThreadData) => {
     const res = await addThread({ data });
     return res;
   }
 );
 export const readThreadsAsync = createAsyncThunk(
-  "home/readThreads",
+  "thread/readThreads",
   async (threadIds: string[]) => {
     const res = await getThreads({ threadIds });
     return res;
@@ -41,14 +41,14 @@ export const readThreadsAsync = createAsyncThunk(
 );
 // Updating thread not yet implemented
 // export const updateThreadAsync = createAsyncThunk(
-//   "home/updateThread",
+//   "thread/updateThread",
 //   async () => {
 
 //   }
 // );
 // Deleting thread not yet implemented
 // export const deleteThreadAsync = createAsyncThunk(
-//   "home/deleteThread",
+//   "thread/deleteThread",
 //   async () => {
 //     delete
 //   }
@@ -56,14 +56,14 @@ export const readThreadsAsync = createAsyncThunk(
 
 // Reaction thunks
 export const createThreadReactionAsync = createAsyncThunk(
-  "home/createThreadReaction",
+  "thread/createThreadReaction",
   async (data: { threadId: string; title: string }) => {
     const res = await addThreadReaction({ ...data });
     return res;
   }
 );
 export const deleteThreadReactionAsync = createAsyncThunk(
-  "home/deleteThreadReaction",
+  "thread/deleteThreadReaction",
   async (data: { threadId: string; threadLikeId: string }) => {
     const res = await removeThreadReaction({ ...data });
     return res;
@@ -72,14 +72,14 @@ export const deleteThreadReactionAsync = createAsyncThunk(
 
 // Comment thunks
 export const createThreadCommentAsync = createAsyncThunk(
-  "home/createThreadComment",
+  "thread/createThreadComment",
   async (data: { threadId: string; data: { content: string } }) => {
     const res = await addComment({ ...data });
     return res;
   }
 );
 export const readThreadCommentsAsync = createAsyncThunk(
-  "home/readThreadComment",
+  "thread/readThreadComment",
   async (commentIds: string[]) => {
     const res = await getComments({ commentIds });
     return res;
@@ -87,13 +87,13 @@ export const readThreadCommentsAsync = createAsyncThunk(
 );
 // Updating comment not yet implemented
 // export const updateThreadCommentAsync = createAsyncThunk(
-//   "home/updateThreadComment",
+//   "thread/updateThreadComment",
 //   async () => {
 
 //   }
 // );
 export const deleteThreadCommentAsync = createAsyncThunk(
-  "home/deleteThreadComment",
+  "thread/deleteThreadComment",
   async ({ commentId }: { commentId: string }) => {
     const res = await deleteComment({ commentId });
     return res;

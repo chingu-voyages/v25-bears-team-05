@@ -1,6 +1,6 @@
 import React from "react";
 export const alertIcon = (
-  <svg width="30" height="30" viewBox="0 0 460 460">
+  <svg className="svg-icon" width="30" height="30" viewBox="0 0 460 460">
     <path
       d="M408.079,344.152c0-154.423,7.873-291.468-144.268-308.509c0.031-0.591,0.047-1.186,0.047-1.785
 	C263.858,15.159,248.699,0,230,0s-33.858,15.159-33.858,33.858c0,0.599,0.017,1.193,0.047,1.785

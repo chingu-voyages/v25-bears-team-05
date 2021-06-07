@@ -1,4 +1,42 @@
-.Notification__icon {
+/* .Notification__icon {
   display: grid;
   place-items: center center;
+  grid-template-rows: 10px 10px;
+  grid-template-areas: "icon text";
+} */
+
+.Nav_notifications {
+  display: grid;
+}
+
+.Notification__count {
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  background-color: var(--color-red);
+  grid-area: icon;
+}
+
+.svg-icon {
+  grid-area: icon;
+}
+
+@media only screen and (min-width: 800px) {
+  .Notification__count {
+   position: absolute;
+    bottom: 34px;
+    right: 76px;
+  }
+  .svg-icon {
+    grid-area: unset;
+  }
+  .Notification__icon {
+    display: grid;
+    place-items: center center;
+    grid-template-rows: unset;
+    grid-template-areas: unset;
+  }
 }

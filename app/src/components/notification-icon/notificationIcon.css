@@ -31,7 +31,7 @@
 @media only screen and (min-width: 920px) {
   .Notification__count {
    position: absolute;
-    bottom: 40px;
+    bottom: 44px;
     left: 45px;
     width: 20px;
     height: 20px;
@@ -45,7 +45,7 @@
 @media only screen and (min-width: 1200px) {
   .Notification__count {
     position: absolute;
-     bottom: 42px;
+     bottom: 43px;
      left: 64px;
    }
    .svg-icon {

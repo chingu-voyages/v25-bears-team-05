@@ -26,7 +26,7 @@
   text-decoration: none;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Network-page {
     background: var(--grey-background-color);
   }

@@ -26,7 +26,7 @@
   background-color: var(--color-green-0);
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 920px) {
   .SearchThreadComment__main {
     border-radius: 10px;
   }

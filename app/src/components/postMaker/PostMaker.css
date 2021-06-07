@@ -4,7 +4,7 @@
   grid-template-rows: 48px auto 48px;
   z-index: 1000;
 }
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 920px) {
   .Post-maker--full-window {
     position: fixed;
     top: 0;

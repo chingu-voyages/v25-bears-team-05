@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Notifications-page__main {
     display: grid;
     grid-template-columns: 20vw auto auto;

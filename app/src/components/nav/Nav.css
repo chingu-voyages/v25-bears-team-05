@@ -9,7 +9,7 @@
   width: 100%;
   z-index: 1500;
 }
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 920px) {
   .Nav {
     display: none;
   }
@@ -35,9 +35,27 @@
 .Nav__avatar-menu {
   display: none;
 }
-@media only screen and (min-width: 800px) {
+
+.Nav__title {
+  display: none;
+}
+
+@media only screen and (min-width: 420px) {
+  .Nav__title {
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 920px) {
+  .Nav {
+    grid-template-columns: repeat(5, 1fr);
+  }
   .Nav__avatar-menu {
     display: grid;
+  }
+  .Nav a {
+    font-size: 14px;
+    width: 80px;
   }
 }
 .Nav svg {
@@ -48,4 +66,11 @@
 .Nav a.active svg {
   color: var(--primary-green-color);
   fill: var(--primary-green-color);
+}
+
+@media only screen and (min-width: 1200px) {
+  .Nav a {
+    font-size: 18px;
+    width: 120px;
+  }
 }

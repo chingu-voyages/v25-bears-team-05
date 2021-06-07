@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import Page from "../../components/page";
 import Post from "../../components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
 import Status from "../../components/status";
-import TopBar from "../../components/topBar";
 import { hasSearchResultContent } from "../../services/search/search";
 import "./Search.css";
 import {
@@ -46,9 +46,8 @@ function Search() {
   };
 
   return (
-    <div className="Search-page">
+    <Page className="Search-page">
       <Status status={status} />
-      <TopBar className="Home-page__top-bar" />
       <div className="Search-page-visible">
         <div className="Search__go-back-section">
           <h4 className="Go-back__button" onClick={handleNavigateBack}>
@@ -104,7 +103,7 @@ function Search() {
           </>
         )}
       </div>
-    </div>
+    </Page>
   );
 }
 

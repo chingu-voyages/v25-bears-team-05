@@ -10,7 +10,6 @@ function NotificationIcon({
   return (
     <div className="Notification__icon">
       {notificationIndicatorOn === true ? alertIcon : normalIcon}
-      Notifications
     </div>
   );
 }

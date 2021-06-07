@@ -6,8 +6,6 @@ import editIcon from "../../images/editicon.svg";
 import { IPostMakerProps } from "../../components/postMaker/PostMaker.type";
 import Post from "../../components/post";
 import ProfileCard from "../../components/profileCard";
-import TopBar from "../../components/topBar";
-import Nav from "../../components/nav";
 import { useHistory } from "react-router-dom";
 import {
   createThreadAsync,
@@ -19,6 +17,7 @@ import {
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IFeedItem } from "../../services/feed/feed.type";
 import Status from "../../components/status";
+import Page from "../../components/page";
 
 function Home() {
   const history = useHistory();
@@ -86,9 +85,8 @@ function Home() {
   };
 
   return (
-    <div className="Home-page">
+    <Page className="Home-page">
       {/* {<Status status={status} />} */}
-      <TopBar className="Home-page__top-bar" />
       <ProfileCard
         type="home-page"
         userId="me"
@@ -116,8 +114,7 @@ function Home() {
           )}
         </ul>
       </div>
-      <Nav />
-    </div>
+    </Page>
   );
 }
 

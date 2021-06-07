@@ -1,13 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import "./Network.css";
-import backIcon from "../../images/backicon.svg";
-import Button from "../../components/button";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import ProfileCard from "../../components/profileCard";
 import OptionsMenu from "../../components/optionsMenu";
 import { IUserConnection } from "../../services/user/user.type";
-import Nav from "../../components/nav";
-import TopBar from "../../components/topBar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   removeConnectionAsync,
@@ -16,12 +12,11 @@ import {
   selectUserConnections,
 } from "../profile/profileSlice";
 import Status from "../../components/status";
+import Page from "../../components/page";
 
 function Network() {
   const match: any = useRouteMatch("/:userId");
   const userId = useRef(match.params.userId.toLowerCase());
-  const history = useHistory();
-  const handleGoBack = () => history.goBack();
 
   const connections = useSelector(
     selectUserConnections(userId.current),
@@ -58,15 +53,8 @@ function Network() {
   };
 
   return (
-    <div className="Network-page">
+    <Page className="Network-page">
       <Status status={status} />
-      <header className="Network-page__top-bar--mobile">
-        <Button role="link" onClick={handleGoBack}>
-          <img className="Network-page__back-icon" src={backIcon} alt="back" />
-        </Button>
-        <h1 className="Network-page__title">Connections</h1>
-      </header>
-      <TopBar className="Network-page__top-bar--desktop" />
       <main className="Network-page__main">
         <ul className="Network-page__connections-list">
           {connections &&
@@ -88,8 +76,7 @@ function Network() {
             )}
         </ul>
       </main>
-      <Nav />
-    </div>
+    </Page>
   );
 }
 

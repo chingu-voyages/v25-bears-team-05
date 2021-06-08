@@ -14,7 +14,9 @@ import {
   INewThreadData,
   IThreadComment,
 } from "../../services/thread/thread.type";
-import stateStatus from "../../utils/stateStatus";
+import StatusSetter from "../status/StatusSetter";
+
+const stateStatus = new StatusSetter("thread");
 
 const initialState = {
   threads: {},

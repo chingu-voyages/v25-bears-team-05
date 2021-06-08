@@ -11,7 +11,9 @@ import {
   requestAddConnection,
 } from "../../services/user/connections";
 import { IUserPatchRequest } from "../../services/user/user.type";
-import stateStatus from "../../utils/stateStatus";
+import StatusSetter from "../status/StatusSetter";
+
+const stateStatus = new StatusSetter("profile");
 
 const initialState: {
   [keyof: string]: any;

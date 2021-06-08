@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getNotifications } from "../../services/notifications";
 import { markNotificationAsRead } from "../../services/notifications/notifications";
-import stateStatus from "../../utils/stateStatus";
+import StatusSetter from "../status/StatusSetter";
+
+const stateStatus = new StatusSetter("notification");
 
 export interface INotification {
   _id: string;

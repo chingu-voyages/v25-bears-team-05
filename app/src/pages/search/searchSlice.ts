@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doLocalSearch } from "../../services/search/local";
 import { doSearch } from "../../services/search/search";
 import { ISearchResult } from "../../services/search/search.types";
-import stateStatus from "../../utils/stateStatus";
+import StatusSetter from "../status/StatusSetter";
+
+const stateStatus = new StatusSetter("search");
 
 const initialState = {
   query: "",

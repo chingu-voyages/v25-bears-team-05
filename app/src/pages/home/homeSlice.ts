@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getFeed } from "../../services/feed/feed";
 import { IFeed, IFeedItem } from "../../services/feed/feed.type";
-import stateStatus from "../../utils/stateStatus";
+import StatusSetter from "../status/StatusSetter";
+
+const stateStatus = new StatusSetter("home");
 
 const initialState = {
   feed: {},

@@ -37,14 +37,11 @@ function Nav({ className }: { className?: string }) {
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
   const dispatch = useDispatch();
-  // const notifications: INotification[] = useSelector(
-  //   selectNotifications,
-  //   shallowEqual
-  // );
 
   useEffect(() => {
     dispatch(getNotificationsAsync());
   }, [dispatch]);
+
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link

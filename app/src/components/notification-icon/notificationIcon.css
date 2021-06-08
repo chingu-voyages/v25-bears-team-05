@@ -1,4 +1,44 @@
-.Notification__icon {
-  display: grid;
-  place-items: center center;
+.Notification__count {
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  background-color: var(--color-red);
+  display: block;
+  bottom: 37px;
+  left: auto;
+  position: absolute;
+  margin-left: 16px;
+}
+
+@media only screen and (min-width: 920px) {
+  .Notification__count {
+    position: absolute;
+    bottom: 44px;
+    left: 45px;
+    width: 20px;
+    height: 20px;
+    margin-left: unset;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .Notification__count {
+    position: absolute;
+     bottom: 47px;
+     left: 64px;
+   }
+}
+
+@media only screen and (max-width: 419px) {
+  .Notification__count {
+    display: block;
+    position: absolute;
+    bottom: 28px;
+    left: auto;
+    height: 15px;
+    width: 15px;
+  }
 }

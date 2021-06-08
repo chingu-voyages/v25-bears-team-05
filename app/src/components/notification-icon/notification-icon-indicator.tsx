@@ -1,6 +1,13 @@
 import React from "react";
-export const normalIcon = (
-  <svg viewBox="0 0 460 460" width="30" height="30" x="0px" y="0px">
+export const notificationIndicatorIcon = (
+  <svg
+    className="svg-icon"
+    viewBox="0 0 460 460"
+    width="30"
+    height="30"
+    x="0px"
+    y="0px"
+  >
     <style></style>
     <path
       d="M408.079,344.152c0-154.423,7.873-291.468-144.268-308.509c0.031-0.591,0.047-1.186,0.047-1.785

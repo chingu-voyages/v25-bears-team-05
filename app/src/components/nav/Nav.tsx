@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import {
@@ -12,14 +12,17 @@ import "./Nav.css";
 
 import {
   getNotificationsAsync,
-  INotification,
-  selectNotifications,
+  selectUnreadNotificationCount,
 } from "../../pages/notifications/notificationSlice";
 
 function Nav({ className }: { className?: string }) {
   const history = useHistory();
   const pathname = history.location.pathname;
   const currentUserId = useSelector(selectCurrentUserId, shallowEqual);
+  const notificationCount = useSelector(
+    selectUnreadNotificationCount,
+    shallowEqual
+  );
   const page = pathname.match("network")
     ? "network"
     : history.location.hash.match("#newpost")
@@ -34,23 +37,11 @@ function Nav({ className }: { className?: string }) {
 
   const userInfo = useSelector(selectUserById("me"), shallowEqual);
   const dispatch = useDispatch();
-  const notifications: INotification[] = useSelector(
-    selectNotifications,
-    shallowEqual
-  );
-  const [hasNotifications, setHasNotifications] = useState(false);
-
-  useEffect(() => {
-    if (notifications && notifications.length > 0) {
-      setHasNotifications(
-        notifications.some((notification) => notification.read === false)
-      );
-    }
-  }, [notifications]);
 
   useEffect(() => {
     dispatch(getNotificationsAsync());
   }, [dispatch]);
+
   return (
     <nav className={`Nav ${className || ""}`}>
       <Link
@@ -59,7 +50,7 @@ function Nav({ className }: { className?: string }) {
           page === "notifications" ? "active" : ""
         }`}
       >
-        <NotificationIcon notificationIndicatorOn={hasNotifications} />
+        <NotificationIcon {...{ notificationCount }} />
         <span className="Nav__title">Notifications</span>
       </Link>
       <Link

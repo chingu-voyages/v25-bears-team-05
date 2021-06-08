@@ -30,10 +30,6 @@
      bottom: 47px;
      left: 64px;
    }
-   .Notification__icon {
-     /* display: grid; */
-     place-items: center center;
-   }
 }
 
 @media only screen and (max-width: 419px) {

@@ -5,6 +5,7 @@ import homeReducer from "./pages/home/homeSlice";
 import searchReducer from "./pages/search/searchSlice";
 import notificationReducer from "./pages/notifications/notificationSlice";
 import threadReducer from "./pages/thread/threadSlice";
+import statusReducer from "./pages/status/statusSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     search: searchReducer,
     notifications: notificationReducer,
     thread: threadReducer,
+    status: statusReducer,
   },
 });

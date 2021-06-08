@@ -2,7 +2,7 @@ import { Method } from "axios";
 import React, { useRef, useState } from "react";
 import imageIcon from "../../images/imageicon.svg";
 import uploadPhotoFile from "../../services/uploadPhotoFile";
-import Spinner from "../spinner";
+import Spinner from "../../pages/status/components/spinner";
 import "./PhotoUploader.css";
 
 function PhotoUploader({

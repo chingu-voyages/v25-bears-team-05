@@ -19,7 +19,7 @@ import {
   updateAvatarURL,
   updateProfileAsync,
 } from "./profileSlice";
-import Status from "../../components/status";
+import Status from "../status/components/status";
 import ApproveDenyPrompt from "../../components/connection-request/approve-deny-prompt";
 import Page from "../../components/page";
 

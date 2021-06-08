@@ -6,7 +6,7 @@ import Post from "../thread/components/post";
 import NoSearchResult from "../../components/search/sub-components/no-results";
 import SearchThreadComment from "../../components/search/sub-components/search-thread-comments";
 import UserSearchResultCard from "../../components/search/sub-components/search-users";
-import Status from "../../components/status";
+import Status from "../status/components/status";
 import { hasSearchResultContent } from "../../services/search/search";
 import "./Search.css";
 import {

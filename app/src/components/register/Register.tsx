@@ -9,7 +9,7 @@ import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import getInvalidNameMessage from "../../utils/getInvalidNameMessage";
 import localRegister from "../../services/localRegister";
 import googleAuth from "../../services/googleAuth";
-import Spinner from "../spinner";
+import Spinner from "../../pages/status/components/spinner";
 
 function Register() {
   const [email, setEmail] = useState("");

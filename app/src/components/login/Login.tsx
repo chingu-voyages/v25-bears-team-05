@@ -7,7 +7,7 @@ import googleIcon from "../../images/googleicon.svg";
 import getInvalidEmailMessage from "../../utils/getInvalidEmailMessage";
 import googleAuth from "../../services/googleAuth";
 import localLogin from "../../services/localLogin";
-import Spinner from "../spinner";
+import Spinner from "../../pages/status/components/spinner";
 
 function Login({ className }: { className?: string }) {
   const [email, setEmail] = useState("");

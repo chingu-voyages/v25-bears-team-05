@@ -1,5 +1,5 @@
 import React from "react";
-import Spinner from "../../components/spinner";
+import Spinner from "../spinner";
 import "./Loading.css";
 
 function Loading({ message }: { message: string }) {

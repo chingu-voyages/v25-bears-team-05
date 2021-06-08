@@ -1,5 +1,5 @@
 import React from "react";
-import { statusStates } from "../../utils/stateStatus";
+import { statusStates } from "../../StatusSetter";
 import PageError from "../pageError";
 import Spinner from "../spinner";
 import "./Status.css";

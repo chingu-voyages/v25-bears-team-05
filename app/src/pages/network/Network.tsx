@@ -11,7 +11,7 @@ import {
   selectProfileStatus,
   selectUserConnections,
 } from "../profile/profileSlice";
-import Status from "../../components/status";
+import Status from "../status/components/status";
 import Page from "../../components/page";
 
 function Network() {

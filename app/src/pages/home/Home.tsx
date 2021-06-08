@@ -15,7 +15,7 @@ import {
 } from "./homeSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { IFeedItem } from "../../services/feed/feed.type";
-import Status from "../../components/status";
+import Status from "../status/components/status";
 import Page from "../../components/page";
 import { createThreadAsync } from "../thread/threadSlice";
 

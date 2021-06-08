@@ -6,7 +6,7 @@ import {
   selectAuthStatus,
   selectIsLoggedIn,
 } from "../../appSlice";
-import Spinner from "../../components/spinner";
+import Spinner from "../status/components/spinner";
 
 function Login() {
   const dispatch = useDispatch();

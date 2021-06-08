@@ -8,7 +8,7 @@ import Profile from "./pages/profile";
 import Signup from "./pages/signup";
 import Logout from "./pages/logout";
 import Login from "./pages/login";
-import Loading from "./pages/loading";
+import Loading from "./pages/status/components/loading";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   checkIsAuthedAsync,

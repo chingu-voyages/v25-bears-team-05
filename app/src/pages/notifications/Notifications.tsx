@@ -2,7 +2,7 @@ import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import NotificationElement from "../../components/notification";
 import Page from "../../components/page";
-import Status from "../../components/status";
+import Status from "../status/components/status";
 import convertDateStringToTimeAgo from "../../utils/convert-time-ago";
 import { selectProfileStatus } from "../profile/profileSlice";
 import "./notifications-style.css";

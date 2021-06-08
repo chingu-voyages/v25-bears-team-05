@@ -1,5 +1,5 @@
 import React from "react";
-export const normalIcon = (
+export const notificationIndicatorIcon = (
   <svg
     className="svg-icon"
     viewBox="0 0 460 460"

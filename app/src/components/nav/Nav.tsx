@@ -50,7 +50,7 @@ function Nav({ className }: { className?: string }) {
           page === "notifications" ? "active" : ""
         }`}
       >
-        <NotificationIcon count={notificationCount} />
+        <NotificationIcon {...{ notificationCount }} />
         <span className="Nav__title">Notifications</span>
       </Link>
       <Link

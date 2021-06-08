@@ -1,12 +1,18 @@
 import React from "react";
-import { normalIcon } from "./normal-icon";
+import { notificationIndicatorIcon } from "./notification-icon-indicator";
 import "./notificationIcon.css";
-function NotificationIcon({ count }: { count: number }) {
+function NotificationIcon({
+  notificationCount,
+}: {
+  notificationCount: number;
+}) {
   return (
     <div className="Notification__icon">
-      {normalIcon}
-      {count > 0 && (
-        <span className="Notification__count">{count.toString()}</span>
+      {notificationIndicatorIcon}
+      {notificationCount > 0 && (
+        <span className="Notification__count">
+          {notificationCount.toString()}
+        </span>
       )}
     </div>
   );

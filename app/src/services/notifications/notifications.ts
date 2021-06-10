@@ -6,12 +6,11 @@ export const getNotifications = async () => {
     url: "/api/users/me/notifications",
   });
   const notifications = request.data as INotification[];
-  const sortedNotifications = notifications.sort(
+  return notifications.sort(
     (a, b) =>
       parseInt(b.createdAt.replace(/[-.:\D]/g, "")) -
       parseInt(a.createdAt.replace(/[-.:\D]/g, ""))
   );
-  return sortedNotifications;
 };
 
 export const markNotificationAsRead = async (notificationId: string) => {
@@ -21,4 +20,17 @@ export const markNotificationAsRead = async (notificationId: string) => {
     data: { read: true },
   });
   return request.data as INotification[];
+};
+
+export const dismissNotification = async (notificationId: string) => {
+  const request = await axios({
+    method: "delete",
+    url: `/api/users/me/notifications/${notificationId}`,
+  });
+  const notifications = request.data as INotification[];
+  return notifications.sort(
+    (a, b) =>
+      parseInt(b.createdAt.replace(/[-.:\D]/g, "")) -
+      parseInt(a.createdAt.replace(/[-.:\D]/g, ""))
+  );
 };

@@ -1,10 +1,8 @@
 import React from "react";
 import "./context-menu-button-style.css";
-function ContextMenuButton({ classNames }: { classNames?: string }) {
+function ContextMenuButton({ className }: { className?: string }) {
   return (
-    <div
-      className={`Context-menu-button__main ${classNames ? classNames : ""}`}
-    >
+    <div className={`Context-menu-button__main ${className ? className : ""}`}>
       <div className="one-dot"></div>
       <div className="one-dot"></div>
       <div className="one-dot"></div>

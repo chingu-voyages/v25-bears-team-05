@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getNotifications } from "../../services/notifications";
-import { markNotificationAsRead } from "../../services/notifications/notifications";
+import {
+  dismissNotification,
+  markNotificationAsRead,
+} from "../../services/notifications/notifications";
 import stateStatus from "../../utils/stateStatus";
 
 export interface INotification {
@@ -46,6 +49,13 @@ export const markNotificationAsReadAsync = createAsyncThunk(
   }
 );
 
+export const dismissNotificationAsync = createAsyncThunk(
+  "notifications/dismissNotification",
+  async (notificationId: string) => {
+    const response = await dismissNotification(notificationId);
+    return response;
+  }
+);
 function getUnreadNotificationCount(notifications: INotification[]): number {
   return notifications.reduce((acc, cv) => {
     return cv.read === false ? acc + 1 : acc + 0;
@@ -87,6 +97,19 @@ export const notificationSlice = createSlice({
       })
       .addCase(markNotificationAsReadAsync.rejected, (state) => {
         stateStatus.error(state, "unable to update notifications");
+      })
+      .addCase(dismissNotificationAsync.pending, (state) => {
+        stateStatus.loading(state, "dismissing notification");
+      })
+      .addCase(dismissNotificationAsync.fulfilled, (state, action) => {
+        stateStatus.idle(state);
+        state.unreadNotificationCount = getUnreadNotificationCount(
+          action.payload
+        );
+        state.notifications = action.payload!;
+      })
+      .addCase(dismissNotificationAsync.rejected, (state) => {
+        stateStatus.loading(state, "failed to  dismiss notification");
       });
   },
 });

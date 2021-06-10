@@ -35,9 +35,7 @@ function Search({ className }: { className?: string }) {
       setCancelQueryVisible(false);
       setLocalSearchMenuVisible(false);
     }
-    dispatch(
-      setSearchQuery({ threads, connections, query: e.target.value.trim() })
-    );
+    dispatch(setSearchQuery({ threads, connections, query: e.target.value }));
   };
   const history = useHistory();
 

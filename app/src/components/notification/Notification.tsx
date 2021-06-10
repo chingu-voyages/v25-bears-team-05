@@ -1,28 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { markNotificationAsReadAsync } from "../../pages/notifications/notificationSlice";
+import {
+  dismissNotificationAsync,
+  markNotificationAsReadAsync,
+} from "../../pages/notifications/notificationSlice";
 
 import Avatar from "../avatar";
 import ContextMenuButton from "./context-menu-button";
 import "./notification-component-style.css";
 import { INotificationCardData } from "./notification.types";
+import { useSwipeable } from "react-swipeable";
 
 function NotificationElement(props: INotificationCardData) {
   const dispatch = useDispatch();
-
+  const [isSwiping, setIsSwiping] = useState<boolean>(false);
+  const [swipingObject, setSwipingObject] = useState<any>();
   const handleOnLinkClick = (notificationId: string) => {
-    // Here we need to mark the notification as read
     dispatch(markNotificationAsReadAsync(notificationId));
   };
+
+  useEffect(() => {
+    if (swipingObject) {
+      swipingObject.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(-500px)" }],
+        { duration: 400 }
+      );
+      swipingObject.style["margin-left"] = `-1300px`;
+      setIsSwiping(false);
+    }
+  }, [isSwiping]);
+
+  const swipeHandlers = useSwipeable({
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: false,
+    onSwipedLeft: (data: any) => {
+      if (!isSwiping && data.velocity < 1) {
+        data.event.currentTarget.style["margin-left"] = `0px`;
+      }
+    },
+    onSwiping: (data: any) => {
+      const target = data.event.currentTarget;
+      if (target && target.style) {
+        setSwipingObject(target);
+        if (data.dir === "Left") {
+          target.style["margin-left"] = `${data.deltaX}px`;
+          if (data.velocity > 1) {
+            setIsSwiping(true);
+          }
+        }
+      }
+    },
+    trackTouch: true,
+  });
   return (
-    <div className="Notification__main-body">
+    <div {...swipeHandlers} className="Notification__main-body">
       {!props.read && <div className="Notification-dot"></div>}
       <Avatar className="Notification__avatar square small" userName="test" />
       <div className="Notification__message-body">
         <div className="Notification__message_area">
           <Link
-            onClick={() => handleOnLinkClick(props.id)}
+            onClick={(e: any) => {
+              handleOnLinkClick(props.id);
+            }}
             className="Notification__link"
             to={`/${props.link}/profile`}
           >
@@ -41,8 +81,7 @@ function NotificationElement(props: INotificationCardData) {
           </h5>
         </div>
       </div>
-
-      <ContextMenuButton classNames="context-menu" />
+      <ContextMenuButton className="context-menu" />
     </div>
   );
 }

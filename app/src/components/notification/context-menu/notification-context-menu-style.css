@@ -1,0 +1,74 @@
+
+.Notification-Context-menu__main-body {
+  position: absolute;
+  width: auto;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-areas: "icon icon icon";
+  right: 46px;
+}
+.contextMenuIcon {
+  height: 15px;
+  width: 15px;
+  padding: 10px;
+}
+
+.Notification-Context-menu-option {
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-grey-2);
+  height: auto;
+  
+}
+
+.Notification-Context-menu-option:hover {
+  cursor: pointer;
+  background-color: var(--color-grey-3);
+}
+
+.description {
+  font-size: 10px;
+}
+
+.toolTipText {
+  display: none;
+}
+
+@media only screen and (min-width: 920px) {
+  .Notification-Context-menu__main-body {
+    position: absolute;
+    background-color: var(--color-white);
+    border: 1px solid black;
+    width: auto;
+    color: var(--color-grey-0);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-areas: "icon icon icon";
+    margin-left: 10px;
+    right: unset;
+  }
+
+  .toolTip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  .toolTip .toolTipText {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    display: block;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .Notification-Context-menu-option:hover:hover .toolTipText {
+    visibility: visible;
+  }
+}

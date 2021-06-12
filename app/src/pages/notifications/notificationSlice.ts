@@ -24,13 +24,16 @@ export interface INotificationState {
   status: {
     state: string;
   };
+  contextMenusOpen: string[];
 }
+
 const initialState: INotificationState = {
   unreadNotificationCount: 0,
   notifications: [],
   status: {
     state: "idle",
   },
+  contextMenusOpen: [],
 };
 
 export const getNotificationsAsync = createAsyncThunk(
@@ -65,7 +68,19 @@ function getUnreadNotificationCount(notifications: INotification[]): number {
 export const notificationSlice = createSlice({
   name: "notifications",
   initialState,
-  reducers: {},
+  reducers: {
+    setContextMenuOpen(state, action: { payload: string }) {
+      if (!state.contextMenusOpen.includes(action.payload)) {
+        state.contextMenusOpen = [...state.contextMenusOpen, action.payload];
+      }
+    },
+    setCloseContextMenu(state, action: { payload: string }) {
+      const menuArray = [...state.contextMenusOpen].filter(
+        (id) => id !== action.payload
+      );
+      state.contextMenusOpen = menuArray;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getNotificationsAsync.pending, (state) => {
@@ -117,4 +132,8 @@ export const selectUnreadNotificationCount = (state: any) =>
   state.notifications.unreadNotificationCount;
 export const selectNotifications = (state: any) =>
   state.notifications.notifications;
+export const selectOpenMenus = (state: any) =>
+  state.notifications.contextMenusOpen;
 export default notificationSlice.reducer;
+export const { setContextMenuOpen } = notificationSlice.actions;
+export const { setCloseContextMenu } = notificationSlice.actions;

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   dismissNotificationAsync,
   markNotificationAsReadAsync,
+  selectOpenMenus,
+  setCloseContextMenu,
+  setContextMenuOpen,
 } from "../../pages/notifications/notificationSlice";
 
 import Avatar from "../avatar";
@@ -11,14 +14,17 @@ import ContextMenuButton from "./context-menu-button";
 import "./notification-component-style.css";
 import { INotificationCardData } from "./notification.types";
 import { useSwipeable } from "react-swipeable";
+import NotificationContextMenu from "./context-menu";
 
 function NotificationElement(props: INotificationCardData) {
   const dispatch = useDispatch();
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
   const [swipingObject, setSwipingObject] = useState<any>();
+  const [contextMenuVisible, setContextMenuVisible] = useState<boolean>(false);
   const handleOnLinkClick = (notificationId: string) => {
     dispatch(markNotificationAsReadAsync(notificationId));
   };
+  const openMenus = useSelector(selectOpenMenus, shallowEqual);
 
   useEffect(() => {
     if (swipingObject) {
@@ -53,6 +59,37 @@ function NotificationElement(props: INotificationCardData) {
     },
     trackTouch: true,
   });
+
+  const clickedInMenuRef = useRef(false);
+
+  useEffect(() => {
+    const handleClose = () => {
+      if (!clickedInMenuRef.current) {
+        setContextMenuVisible(false);
+        dispatch(setCloseContextMenu(props.id));
+      } else {
+        clickedInMenuRef.current = false;
+
+        window?.addEventListener("click", handleClose, { once: true });
+      }
+    };
+    if (contextMenuVisible) {
+      window?.addEventListener("click", handleClose, { once: true });
+    }
+    return () => {
+      // openedMenus.current = {[props.id]: false}
+      window?.removeEventListener("click", handleClose);
+    };
+  }, [contextMenuVisible]);
+
+  const handleContextMenuClick = () => {
+    if (openMenus && openMenus.length === 0) {
+      clickedInMenuRef.current = true;
+      setContextMenuVisible(true);
+      dispatch(setContextMenuOpen(props.id));
+    }
+  };
+
   return (
     <div {...swipeHandlers} className="Notification__main-body">
       {!props.read && <div className="Notification-dot"></div>}
@@ -81,7 +118,15 @@ function NotificationElement(props: INotificationCardData) {
           </h5>
         </div>
       </div>
-      <ContextMenuButton className="context-menu" />
+
+      <ContextMenuButton
+        className="context-menu"
+        clickHandler={handleContextMenuClick}
+      >
+        {contextMenuVisible && (
+          <NotificationContextMenu notificationId={props.id} />
+        )}
+      </ContextMenuButton>
     </div>
   );
 }

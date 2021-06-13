@@ -19,10 +19,10 @@ const ToolTip = ({ text }: { text: string }) => (
 
 function NotificationContextMenu({
   notification,
-  eventProps,
+  onMenuOptionClicked,
 }: {
   notification: INotificationCardData;
-  eventProps: (
+  onMenuOptionClicked: (
     notificationId: string,
     action: NotificationContextMenuAction
   ) => void;
@@ -32,7 +32,10 @@ function NotificationContextMenu({
       <div
         className="Notification-Context-menu-option"
         onClick={() =>
-          eventProps(notification.id, NotificationContextMenuAction.DELETE)
+          onMenuOptionClicked(
+            notification.id,
+            NotificationContextMenuAction.DELETE
+          )
         }
       >
         <img className="contextMenuIcon" src={TrashIcon} alt="delete"></img>
@@ -41,7 +44,10 @@ function NotificationContextMenu({
       <div
         className="Notification-Context-menu-option"
         onClick={() =>
-          eventProps(notification.id, NotificationContextMenuAction.MUTE)
+          onMenuOptionClicked(
+            notification.id,
+            NotificationContextMenuAction.MUTE
+          )
         }
       >
         <img className="contextMenuIcon" src={MuteIcon} alt="mute"></img>
@@ -50,7 +56,10 @@ function NotificationContextMenu({
       <div
         className="Notification-Context-menu-option"
         onClick={() =>
-          eventProps(notification.id, NotificationContextMenuAction.TURN_OFF)
+          onMenuOptionClicked(
+            notification.id,
+            NotificationContextMenuAction.TURN_OFF
+          )
         }
       >
         <img className="contextMenuIcon" src={TurnOffIcon} alt="turn off"></img>

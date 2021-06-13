@@ -148,7 +148,7 @@ function NotificationElement(props: INotificationCardData) {
         {contextMenuVisible && (
           <NotificationContextMenu
             notification={props}
-            eventProps={contextMenuOptionClickHandler}
+            onMenuOptionClicked={contextMenuOptionClickHandler}
           />
         )}
       </ContextMenuButton>

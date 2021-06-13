@@ -31,6 +31,7 @@
 
 .toolTipText {
   display: none;
+  font-family: "Roboto", sans-serif;
 }
 
 @media only screen and (min-width: 920px) {
@@ -52,6 +53,7 @@
     display: inline-block;
     border-bottom: 1px dotted black;
   }
+  
   .toolTip .toolTipText {
     visibility: hidden;
     width: 120px;
@@ -60,14 +62,11 @@
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
-   
-    /* Position the tooltip text - see examples below! */
     position: absolute;
     z-index: 1;
     display: block;
   }
   
-  /* Show the tooltip text when you mouse over the tooltip container */
   .Notification-Context-menu-option:hover:hover .toolTipText {
     visibility: visible;
   }

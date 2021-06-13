@@ -15,6 +15,7 @@ import "./notification-component-style.css";
 import { INotificationCardData } from "./notification.types";
 import { useSwipeable } from "react-swipeable";
 import NotificationContextMenu from "./context-menu";
+import { NotificationContextMenuAction } from "./context-menu/Notification-context-menu";
 
 function NotificationElement(props: INotificationCardData) {
   const dispatch = useDispatch();
@@ -33,13 +34,16 @@ function NotificationElement(props: INotificationCardData) {
         { duration: 400 }
       );
       swipingObject.style["margin-left"] = `-1300px`;
-      setIsSwiping(false);
+      if (props.id) {
+        dispatch(dismissNotificationAsync(props.id));
+        setIsSwiping(false);
+      }
     }
-  }, [isSwiping]);
+  }, [dispatch, swipingObject, props.id]);
 
   const swipeHandlers = useSwipeable({
     preventDefaultTouchmoveEvent: true,
-    trackMouse: false,
+    trackMouse: true,
     onSwipedLeft: (data: any) => {
       if (!isSwiping && data.velocity < 1) {
         data.event.currentTarget.style["margin-left"] = `0px`;
@@ -69,7 +73,6 @@ function NotificationElement(props: INotificationCardData) {
         dispatch(setCloseContextMenu(props.id));
       } else {
         clickedInMenuRef.current = false;
-
         window?.addEventListener("click", handleClose, { once: true });
       }
     };
@@ -87,6 +90,25 @@ function NotificationElement(props: INotificationCardData) {
       clickedInMenuRef.current = true;
       setContextMenuVisible(true);
       dispatch(setContextMenuOpen(props.id));
+    }
+  };
+
+  const contextMenuOptionClickHandler = (
+    notificationId: string,
+    action: NotificationContextMenuAction
+  ) => {
+    dispatch(setCloseContextMenu(props.id));
+    setContextMenuVisible(false);
+    switch (action) {
+      case NotificationContextMenuAction.DELETE:
+        dispatch(dismissNotificationAsync(props.id));
+        break;
+      case NotificationContextMenuAction.MUTE:
+        console.log("Not yet implemented");
+        break;
+      case NotificationContextMenuAction.TURN_OFF:
+        console.log("Not yet implemented");
+        break;
     }
   };
 
@@ -124,7 +146,10 @@ function NotificationElement(props: INotificationCardData) {
         clickHandler={handleContextMenuClick}
       >
         {contextMenuVisible && (
-          <NotificationContextMenu notificationId={props.id} />
+          <NotificationContextMenu
+            notification={props}
+            eventProps={contextMenuOptionClickHandler}
+          />
         )}
       </ContextMenuButton>
     </div>

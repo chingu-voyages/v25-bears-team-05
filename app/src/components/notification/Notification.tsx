@@ -46,7 +46,9 @@ function NotificationElement(props: INotificationCardData) {
     trackMouse: true,
     onSwipedLeft: (data: any) => {
       if (!isSwiping && data.velocity < 1) {
-        data.event.currentTarget.style["margin-left"] = `0px`;
+        if (data.event.currentTarget) {
+          data.event.currentTarget.style["margin-left"] = `0px`;
+        }
       }
     },
     onSwiping: (data: any) => {

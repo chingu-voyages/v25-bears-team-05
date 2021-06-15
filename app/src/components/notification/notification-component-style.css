@@ -51,3 +51,17 @@
   align-self: center;
   margin-right: 30px;
 }
+
+.Notification-action-confirmation__main {
+  position: absolute;
+  z-index: 10;
+  left: 50vw;
+  background-color: var(--color-black);
+  border: 1px solid var(--color-green-3);
+  width: 200px;
+  padding: 5px;
+}
+
+.Notification-action-confirmation__options {
+  display: flex;
+}

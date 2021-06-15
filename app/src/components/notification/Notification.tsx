@@ -16,12 +16,20 @@ import { INotificationCardData } from "./notification.types";
 import { useSwipeable } from "react-swipeable";
 import NotificationContextMenu from "./context-menu";
 import { NotificationContextMenuAction } from "./context-menu/Notification-context-menu";
+import Button from "../button";
 
 function NotificationElement(props: INotificationCardData) {
   const dispatch = useDispatch();
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
   const [swipingObject, setSwipingObject] = useState<any>();
   const [contextMenuVisible, setContextMenuVisible] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [
+    confirmationAction,
+    setConfirmationAction,
+  ] = useState<NotificationContextMenuAction | null>(null);
+  const [confirmationMessage, setConfirmationMessage] = useState<string>("");
+
   const handleOnLinkClick = (notificationId: string) => {
     dispatch(markNotificationAsReadAsync(notificationId));
   };
@@ -103,15 +111,57 @@ function NotificationElement(props: INotificationCardData) {
     setContextMenuVisible(false);
     switch (action) {
       case NotificationContextMenuAction.DELETE:
-        dispatch(dismissNotificationAsync(props.id));
+        setConfirmationAction(NotificationContextMenuAction.DELETE);
+        setShowConfirmation(true);
+        setConfirmationMessage("Confirm delete");
         break;
       case NotificationContextMenuAction.MUTE:
-        console.log("Not yet implemented");
-        break;
       case NotificationContextMenuAction.TURN_OFF:
+        //setConfirmationAction(NotificationContextMenuAction.DELETE)
+        setShowConfirmation(true);
         console.log("Not yet implemented");
         break;
     }
+  };
+
+  const handleConfirmationAction = (action: NotificationContextMenuAction) => {
+    switch (action) {
+      case NotificationContextMenuAction.DELETE:
+        setShowConfirmation(false);
+        setConfirmationMessage("");
+        setConfirmationAction(null);
+        deleteNotificationAction();
+    }
+  };
+
+  const deleteNotificationAction = () =>
+    dispatch(dismissNotificationAsync(props.id));
+
+  useEffect(() => {}, [showConfirmation, confirmationAction]);
+
+  const NotificationActionConfirmation = () => {
+    return confirmationAction ? (
+      <div className="Notification-action-confirmation__main">
+        <h4>{confirmationMessage}</h4>
+        <div className="Notification-action-confirmation__options">
+          <Button
+            className="square"
+            onClick={() => setConfirmationAction(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="square primary"
+            onClick={() => handleConfirmationAction(confirmationAction)}
+          >
+            {" "}
+            Yes{" "}
+          </Button>
+        </div>
+      </div>
+    ) : (
+      <div></div>
+    );
   };
 
   return (
@@ -142,7 +192,7 @@ function NotificationElement(props: INotificationCardData) {
           </h5>
         </div>
       </div>
-
+      {showConfirmation && NotificationActionConfirmation()}
       <ContextMenuButton
         className="context-menu"
         clickHandler={handleContextMenuClick}

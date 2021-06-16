@@ -51,7 +51,7 @@ function NotificationElement(props: INotificationCardData) {
     trackTouch: true,
     onSwipedLeft: (data: any) => {
       if (!isSwiping && data.velocity < 1) {
-        if (data.event.currentTarget) {
+        if (data.event?.currentTarget?.style) {
           data.event.currentTarget.style["margin-left"] = `0px`;
         }
       }

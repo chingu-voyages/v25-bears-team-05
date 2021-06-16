@@ -16,7 +16,7 @@ import { INotificationCardData } from "./notification.types";
 import { useSwipeable } from "react-swipeable";
 import NotificationContextMenu from "./context-menu";
 import { NotificationContextMenuAction } from "./context-menu/Notification-context-menu";
-import Button from "../button";
+import NotificationActionConfirmation from "./notification-confirmation-action-modal";
 
 function NotificationElement(props: INotificationCardData) {
   const dispatch = useDispatch();
@@ -37,21 +37,18 @@ function NotificationElement(props: INotificationCardData) {
 
   useEffect(() => {
     if (swipingObject) {
-      swipingObject.animate(
-        [{ transform: "translateX(0px)" }, { transform: "translateX(-500px)" }],
-        { duration: 400 }
-      );
       swipingObject.style["margin-left"] = `-1300px`;
-      if (props.id) {
+      if (props.id && isSwiping) {
         dispatch(dismissNotificationAsync(props.id));
         setIsSwiping(false);
       }
     }
-  }, [dispatch, swipingObject, props.id]);
+  }, [dispatch, swipingObject, props.id, isSwiping]);
 
   const swipeHandlers = useSwipeable({
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,
+    trackTouch: true,
     onSwipedLeft: (data: any) => {
       if (!isSwiping && data.velocity < 1) {
         if (data.event.currentTarget) {
@@ -63,15 +60,12 @@ function NotificationElement(props: INotificationCardData) {
       const target = data.event.currentTarget;
       if (target && target.style) {
         setSwipingObject(target);
-        if (data.dir === "Left") {
+        if (data.dir === "Left" && data.velocity > 1) {
           target.style["margin-left"] = `${data.deltaX}px`;
-          if (data.velocity > 1) {
-            setIsSwiping(true);
-          }
+          setIsSwiping(true);
         }
       }
     },
-    trackTouch: true,
   });
 
   const clickedInMenuRef = useRef(false);
@@ -118,92 +112,87 @@ function NotificationElement(props: INotificationCardData) {
       case NotificationContextMenuAction.MUTE:
       case NotificationContextMenuAction.TURN_OFF:
         //setConfirmationAction(NotificationContextMenuAction.DELETE)
-        setShowConfirmation(true);
         console.log("Not yet implemented");
         break;
     }
   };
 
-  const handleConfirmationAction = (action: NotificationContextMenuAction) => {
+  const handleConfirmationAction = (
+    action: NotificationContextMenuAction | null
+  ) => {
     switch (action) {
       case NotificationContextMenuAction.DELETE:
         setShowConfirmation(false);
         setConfirmationMessage("");
         setConfirmationAction(null);
         deleteNotificationAction();
+        break;
+      default:
+        console.log("Not implemented");
     }
+  };
+
+  const handleCancelAction = () => {
+    setShowConfirmation(false);
+    setConfirmationMessage("");
+    setConfirmationAction(null);
   };
 
   const deleteNotificationAction = () =>
     dispatch(dismissNotificationAsync(props.id));
 
-  useEffect(() => {}, [showConfirmation, confirmationAction]);
-
-  const NotificationActionConfirmation = () => {
-    return confirmationAction ? (
-      <div className="Notification-action-confirmation__main">
-        <h4>{confirmationMessage}</h4>
-        <div className="Notification-action-confirmation__options">
-          <Button
-            className="square"
-            onClick={() => setConfirmationAction(null)}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="square primary"
-            onClick={() => handleConfirmationAction(confirmationAction)}
-          >
-            {" "}
-            Yes{" "}
-          </Button>
-        </div>
-      </div>
-    ) : (
-      <div></div>
-    );
-  };
-
   return (
-    <div {...swipeHandlers} className="Notification__main-body">
-      {!props.read && <div className="Notification-dot"></div>}
-      <Avatar className="Notification__avatar square small" userName="test" />
-      <div className="Notification__message-body">
-        <div className="Notification__message_area">
-          <Link
-            onClick={(e: any) => {
-              handleOnLinkClick(props.id);
-            }}
-            className="Notification__link"
-            to={`/${props.link}/profile`}
-          >
-            <h4 className={`${!props.read ? "unread" : "read"}`}>
-              {props.message}
-            </h4>
-          </Link>
+    <div className="Notification__main__parent">
+      {showConfirmation &&
+        NotificationActionConfirmation({
+          onCancel: handleCancelAction,
+          onConfirm: () => handleConfirmationAction(confirmationAction),
+          message: confirmationMessage,
+        })}
+      <div {...swipeHandlers} className="Notification__main-body">
+        {!props.read && <div className="Notification-dot"></div>}
+        <Avatar className="Notification__avatar square small" userName="test" />
+        <div className="Notification__message-body">
+          <div className="Notification__message_area">
+            <Link
+              onClick={(e: any) => {
+                handleOnLinkClick(props.id);
+              }}
+              className="Notification__link"
+              to={`/${props.link}/profile`}
+            >
+              <h4
+                className={`${
+                  !props.read ? "unread" : "read"
+                } Notification__message-text`}
+              >
+                {props.message}
+              </h4>
+            </Link>
+          </div>
+          <div className="Notification__time-ago">
+            <h5
+              className={`Notification__Time-ago-style ${
+                !props.read ? "unread" : "read"
+              }`}
+            >
+              {props.timeAgo}
+            </h5>
+          </div>
         </div>
-        <div className="Notification__time-ago">
-          <h5
-            className={`Notification__Time-ago-style ${
-              !props.read ? "unread" : "read"
-            }`}
-          >
-            {props.timeAgo}
-          </h5>
-        </div>
+
+        <ContextMenuButton
+          className="context-menu"
+          clickHandler={handleContextMenuClick}
+        >
+          {contextMenuVisible && (
+            <NotificationContextMenu
+              notification={props}
+              onMenuOptionClicked={contextMenuOptionClickHandler}
+            />
+          )}
+        </ContextMenuButton>
       </div>
-      {showConfirmation && NotificationActionConfirmation()}
-      <ContextMenuButton
-        className="context-menu"
-        clickHandler={handleContextMenuClick}
-      >
-        {contextMenuVisible && (
-          <NotificationContextMenu
-            notification={props}
-            onMenuOptionClicked={contextMenuOptionClickHandler}
-          />
-        )}
-      </ContextMenuButton>
     </div>
   );
 }

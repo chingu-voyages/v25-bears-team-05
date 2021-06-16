@@ -22,6 +22,7 @@
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "react-swipeable": "^6.1.2",
     "redux": "^4.0.5",
     "socket.io-client": "^4.0.2",
     "typescript": "^4.0.5",
@@ -55,6 +56,7 @@
   "proxy": "http://localhost:5000",
   "devDependencies": {
     "@types/lodash": "^4.14.170",
+    "@types/react-swipeable": "^5.2.0",
     "redux-devtools": "^3.7.0",
     "ts-node": "^10.0.0"
   }

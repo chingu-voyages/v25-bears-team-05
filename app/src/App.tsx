@@ -66,11 +66,9 @@ function App() {
         dispatch(getNotificationsAsync());
       });
     }
-  }, [socket.current]);
+  }, [socket.current, dispatch]);
 
   const handleNotificationData = (data: any) => {
-    // NOTIFICATION FROM SERVER
-    console.log("App.tsx line 64", data); // Leave here for debugging purposes
     if (data.type === "connection_request_approved") {
       dispatch(getUsersAsync(["me"]));
     }

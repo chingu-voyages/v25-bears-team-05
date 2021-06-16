@@ -10,6 +10,7 @@ import { INotification, selectNotifications } from "./notificationSlice";
 function Notifications() {
   const status = useSelector(selectProfileStatus, shallowEqual);
   const notifications = useSelector(selectNotifications, shallowEqual);
+
   return (
     <Page className="Notifications-page">
       <Status status={status} />

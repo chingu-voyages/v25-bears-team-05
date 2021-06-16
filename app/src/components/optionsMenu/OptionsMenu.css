@@ -14,6 +14,7 @@
   color: var(--primary-text-color);
   z-index: 100;
   border: solid var(--primary-text-color) 1px;
+  margin-top: 10%;
 }
 
 .Options-menu__hidden-input {

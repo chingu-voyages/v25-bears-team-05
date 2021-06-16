@@ -7,6 +7,13 @@
   width: 100%;
 }
 
+.Notifications-empty-list {
+  background-color: var(--color-black);
+  border: 1px solid white;
+  border-radius: 8px;
+  text-align: center;
+}
+
 @media only screen and (min-width: 920px) {
   .Notifications-page__main {
     display: grid;

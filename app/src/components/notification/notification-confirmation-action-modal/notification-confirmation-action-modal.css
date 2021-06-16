@@ -1,0 +1,40 @@
+.Notification-action-confirmation__main {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background:rgba(158, 169, 164, 0.65);
+  z-index: 10000;
+  top: 0px;
+  left: 0px;
+}
+
+.Notification-action-confirmation__body {
+  background-color: var(--color-black);
+  border: 1px solid var(--color-green-3);
+  width: 200px;
+  padding: 5px;
+  margin-left: 36%;
+  margin-top: 64px;
+}
+
+.Notification-action-confirmation__options {
+  display: flex;
+}
+
+h4.align-center {
+  text-align: center;
+}
+
+@media only screen and (max-width: 420px) {
+  .Notification-action-confirmation__body {
+    margin-top: 20%;
+    margin-left: 16%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .Notification-action-confirmation__body {
+    margin-top: 10%;
+    margin-left: 40%;
+  }
+}

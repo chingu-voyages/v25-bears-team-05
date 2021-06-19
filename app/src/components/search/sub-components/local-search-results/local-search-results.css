@@ -69,8 +69,14 @@
   margin-left: 2em;
 }
 
-.link__User-profile {
+.link__User-profile, .Local-Search__thread-link {
   text-decoration: none;
+  color: var(--color-black);
+}
+
+.ThreadInfo-text, .ThreadCommentInfo-text {
+  font-size: 12px;
+  margin-left: 15px;
 }
 
 @media only screen and (min-width: 920px) {

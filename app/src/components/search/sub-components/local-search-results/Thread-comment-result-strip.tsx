@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MiniProfileIcon from "../../../../images/miniprofile.svg";
 import ThreadCommentIcon from "../../../../images/thread-comment.svg";
 import { IThreadsCommentSearchMatch } from "../../../../services/search/local";
@@ -32,10 +33,15 @@ function ThreadCommentResultStrip({
         alt="thread comment"
       />
       <div className="ResultStrip__ThreadCommentInfo-section">
-        <p className="ThreadCommentInfo-text">{`${getStringExcerpt({
-          queryString: queryString,
-          threadContent: data.content,
-        })}`}</p>
+        <Link
+          className="Local-Search__thread-link"
+          to={`/thread/${data.parentThreadId}/${data._id}`}
+        >
+          <p className="ThreadCommentInfo-text">{`${getStringExcerpt({
+            queryString: queryString,
+            threadContent: data.content,
+          })}`}</p>
+        </Link>
       </div>
     </div>
   );

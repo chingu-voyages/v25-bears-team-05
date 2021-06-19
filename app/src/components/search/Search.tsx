@@ -76,6 +76,11 @@ function Search({ className }: { className?: string }) {
     };
   }, [localSearchMenuVisible]);
 
+  const closeLocalSearch = () => {
+    setLocalSearchMenuVisible(false);
+    clickedInMenuRef.current = true;
+  };
+
   return (
     <div className={`Search ${className || ""}`}>
       <input
@@ -103,7 +108,7 @@ function Search({ className }: { className?: string }) {
         <LocalSearchResults
           results={localResults}
           queryString={query}
-          onClick={() => (clickedInMenuRef.current = true)}
+          onClick={closeLocalSearch}
         />
       )}
     </div>

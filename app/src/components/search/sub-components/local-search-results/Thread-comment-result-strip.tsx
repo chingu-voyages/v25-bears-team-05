@@ -35,7 +35,7 @@ function ThreadCommentResultStrip({
       <div className="ResultStrip__ThreadCommentInfo-section">
         <Link
           className="Local-Search__thread-link"
-          to={`/thread/${data.parentThreadId}/${data._id}`}
+          to={`/thread/${data.parentThreadId}/comment/${data._id}`}
         >
           <p className="ThreadCommentInfo-text">{`${getStringExcerpt({
             queryString: queryString,

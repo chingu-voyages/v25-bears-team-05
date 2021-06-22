@@ -46,7 +46,7 @@ export function doLocalSearch({
   };
 }
 
-function queryConnections({
+export function queryConnections({
   connections,
   queryString,
 }: {
@@ -70,7 +70,7 @@ function queryConnections({
   return [];
 }
 
-function queryThreads({
+export function queryThreads({
   threads,
   queryString,
 }: {
@@ -93,7 +93,7 @@ function queryThreads({
   return [];
 }
 
-function queryThreadComments({
+export function queryThreadComments({
   threads,
   queryString,
 }: {
@@ -116,9 +116,19 @@ function queryThreadComments({
   const flattenedThreadCommentsArray = _flatten(threadsCommentCollection);
   const regExp = new RegExp(queryString, "i");
   const mingoSearchTerm = { "content": regExp };
-  const results = new mingo.Query(mingoSearchTerm)
+  const rawResults = new mingo.Query(mingoSearchTerm)
     .find(flattenedThreadCommentsArray)
-    .all();
-  if (results) return results as IThreadsCommentSearchMatch[];
-  return [];
+    .all() as IThreadsCommentSearchMatch[];
+
+  const results: IThreadsCommentSearchMatch[] = rawResults.map((result) => {
+    return {
+      _id: result._id,
+      content: result.content,
+      parentThreadId: result.parentThreadId,
+      parentThreadOriginatorId: result.parentThreadOriginatorId,
+      postedByUserId: result.postedByUserId,
+      updatedAt: result.updatedAt,
+    };
+  });
+  return results ? results : [];
 }

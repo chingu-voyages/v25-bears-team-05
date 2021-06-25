@@ -20,12 +20,10 @@ export enum StripType {
 }
 
 function ResultStrip({
-  classNameInfo,
   stripType,
   data,
   queryString,
 }: {
-  classNameInfo?: string;
   stripType: StripType;
   data:
     | IConnectionsSearchMatch

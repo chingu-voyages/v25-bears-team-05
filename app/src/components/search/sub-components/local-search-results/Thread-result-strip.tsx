@@ -3,6 +3,7 @@ import { IThreadsSearchMatch } from "../../../../services/search/local";
 import MiniProfileIcon from "../../../../images/miniprofile.svg";
 import ThreadIcon from "../../../../images/comment-icon.svg";
 import { getStringExcerpt } from "../../search.helpers";
+import { Link } from "react-router-dom";
 function ThreadResultStrip({
   data,
   classNameInfo,
@@ -28,10 +29,14 @@ function ThreadResultStrip({
       </div>
       <img className="comment-icon" src={ThreadIcon} alt="thread" />
       <div className="ResultStrip__ThreadInfo-section">
-        <p className="ThreadInfo-text">{`${getStringExcerpt({
-          queryString: queryString,
-          threadContent: (data as IThreadsSearchMatch).content.html,
-        })}`}</p>
+        <Link className="Local-Search__thread-link" to={`/thread/${data.id}`}>
+          <p className="ThreadInfo-text">
+            {`${getStringExcerpt({
+              queryString: queryString,
+              threadContent: data.content.html,
+            })}`}
+          </p>
+        </Link>
       </div>
     </div>
   );

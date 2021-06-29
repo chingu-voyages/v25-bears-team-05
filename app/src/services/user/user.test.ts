@@ -185,8 +185,5 @@ describe("updateUser", () => {
     await expect(updateUser({ data: patchRequest })).rejects.toThrow(
       "Bad request"
     );
-    // const res = await updateUser({ data: patchRequest})
-    // console.log(res);
-    // expect(res).toEqual(patchRequest);
   });
 });

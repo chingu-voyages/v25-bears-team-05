@@ -4,7 +4,7 @@ import { ISearchResults } from "./search.types";
 describe("search results tests", () => {
   test("returns false when the data is empty", () => {
     const sampleSearchResult: ISearchResults = {
-      query_string: "There is something",
+      queryString: "There is something",
       private_thread_comments: [],
       private_threads: [],
       public_thread_comments: [],
@@ -15,7 +15,7 @@ describe("search results tests", () => {
   });
   test("returns true when there are results", () => {
     const sampleSearchResult: ISearchResults = {
-      query_string: "Some User value",
+      queryString: "Some User value",
       private_thread_comments: [],
       private_threads: [],
       public_thread_comments: [],

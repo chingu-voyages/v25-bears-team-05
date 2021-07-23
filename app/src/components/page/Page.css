@@ -1,0 +1,6 @@
+.Page {
+  padding-bottom: 60px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: start stretch;
+}

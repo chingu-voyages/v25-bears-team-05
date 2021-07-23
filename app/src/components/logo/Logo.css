@@ -3,6 +3,19 @@
   place-items: center center;
 }
 
+.wrapper__Logo:hover {
+  cursor: pointer;
+}
 .Logo {
   width: 100%;
+}
+
+@media only screen and (min-width: 1200px) {
+  .Logo {
+    width: 200px;
+  }
+}
+
+.Logo--condensed {
+  width: 54px;
 }

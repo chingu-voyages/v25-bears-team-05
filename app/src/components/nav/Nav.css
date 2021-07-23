@@ -1,6 +1,6 @@
 .Nav {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   height: 48px;
   padding: 6px 0;
   position: fixed;
@@ -9,20 +9,68 @@
   width: 100%;
   z-index: 1500;
 }
-.Nav img {
+@media only screen and (min-width: 920px) {
+  .Nav {
+    display: none;
+  }
+}
+.Nav__avatar-menu button div {
+  box-sizing: border-box;
   width: 30px;
 }
-.Nav a {
+.Nav a,
+.Nav__avatar-menu,
+.Nav__avatar-menu, button {
   display: grid;
   place-items: center center;
   color: var(--secondary-text-color);
   text-decoration: none;
 }
+
+.Nav__notification_icon div {
+  display: grid;
+  place-items: center center;
+}
+
+.Nav__avatar-menu {
+  display: none;
+}
+
+.Nav__title {
+  display: none;
+}
+
+@media only screen and (min-width: 420px) {
+  .Nav__title {
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 920px) {
+  .Nav {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .Nav__avatar-menu {
+    display: grid;
+  }
+  .Nav a {
+    font-size: 14px;
+    width: 80px;
+  }
+}
 .Nav svg {
   fill: var(--secondary-text-color);
+  height: 20px;
 }
 .Nav a.active,
 .Nav a.active svg {
   color: var(--primary-green-color);
   fill: var(--primary-green-color);
+}
+
+@media only screen and (min-width: 1200px) {
+  .Nav a {
+    font-size: 18px;
+    width: 120px;
+  }
 }

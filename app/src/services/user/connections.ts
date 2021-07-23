@@ -29,59 +29,75 @@ const getConnections = async ({
   }
 };
 
-const removeConnection = async ({
-  connectionId,
-  onSuccess,
-  onError,
-}: {
-  connectionId: string;
-  onSuccess: () => void;
-  onError: (message: string) => void;
-}) => {
-  try {
-    const req = await axios({
-      method: "delete",
-      url: `/api/users/connections/${connectionId}`,
-    });
-    if (req.status === 200) {
-      onSuccess();
-    } else {
-      onError(req.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError("Connection not removed, please try again later");
-  }
+const removeConnection = async ({ targetUserId }: { targetUserId: string }) => {
+  const res = await axios({
+    method: "delete",
+    url: `/api/users/me/connections/${targetUserId}`,
+  });
+  return res?.data;
 };
 
 const addConnection = async ({
   connectionId,
+  connectionRequestDocumentId,
+}: {
+  connectionId: string;
+  connectionRequestDocumentId: string;
+}) => {
+  const req = await axios({
+    method: "put",
+    url: `/api/users/${connectionId}/connections`,
+    data: { connectionRequestDocumentId },
+  });
+  return req?.data;
+};
+
+const requestAddConnection = async ({
+  connectionId,
   isTeamMate,
-  onSuccess,
-  onError,
 }: {
   connectionId: string;
   isTeamMate: boolean;
-  onSuccess: () => void;
-  onError: (message: string) => void;
 }) => {
-  try {
-    const req = await axios({
-      method: "put",
-      url: `/api/users/connections/${connectionId}`,
-      data: { isTeamMate },
-    });
-    if (req.status === 200) {
-      onSuccess();
-    } else {
-      onError(req.statusText);
-    }
-  } catch (error) {
-    console.error(error);
-    typeof error?.message === "string" &&
-      onError("Connection not added, please try again later");
-  }
+  const req = await axios({
+    method: "post",
+    url: `/api/request/connection/${connectionId}`,
+    data: { isTeamMate },
+  });
+  return req?.data;
 };
 
-export { getConnections, removeConnection, addConnection };
+const cancelAddConnectionRequest = async ({
+  connectionId,
+}: {
+  connectionId: string;
+}) => {
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${connectionId}`,
+    data: { origin: "requestor" },
+  });
+  return req?.data;
+};
+
+const declineConnectionRequest = async ({
+  requestorId,
+}: {
+  requestorId: string;
+}) => {
+  const req = await axios({
+    method: "delete",
+    url: `/api/request/connection/${requestorId}`,
+    data: { origin: "approver" },
+  });
+  return req?.data;
+};
+
+export {
+  getConnections,
+  removeConnection,
+  addConnection,
+  requestAddConnection,
+  cancelAddConnectionRequest,
+  declineConnectionRequest,
+};

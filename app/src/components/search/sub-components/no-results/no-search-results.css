@@ -1,0 +1,12 @@
+
+.search-result__no-result {
+  height: 5rem;
+  border: 1px solid var(--color-white);
+  border-radius: 8px;
+  background-color: var(--black-background-color);
+}
+
+.search-result__text-content {
+  text-align: center;
+  padding-top: 2%;
+}

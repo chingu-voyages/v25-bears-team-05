@@ -1,3 +1,15 @@
-import { addThread } from "./thread";
+import {
+  getThread,
+  getThreads,
+  addThread,
+  addThreadReaction,
+  removeThreadReaction,
+} from "./thread";
 
-export { addThread };
+export {
+  getThread,
+  getThreads,
+  addThread,
+  addThreadReaction,
+  removeThreadReaction,
+};

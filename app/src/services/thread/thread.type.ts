@@ -3,9 +3,15 @@ export interface IAttachmentType {
 }
 
 export interface IThreadComment {
+  id?: string;
+  _id: string;
   postedByUserId: string;
   content: string;
-  attachments?: Array<IAttachmentType>;
+  updatedAt: string;
+  createdAt: string;
+  parentThreadId: string;
+  parentThreadVisibility: ThreadVisibility;
+  parentThreadOriginatorId: string;
 }
 
 export enum ThreadLikeTypeTitle {
@@ -29,7 +35,7 @@ export interface IThreadShare {
     hashTags: Array<string>;
     attachments: Array<string>;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
 }
@@ -47,6 +53,7 @@ export enum ThreadVisibility {
 }
 
 export interface IThread {
+  id?: string;
   _id: string;
   postedByUserId: string;
   threadType: ThreadType;
@@ -55,11 +62,14 @@ export interface IThread {
     html: string;
     hashTags: Array<string>;
     attachments: Array<string>;
+    updatedAt: string;
+    createdAt: string;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
   likes: { [keyof: string]: IThreadLike };
   shares: { [keyof: string]: IThreadShare };
   updatedAt: string;
+  createdAt: string;
 }
 
 export interface INewThreadData {
@@ -81,6 +91,8 @@ export interface IThreadDataProcessed {
     html: string;
     hashTags?: Array<string>;
     attachments?: Array<string>;
+    updatedAt: string;
+    createdAt: string;
   };
   postedByUserId: string;
   threadType: ThreadType;
@@ -91,5 +103,7 @@ export interface IThreadDataProcessed {
   currentUserReactions: {
     [reactionType: string]: string | false;
   };
-  comments: { [keyof: string]: IThreadComment };
+  comments: Array<IThreadComment>;
+  updatedAt: string;
+  createdAt: string;
 }

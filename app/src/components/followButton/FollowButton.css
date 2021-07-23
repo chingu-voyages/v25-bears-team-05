@@ -16,3 +16,7 @@
 .Follow-button__progress__spinner {
   width: 50px;
 }
+
+.Btn-Cancel-request:hover {
+  cursor: pointer;
+}

@@ -76,6 +76,7 @@ function Register() {
               errorMessageReturner={(message) =>
                 handleErrorMessageReturn(0, message)
               }
+              className="breakout-on-large-view"
             />
             <Input
               label="Last name"
@@ -87,6 +88,7 @@ function Register() {
               errorMessageReturner={(message) =>
                 handleErrorMessageReturn(1, message)
               }
+              className="breakout-on-large-view"
             />
             <Input
               label="Email"
@@ -98,6 +100,7 @@ function Register() {
               errorMessageReturner={(message) =>
                 handleErrorMessageReturn(2, message)
               }
+              className="breakout-on-large-view"
             />
             <Input
               label="Password"
@@ -109,6 +112,7 @@ function Register() {
               errorMessageReturner={(message) =>
                 handleErrorMessageReturn(3, message)
               }
+              className="breakout-on-large-view"
             />
             <ul className="Register__error">
               {errorMessages.map(
@@ -124,10 +128,13 @@ function Register() {
               onClick={handleLocalSignup}
               type="submit"
               aria-label="Sign up"
-              className="square primary"
+              className="square Register__submit"
             >
               Agree &#38; Join
             </Button>
+            <div className="Register__or-rule">
+              <span className="Register__or-rule__span">or</span>
+            </div>
             <Button
               type="submit"
               onClick={handleGoogleSignup}

@@ -11,9 +11,11 @@
 .wrapper__Profile-page__wall-paper {
   overflow: hidden;
 }
-.Profile-page__wall-paper {
+.Profile-page__wall-paper img {
   width: 150%;
   margin-left: -25%;
+}
+.Profile-page__wall-paper {
   background: linear-gradient(
     to right,
     var(--color-green-4),
@@ -28,18 +30,20 @@
   height: 80px;
 }
 .Profile-page__info {
+  width: 100%;
   position: relative;
   top: -60px;
-  margin: 12px 8%;
+  padding: 12px 8%;
   font-family: "Roboto", sans-serif;
   display: grid;
   place-items: start start;
-  grid-template-columns: 9fr 1fr;
+  grid-template-columns: 9fr auto;
   column-gap: 4%;
   row-gap: 12%;
   grid-template-areas:
     "inputs edit"
     "inputs save";
+  box-sizing: border-box;
 }
 .Profile-page__connections-count {
   font-size: 11px;
@@ -60,13 +64,7 @@
 .Profile-page__editor {
   grid-area: inputs;
 }
-@media (orientation: landscape) {
-  .Profile-page__wall-paper {
-    width: 100%;
-    margin-left: 0;
-  }
-}
-.Profile-page__get-data-error {
+.Profile-page__error {
   position: absolute;
   bottom: -40px;
   font-size: 11px;
@@ -77,4 +75,71 @@
 }
 .Profile-page__follow .Follow-button__text {
   padding: 24px 0;
+}
+
+.ConnectionRequestMenu__main-body {
+  display: grid;
+  grid-template-areas: "header header"
+                       "approve decline";
+  border-radius: 2%;
+  margin-top: -45px;
+}
+
+.ConnectionRequestMenu__options-body {
+  display: contents;
+}
+.approve-option {
+  grid-area: approve;
+  margin: 2px;
+  background-color: var(--color-grey-3);
+  color: var(--color-black);
+  text-align: center;
+}
+
+.decline-option {
+  grid-area: decline;
+  margin: 2px;
+  background-color: var(--color-grey-3);
+  color: var(--color-black);
+  text-align: center;
+}
+
+.approve-option:hover {
+  cursor: pointer;
+  background-color: var(--primary-green-color);
+}
+
+.decline-option:hover {
+  cursor: pointer;
+  background-color: var(--color-red);
+}
+
+.ConnectionRequestMenu__header {
+  grid-area: header;
+  margin: 0px;
+  border: 0.5px solid white;
+  display: flex;
+}
+
+.ConnectionRequest__message {
+  margin: 2px;
+  text-align: center;
+}
+
+.connection-icon {
+  margin: 4px;
+}
+
+@media (orientation: landscape) {
+  .Profile-page__wall-paper {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media only screen and (min-width: 500px) {
+  .ConnectionRequestMenu__main-body {
+    margin-left: 50%;
+    margin-right: 10px;
+  }
 }

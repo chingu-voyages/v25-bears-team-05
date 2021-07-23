@@ -3,4 +3,82 @@
   display: grid;
   place-items: center start;
   padding: 12px;
+  grid-template-columns: 60px auto 1fr auto;
+  grid-template-areas: "menu search search search";
+}
+.Top-bar__logo {
+  grid-area: logo;
+  display: none;
+}
+.Top-bar__avatar-menu {
+  grid-area: menu;
+}
+.Top-bar__nav {
+  grid-area: nav;
+}
+.Top-bar__search {
+  grid-area: search;
+  justify-self: stretch;
+}
+@media only screen and (min-width: 920px) {
+  .Top-bar {
+    background: var(--color-black);
+    grid-template-areas: "logo . search . nav";
+    grid-template-columns: auto 18px 1fr auto auto;
+    justify-content: space-between;
+    padding: 12px 2% 0 6%;
+  }
+  .Top-bar__logo {
+    display: block;
+    padding-bottom: 12px;
+  }
+  .Top-bar__search {
+    padding-bottom: 12px;
+    width: 320px;
+    max-width: 30vw;
+  }
+  .Top-bar__avatar-menu {
+    display: none;
+  }
+  .Top-bar__nav {
+    display: grid;
+    position: relative;
+    height: 100%;
+    padding: 0 0;
+    gap: 12px;
+    place-items: center center;
+  }
+  .Top-bar__nav a,
+  .Top-bar__nav .Nav__avatar-menu button {
+    row-gap: 6px;
+    place-items: center center;
+  }
+  .Top-bar__nav svg,
+  .Top-bar__nav .Nav__avatar-menu.active button div {
+    height: 30px;
+  }
+  .Top-bar__nav a.active,
+  .Top-bar__nav a.active svg,
+  .Top-bar__nav .Nav__avatar-menu.active button {
+    color: var(--primary-text-color);
+    fill: var(--primary-text-color);
+  }
+  .Top-bar__nav .Nav__avatar-menu.active button div {
+    border-color: var(--primary-text-color);
+    border-width: 2px;
+  }
+  .Top-bar__nav a.active,
+  .Top-bar__nav .Nav__avatar-menu.active {
+    border-bottom: 5px solid var(--primary-text-color);
+  }
+}
+.Nav__avatar-menu button {
+  color: var(--secondary-text-color);
+  font-weight: 400;
+}
+
+@media only screen and (min-width: 1200px) {
+  .Top-bar {
+    padding: 12px 2% 0 10%;
+  }
 }

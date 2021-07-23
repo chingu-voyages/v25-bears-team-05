@@ -24,11 +24,12 @@
   border-radius: 2px;
   border-color: var(--color-green-3);
   height: 40px;
+  padding: 0 12px;
 }
 .Button.round {
   border-style: solid;
   border-radius: 28px;
-  height: 60px;
+  height: 50px;
   width: 100%;
   font-size: 16px;
 }
@@ -40,4 +41,11 @@
 .Button.primary:active {
   background-color: var(--color-green-3);
   background-color: var(--grey-background-color);
+}
+
+.Button.plain {
+  background-color: var(--color-black);
+  border-style: none;
+  color: var(--color-red);
+  font-weight: lighter;
 }

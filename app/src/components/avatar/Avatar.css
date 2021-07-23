@@ -9,6 +9,9 @@
   border: 1px solid var(--color-grey-2);
   box-shadow: 0 2px 2px var(--color-white);
 }
+.Avatar.square {
+  border-radius: 0px;
+}
 .Avatar.small {
   width: 50px;
   height: 50px;
@@ -33,6 +36,12 @@
 .Avatar.xsmall {
   width: 35px;
   height: 35px;
+  box-shadow: none;
+  border: 1px solid var(--color-grey-2);
+}
+.Avatar.xxsmall {
+  width: 30px;
+  height: 30px;
   box-shadow: none;
   border: 1px solid var(--color-grey-2);
 }

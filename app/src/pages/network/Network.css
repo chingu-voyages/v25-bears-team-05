@@ -1,28 +1,5 @@
 .Network-page {
   background: var(--color-black);
-  min-height: 100vh;
-  padding-bottom: 60px;
-  box-sizing: border-box;
-}
-.Network-page__top-bar {
-  display: grid;
-  grid-template-columns: 1fr 9fr;
-  width: 100%;
-  place-items: center start;
-  background: var(--primary-green-color);
-  color: var(--color-black);
-}
-
-.Network-page__title {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: 24px;
-}
-
-.Network-page__back-icon {
-  width: 20px;
-  padding: 16px;
-  fill: var(--color-black);
 }
 
 .Network-page__connections-list {
@@ -35,18 +12,36 @@
   display: grid;
   place-items: center stretch;
   grid-template-columns: 1fr auto;
-  width: 100%;
+
 }
 .Network-page__connections-list li:after {
   content: "";
-  width: 100%;
   margin-left: 50px;
   margin-top: 4px;
   border-bottom: 1px solid var(--color-grey-2);
   grid-column: span 2;
 }
-
 .connections-list__link {
   color: var(--primary-text-color);
   text-decoration: none;
+}
+
+@media only screen and (min-width: 920px) {
+  .Network-page {
+    background: var(--grey-background-color);
+  }
+  .Network-page__main {
+    display: grid;
+    place-items: center stretch;
+    overflow: hidden;
+    padding: 18px;
+    box-sizing: border-box;
+    max-width: 860px;
+    justify-self: center;
+    width: 80%;
+    margin-top: 20px;
+    background: var(--color-black);
+    border: solid 1px var(--active-icon-color);
+    border-radius: 18px;
+  }
 }

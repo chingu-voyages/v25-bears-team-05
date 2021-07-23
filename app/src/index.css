@@ -27,7 +27,7 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --error-color: var(--color-red);
+  --error-color: var(--color-orange-0);
   --primary-green-color: var(--color-green-4);
   --active-icon-color: var(--color-grey-3);
   --inactive-icon-color: var(--color-grey-2);
@@ -47,7 +47,8 @@ body {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
 }
@@ -60,4 +61,8 @@ button {
 a {
   font: unset;
   font-family: "Roboto", sans-serif;
+}
+
+img {
+  max-width: 100%;
 }

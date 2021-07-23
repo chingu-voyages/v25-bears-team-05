@@ -1,0 +1,31 @@
+.Notifications-page {
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.Notifications-container {
+  width: 100%;
+}
+
+.Notifications-empty-list {
+  background-color: var(--color-black);
+  border: 1px solid white;
+  border-radius: 8px;
+  text-align: center;
+}
+
+@media only screen and (min-width: 920px) {
+  .Notifications-page__main {
+    display: grid;
+    grid-template-columns: 20vw auto auto;
+    grid-template-areas: ". notifications-section .";
+  }
+  .Notifications-container {
+    background-color: var(--color-black);
+    border: solid 1px var(--color-white);
+    border-radius: 5px;
+    padding: 2px;
+    grid-area: notifications-section;
+    margin-top: 30px;
+  }
+}

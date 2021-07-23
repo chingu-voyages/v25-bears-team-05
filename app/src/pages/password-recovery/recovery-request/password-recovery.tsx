@@ -19,10 +19,11 @@ function PasswordRecovery() {
   const [receivedError, setReceivedError] = useState<boolean>(false);
 
   loadjs("https://www.google.com/recaptcha/api.js");
-
+  const = captchaSiteKey = !(process.env.NODE_ENV && process.env.NODE_ENV.match("development")) ? process.env.REACT_APP_PRODUCTION_CAPTCHA_SITE_KEY : process.env.REACT_APP_DEV_CAPTCHA_SITE_KEY;
+   
   const sendPasswordRecoveryRequest = async (e: any) => {
-    assert(
-      process.env.REACT_APP_DEV_CAPTCHA_SITE_KEY,
+     assert(
+      captchaSiteKey,
       "Please set env variable REACT_APP_DEV_CAPTCHA_SITE_KEY"
     );
     const emailValue = (document.getElementById("recoveryEmail") as any).value;
@@ -86,7 +87,7 @@ function PasswordRecovery() {
           <div className="Password-recovery-request-page__captcha">
             <div
               className="g-recaptcha"
-              data-sitekey={process.env.REACT_APP_DEV_CAPTCHA_SITE_KEY}
+              data-sitekey={captchaSiteKey}
             ></div>
           </div>
           {receivedError && (

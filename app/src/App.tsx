@@ -48,7 +48,8 @@ function App() {
 
   useEffect(() => {
     if (userInfo) {
-      socket.current = io("http://localhost:7000");
+      const hostUrl = !(process.env.NODE_ENV && process.env.NODE_ENV.match("development")) ? process.env.REACT_APP_API_URL : process.env.REACT_APP_DEV_API_URL;
+      socket.current = io(hostUrl || "http://localhost:7000");
     }
   }, [userInfo]);
   // Once logged in get current user data

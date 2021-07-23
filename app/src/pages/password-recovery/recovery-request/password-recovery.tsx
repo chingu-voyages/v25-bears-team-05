@@ -19,7 +19,7 @@ function PasswordRecovery() {
   const [receivedError, setReceivedError] = useState<boolean>(false);
 
   loadjs("https://www.google.com/recaptcha/api.js");
-  const = captchaSiteKey = !(process.env.NODE_ENV && process.env.NODE_ENV.match("development")) ? process.env.REACT_APP_PRODUCTION_CAPTCHA_SITE_KEY : process.env.REACT_APP_DEV_CAPTCHA_SITE_KEY;
+  const captchaSiteKey = !(process.env.NODE_ENV && process.env.NODE_ENV.match("development")) ? process.env.REACT_APP_PRODUCTION_CAPTCHA_SITE_KEY : process.env.REACT_APP_DEV_CAPTCHA_SITE_KEY;
    
   const sendPasswordRecoveryRequest = async (e: any) => {
      assert(

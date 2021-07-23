@@ -134,6 +134,12 @@ function App() {
           redirectTo="/"
         />
         <ProtectedRoute
+          path="/search"
+          allowed={isLoggedIn}
+          component={Home}
+          redirectTo="/"
+        />
+        <ProtectedRoute
           path="/notifications"
           allowed={isLoggedIn}
           component={Notifications}

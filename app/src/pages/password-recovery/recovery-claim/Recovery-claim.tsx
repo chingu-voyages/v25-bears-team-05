@@ -26,6 +26,8 @@ function RecoveryClaim() {
   const [requestToken, setRequestToken] = useState<string>("");
   const [claimSuccessful, setClaimSuccessful] = useState<boolean>(false);
   const [showUpdateUI, setShowUpdateUI] = useState<boolean>(false);
+  const [uiDisabled, setUIDisabled] = useState<boolean>(false);
+
   const [
     showRecoveryRequestLink,
     setShowRecoverRequestLink,
@@ -55,8 +57,8 @@ function RecoveryClaim() {
     })();
   }, []);
 
-  const handleSubmitRequest = async (e: any) => {
-    e.target.disabled = true;
+  const handleSubmitRequest = async () => {
+    setUIDisabled(true);
     if (hashedEmail && requestToken) {
       if (
         isPasswordValid(firstPasswordEntry) &&
@@ -85,13 +87,13 @@ function RecoveryClaim() {
         setErrorMessage(
           "Please check that you've entered valid matching passwords."
         );
-        e.target.disabled = false;
+        setUIDisabled(false);
       }
     } else {
       setShowErrorMessage(true);
       setErrorMessage("Request cannot be completed");
       setShowUpdateUI(false);
-      e.target.disabled = false;
+      setUIDisabled(false);
     }
   };
 
@@ -106,6 +108,7 @@ function RecoveryClaim() {
           setValue={setFirstPasswordEntry}
           validationMessenger={getInvalidPasswordMessage}
           className="breakout-on-large-view"
+          isDisabled={uiDisabled}
         />
         <Input
           label="Confirm new password"
@@ -115,6 +118,8 @@ function RecoveryClaim() {
           setValue={setSecondPasswordEntry}
           validationMessenger={getInvalidPasswordMessage}
           className="breakout-on-large-view"
+          actionOnEnterKey={handleSubmitRequest}
+          isDisabled={uiDisabled}
         />
       </div>
     );
@@ -128,6 +133,8 @@ function RecoveryClaim() {
           type="submit"
           aria-label="Submit"
           className="square Register__submit"
+          id="submitButton"
+          disabled={uiDisabled}
         >
           Submit
         </Button>

@@ -65,6 +65,7 @@ function Login({ className }: { className?: string }) {
               value={password}
               setValue={setPassword}
               errorMessage={passwordErrorMessage}
+              actionOnEnterKey={handleLocalSignin}
             />
           </div>
           <div className="Login__forgot-password">

@@ -113,6 +113,7 @@ function Register() {
                 handleErrorMessageReturn(3, message)
               }
               className="breakout-on-large-view"
+              actionOnEnterKey={handleLocalSignup}
             />
             <ul className="Register__error">
               {errorMessages.map(

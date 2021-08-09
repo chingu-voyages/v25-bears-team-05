@@ -29,6 +29,13 @@ function Input(props: IInputProps) {
     props.setValue(e.target.value);
   };
 
+  const handleEnterKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      if (props.actionOnEnterKey) {
+        props.actionOnEnterKey();
+      }
+    }
+  };
   const attributes: IInputAttributes = { ...props };
   delete attributes.errorMessage;
   delete attributes.label;
@@ -56,6 +63,8 @@ function Input(props: IInputProps) {
         className={`Input ${errorMessage && !isFocused ? "Input--error" : ""} ${
           props.value ? "Input--has-content" : ""
         }`}
+        onKeyPress={handleEnterKeyPress}
+        disabled={props.isDisabled || false}
       />
       <label
         className="Input__label--floating"

@@ -71,3 +71,8 @@
 .Options-menu.bar .Options-menu__button {
   margin-bottom: 0;
 }
+
+
+.menu-absolute-position {
+  position: absolute;
+}

@@ -87,7 +87,9 @@ function Nav({ className }: { className?: string }) {
         <span className="Nav__title">My Network</span>
       </Link>
       <OptionsMenu
-        className={`Nav__avatar-menu ${page === "profile" ? "active" : ""}`}
+        className={`Nav__avatar-menu ${
+          page === "profile" ? "active" : ""
+        } menu-absolute-position`}
         buttons={{
           "View Profile": { type: "link", linkTo: `/${userInfo?.id}/profile` },
           "Edit Profile": { type: "link", linkTo: "/me/profile" },

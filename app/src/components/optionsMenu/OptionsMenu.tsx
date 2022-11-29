@@ -75,7 +75,7 @@ function OptionsMenu({
       {isOpen && (
         <dialog
           open={true}
-          className="Options-menu__list"
+          className={`Options-menu__list menu-absolute-position`}
           onClick={() => (clickedInMenuRef.current = true)}
         >
           {confirmData ? (
